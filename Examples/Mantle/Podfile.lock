@@ -1,0 +1,19 @@
+PODS:
+  - Mantle (2.0.3):
+    - Mantle/extobjc (= 2.0.3)
+  - Mantle/extobjc (2.0.3)
+  - YMCache (1.0.0)
+
+DEPENDENCIES:
+  - Mantle (~> 2.0)
+  - YMCache (from `../../`)
+
+EXTERNAL SOURCES:
+  YMCache:
+    :path: "../../"
+
+SPEC CHECKSUMS:
+  Mantle: 8d6b14979a082a9ed4994463eb7a4ff576c94632
+  YMCache: 4650659957fd11ab7ab58ced7a2a49b130c24bd2
+
+COCOAPODS: 0.38.2

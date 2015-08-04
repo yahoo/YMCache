@@ -1,0 +1,22 @@
+{
+    "YHOO": {
+        "symbol": "YHOO",
+        "name": "Yahoo",
+        "last": 35.00
+    },
+    "AAPL": {
+        "symbol": "AAPL",
+        "name": "Apple",
+        "last": 40.00
+    },
+    "GOOG": {
+        "symbol": "GOOG",
+        "name": "Google",
+        "last": 50.00
+    },
+    "MSFT": {
+        "symbol": "MSFT",
+        "name": "Microsoft",
+        "last": 30.00
+    },
+}

@@ -1,0 +1,427 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		114B1FBD7B2A435881A2F74A /* Pods_YMCacheMantleExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CEA9DFEE7F3DFA1059E64E3 /* Pods_YMCacheMantleExample.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		FCDDABC71B701243006C333F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FCDDABC61B701243006C333F /* main.m */; };
+		FCDDABCA1B701243006C333F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FCDDABC91B701243006C333F /* AppDelegate.m */; };
+		FCDDABCD1B701243006C333F /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCDDABCC1B701243006C333F /* TableViewController.m */; };
+		FCDDABD21B701243006C333F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FCDDABD11B701243006C333F /* Images.xcassets */; };
+		FCDDABEE1B7012BE006C333F /* YMCachePersistenceController+MantleSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = FCDDABEB1B7012BE006C333F /* YMCachePersistenceController+MantleSupport.m */; };
+		FCDDABEF1B7012BE006C333F /* YMMantleSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = FCDDABED1B7012BE006C333F /* YMMantleSerializer.m */; };
+		FCDDABF21B701360006C333F /* Stock.m in Sources */ = {isa = PBXBuildFile; fileRef = FCDDABF11B701360006C333F /* Stock.m */; };
+		FCDDABF81B701677006C333F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FCDDABCE1B701243006C333F /* Main.storyboard */; };
+		FCDDABF91B70167A006C333F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = FCDDABD31B701243006C333F /* LaunchScreen.xib */; };
+		FCDDABFB1B701691006C333F /* stock.json in Resources */ = {isa = PBXBuildFile; fileRef = FCDDABF61B70143A006C333F /* stock.json */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1CEA9DFEE7F3DFA1059E64E3 /* Pods_YMCacheMantleExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YMCacheMantleExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8AFC53072F296BFF4126CDA3 /* Pods-YMCacheMantleExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YMCacheMantleExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YMCacheMantleExample/Pods-YMCacheMantleExample.debug.xcconfig"; sourceTree = "<group>"; };
+		DED211485E0E10F477C01AC7 /* Pods-YMCacheMantleExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YMCacheMantleExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-YMCacheMantleExample/Pods-YMCacheMantleExample.release.xcconfig"; sourceTree = "<group>"; };
+		FCDDABC11B701243006C333F /* YMCacheMantleExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YMCacheMantleExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FCDDABC51B701243006C333F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FCDDABC61B701243006C333F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		FCDDABC81B701243006C333F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		FCDDABC91B701243006C333F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		FCDDABCB1B701243006C333F /* TableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TableViewController.h; sourceTree = "<group>"; };
+		FCDDABCC1B701243006C333F /* TableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TableViewController.m; sourceTree = "<group>"; };
+		FCDDABCF1B701243006C333F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		FCDDABD11B701243006C333F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		FCDDABD41B701243006C333F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		FCDDABEA1B7012BE006C333F /* YMCachePersistenceController+MantleSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "YMCachePersistenceController+MantleSupport.h"; sourceTree = "<group>"; };
+		FCDDABEB1B7012BE006C333F /* YMCachePersistenceController+MantleSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "YMCachePersistenceController+MantleSupport.m"; sourceTree = "<group>"; };
+		FCDDABEC1B7012BE006C333F /* YMMantleSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMMantleSerializer.h; sourceTree = "<group>"; };
+		FCDDABED1B7012BE006C333F /* YMMantleSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMMantleSerializer.m; sourceTree = "<group>"; };
+		FCDDABF01B701360006C333F /* Stock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stock.h; sourceTree = "<group>"; };
+		FCDDABF11B701360006C333F /* Stock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Stock.m; sourceTree = "<group>"; };
+		FCDDABF61B70143A006C333F /* stock.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = stock.json; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FCDDABBE1B701243006C333F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				114B1FBD7B2A435881A2F74A /* Pods_YMCacheMantleExample.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		77ACB36F56A296D647164A37 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8AFC53072F296BFF4126CDA3 /* Pods-YMCacheMantleExample.debug.xcconfig */,
+				DED211485E0E10F477C01AC7 /* Pods-YMCacheMantleExample.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		DB72E814718CF8D3F8FF5197 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1CEA9DFEE7F3DFA1059E64E3 /* Pods_YMCacheMantleExample.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FCDDABB81B701243006C333F = {
+			isa = PBXGroup;
+			children = (
+				FCDDABC31B701243006C333F /* YMCacheMantleExample */,
+				FCDDABC21B701243006C333F /* Products */,
+				77ACB36F56A296D647164A37 /* Pods */,
+				DB72E814718CF8D3F8FF5197 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		FCDDABC21B701243006C333F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FCDDABC11B701243006C333F /* YMCacheMantleExample.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FCDDABC31B701243006C333F /* YMCacheMantleExample */ = {
+			isa = PBXGroup;
+			children = (
+				FCDDABF41B70136B006C333F /* UI */,
+				FCDDABF51B701373006C333F /* Data Layer */,
+				FCDDABC81B701243006C333F /* AppDelegate.h */,
+				FCDDABC91B701243006C333F /* AppDelegate.m */,
+				FCDDABF61B70143A006C333F /* stock.json */,
+				FCDDABCE1B701243006C333F /* Main.storyboard */,
+				FCDDABD11B701243006C333F /* Images.xcassets */,
+				FCDDABD31B701243006C333F /* LaunchScreen.xib */,
+				FCDDABC41B701243006C333F /* Supporting Files */,
+			);
+			path = YMCacheMantleExample;
+			sourceTree = "<group>";
+		};
+		FCDDABC41B701243006C333F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				FCDDABC51B701243006C333F /* Info.plist */,
+				FCDDABC61B701243006C333F /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		FCDDABF31B701365006C333F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				FCDDABF01B701360006C333F /* Stock.h */,
+				FCDDABF11B701360006C333F /* Stock.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		FCDDABF41B70136B006C333F /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				FCDDABCB1B701243006C333F /* TableViewController.h */,
+				FCDDABCC1B701243006C333F /* TableViewController.m */,
+			);
+			name = UI;
+			sourceTree = "<group>";
+		};
+		FCDDABF51B701373006C333F /* Data Layer */ = {
+			isa = PBXGroup;
+			children = (
+				FCDDABF31B701365006C333F /* Model */,
+				FCDDABEA1B7012BE006C333F /* YMCachePersistenceController+MantleSupport.h */,
+				FCDDABEB1B7012BE006C333F /* YMCachePersistenceController+MantleSupport.m */,
+				FCDDABEC1B7012BE006C333F /* YMMantleSerializer.h */,
+				FCDDABED1B7012BE006C333F /* YMMantleSerializer.m */,
+			);
+			name = "Data Layer";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FCDDABC01B701243006C333F /* YMCacheMantleExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FCDDABE41B701243006C333F /* Build configuration list for PBXNativeTarget "YMCacheMantleExample" */;
+			buildPhases = (
+				05285794B68EC9EFD758B1C2 /* Check Pods Manifest.lock */,
+				FCDDABBD1B701243006C333F /* Sources */,
+				FCDDABBE1B701243006C333F /* Frameworks */,
+				FCDDABBF1B701243006C333F /* Resources */,
+				D1CBE908B402871986ACCF7A /* Embed Pods Frameworks */,
+				4964FB5811837E052C6EE04C /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = YMCacheMantleExample;
+			productName = YMCacheMantleExample;
+			productReference = FCDDABC11B701243006C333F /* YMCacheMantleExample.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FCDDABB91B701243006C333F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0640;
+				ORGANIZATIONNAME = "Yahoo, Inc";
+				TargetAttributes = {
+					FCDDABC01B701243006C333F = {
+						CreatedOnToolsVersion = 6.4;
+					};
+				};
+			};
+			buildConfigurationList = FCDDABBC1B701243006C333F /* Build configuration list for PBXProject "YMCacheMantleExample" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = FCDDABB81B701243006C333F;
+			productRefGroup = FCDDABC21B701243006C333F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FCDDABC01B701243006C333F /* YMCacheMantleExample */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FCDDABBF1B701243006C333F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FCDDABFB1B701691006C333F /* stock.json in Resources */,
+				FCDDABD21B701243006C333F /* Images.xcassets in Resources */,
+				FCDDABF81B701677006C333F /* Main.storyboard in Resources */,
+				FCDDABF91B70167A006C333F /* LaunchScreen.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		05285794B68EC9EFD758B1C2 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		4964FB5811837E052C6EE04C /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YMCacheMantleExample/Pods-YMCacheMantleExample-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D1CBE908B402871986ACCF7A /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YMCacheMantleExample/Pods-YMCacheMantleExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FCDDABBD1B701243006C333F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FCDDABF21B701360006C333F /* Stock.m in Sources */,
+				FCDDABCD1B701243006C333F /* TableViewController.m in Sources */,
+				FCDDABEF1B7012BE006C333F /* YMMantleSerializer.m in Sources */,
+				FCDDABCA1B701243006C333F /* AppDelegate.m in Sources */,
+				FCDDABC71B701243006C333F /* main.m in Sources */,
+				FCDDABEE1B7012BE006C333F /* YMCachePersistenceController+MantleSupport.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		FCDDABCE1B701243006C333F /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FCDDABCF1B701243006C333F /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		FCDDABD31B701243006C333F /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FCDDABD41B701243006C333F /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		FCDDABE21B701243006C333F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		FCDDABE31B701243006C333F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		FCDDABE51B701243006C333F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8AFC53072F296BFF4126CDA3 /* Pods-YMCacheMantleExample.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = YMCacheMantleExample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		FCDDABE61B701243006C333F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DED211485E0E10F477C01AC7 /* Pods-YMCacheMantleExample.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = YMCacheMantleExample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FCDDABBC1B701243006C333F /* Build configuration list for PBXProject "YMCacheMantleExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FCDDABE21B701243006C333F /* Debug */,
+				FCDDABE31B701243006C333F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FCDDABE41B701243006C333F /* Build configuration list for PBXNativeTarget "YMCacheMantleExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FCDDABE51B701243006C333F /* Debug */,
+				FCDDABE61B701243006C333F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FCDDABB91B701243006C333F /* Project object */;
+}
