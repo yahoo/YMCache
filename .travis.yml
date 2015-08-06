@@ -3,13 +3,15 @@
 # * https://github.com/supermarin/xcpretty#usage
 
 language: objective-c
-# cache: cocoapods
-# podfile: Example/Podfile
-# before_install:
-# - gem install cocoapods # Since Travis is not always on latest version
-# - pod install --project-directory=Example
+osx_image: xcode6.4
+before_install:
+  - rvm use $RVM_RUBY_VERSION
 install:
-- gem install xcpretty --no-rdoc --no-ri --no-document --quiet
+  - bundle install --without=documentation xcpretty
+  - bundle install --without=documentation --path ../travis_bundle_dir
 script:
-- set -o pipefail && xcodebuild test -workspace Example/YMCache.xcworkspace -scheme YMCache-Example -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO | xcpretty -c
-- pod lib lint --quick
+  - set -o pipefail && xcodebuild test -project YMCache.xcodeproj -scheme YMCache-iOS -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES | xcpretty -c
+  - set -o pipefail && xcodebuild test -project YMCache.xcodeproj -scheme YMCache-Mac -sdk macosx ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES | xcpretty -c
+  - pod lib lint --quick
+after_success:
+  - slather
