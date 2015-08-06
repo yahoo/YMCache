@@ -1,8 +1,8 @@
 # YMCache
 
-YMCache is a lightweight object caching solution for iOS and Mac OS X that is designed for highly parallel access scenarios. YMCache presents a familiar interface enumating `NSMutableDictionary`, while internally leveraging Apple's [Grand Central Dispath](https://developer.apple.com/library/ios/documentation/Performance/Reference/GCD_libdispatch_Ref/index.html) technology to strike a balance between perforamnce and consistency.
+YMCache is a lightweight object caching solution for iOS and Mac OS X that is designed for highly parallel access scenarios. YMCache presents a familiar interface emulating `NSMutableDictionary`, while internally leveraging Apple's [Grand Central Dispath](https://developer.apple.com/library/ios/documentation/Performance/Reference/GCD_libdispatch_Ref/index.html) technology to strike a balance between perforamnce and consistency.
 
-The Yahoo Finance iOS team uses YMCache to multiplex access to it's database of thousands of real-time stocks which change in unpredictable ways, at an unpredictable cadence. YMcache helps relieve the complexity of multi-thread access to a central data store by providing a set of easy to understand [reader-writer](https://en.wikipedia.org/wiki/Readers–writer_lock) access semantics.
+The Yahoo Finance iOS team uses YMCache to multiplex access to it's database of thousands of real-time stocks, which change in unpredictable ways, with an unpredictable cadence. YMCache helps relieve the complexity of multi-thread access to a central data store by providing a set of easy to understand [reader-writer](https://en.wikipedia.org/wiki/Readers–writer_lock) access semantics.
 
 ### Parallel Access
 
@@ -12,16 +12,12 @@ The Yahoo Finance iOS team uses YMCache to multiplex access to it's database of 
 
 The above rules allow for multiple readers, but a single writer. A nice result of this approach is that reads are serialized with respect to writes, enforcing a sensible order: you may read with the confidence that the expected data has been fully written.
 
-### Single vs Bulks Reads & Writes
-
-YMCache provides support for both single-value reads/writes, and efficient multi-value reads/writes. Bulk reads and writes follow the [Parallel Access](#ParallelAccess) rules, but count as a single operation.
-
 ### Features
 
-- Persistence: save/load a cache from disk once, or at intervals
-- Eviction: handle low memory situations in-band, using whatever logic suits your needs
-- Serialization: support for arbitrary model transformations comes for free. You can use Mantle, NSJSONSerialization or any serialization format you can think up!
-- Bulk operations: efficient multi-value reads/writes. (Bulk operations follow the [Parallel Access](#ParallelAccess) rules, but count as a single operation)
+- **Persistence**: save/load a cache from disk once, or at a defined interval
+- **Eviction**: handle low memory situations in-band, using whatever logic suits your needs
+- **Serialization**: arbitrary model transformations comes for free. You can use Mantle, straight NSJSONSerialization or any other format you can think up!
+- **Bulk operations**: efficient multi-value reads/writes. (Bulk operations follow the [Parallel Access](#ParallelAccess) rules, but count as a single operation)
 
 ## SETUP
 
