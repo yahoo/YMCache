@@ -5,15 +5,16 @@
 language: objective-c
 osx_image: xcode6.4
 xcode_project: YMCache.xcodeproj
+xcode_scheme: YMCache-iOS
 before_install:
   - brew update || brew update
   - brew install carthage || brew outdated carthage || brew upgrade carthage
   - brew install xctool || brew outdated xctool || brew upgrade xctool
-install:
   - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
   - gem install slather --no-rdoc --no-ri --no-document --quiet
+install:
+  - carthage bootstrap --verbose
 script:
-  - carthage bootstrap
   - set -o pipefail && xctool test -project YMCache.xcodeproj -scheme YMCache-iOS -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES | xcpretty -c
   - set -o pipefail && xctool test -project YMCache.xcodeproj -scheme YMCache-Mac -sdk macosx ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES | xcpretty -c
   - pod lib lint --quick
