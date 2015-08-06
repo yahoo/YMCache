@@ -49,7 +49,11 @@ We support the [CocoaPods](http://github.com/CocoaPods/CocoaPods) and [Carthage]
 
 ## Usage
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+To run the example projects, clone the repo, and run `pod install` from one of the directories in Example.
+
+### Example: Mantle Serialization
+
+It's very easy to use Mantle – version 1 or 2 – to serialize your cache to disk! Check out the pre-built, production-ready example in [Examples/Mantle](https://github.com/yahoo/YMCache/tree/master/Examples/Mantle).
 
 ## Support & Contributing
 
@@ -57,4 +61,4 @@ Report any bugs or send feature requests to the GitHub issues. Pull requests are
 
 ## License
 
-Apache 2.0 license. See the [LICENSE](https://github.com/yahoo/YMCache/blob/master/LICENSE) file for details.
+MIT license. See the [LICENSE](https://github.com/yahoo/YMCache/blob/master/LICENSE) file for details.
