@@ -4,14 +4,17 @@
 
 language: objective-c
 osx_image: xcode6.4
-#before_install:
-#  - rvm use $RVM_RUBY_VERSION
+xcode_project: YMCache.xcodeproj
+before_install:
+  - brew update
+  - brew outdated carthage || brew upgrade carthage
+  - brew outdated xctool || brew upgrade xctool
 install:
-  - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
   - gem install slather --no-rdoc --no-ri --no-document --quiet
 script:
-  - set -o pipefail && xcodebuild test -project YMCache.xcodeproj -scheme YMCache-iOS -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES | xcpretty -c
-  - set -o pipefail && xcodebuild test -project YMCache.xcodeproj -scheme YMCache-Mac -sdk macosx ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES | xcpretty -c
+  - carthage bootstrap
+  - set -o pipefail && xctool test -project -project YMCache.xcodeproj -scheme YMCache-iOS -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES | xcpretty -c
+  - set -o pipefail && xctool test -project -project YMCache.xcodeproj -scheme YMCache-Mac -sdk maxosx ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES | xcpretty -c
   - pod lib lint --quick
 after_success:
   - slather
