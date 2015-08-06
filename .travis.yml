@@ -6,10 +6,11 @@ language: objective-c
 osx_image: xcode6.4
 xcode_project: YMCache.xcodeproj
 before_install:
-  - brew update
+  - brew update || brew update
   - brew outdated carthage || brew upgrade carthage
   - brew outdated xctool || brew upgrade xctool
 install:
+  - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
   - gem install slather --no-rdoc --no-ri --no-document --quiet
 script:
   - carthage bootstrap
