@@ -12,8 +12,11 @@ before_install:
   - brew install xctool || brew outdated xctool || brew upgrade xctool
   - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
   - gem install slather --no-rdoc --no-ri --no-document --quiet
+  - ./script/travis-codesign-setup.sh
 install:
   - carthage bootstrap --verbose
+after_install:
+  - ./script/travis-codesign-teardown.sh
 script:
   - set -o pipefail && xctool test -project YMCache.xcodeproj -scheme YMCache-iOS -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES | xcpretty -c
   - set -o pipefail && xctool test -project YMCache.xcodeproj -scheme YMCache-Mac -sdk macosx ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES | xcpretty -c
