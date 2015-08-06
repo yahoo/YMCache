@@ -4,6 +4,10 @@ KEYCHAIN=ios-build.keychain
 PASSWORD=cibuild
 SCRIPT_DIR=$(dirname "$0")
 
+echo "Fake key"
+echo "$KEY_PASSWORD"
+echo "---"
+
 # Create a temporary keychain for code signing.
 security create-keychain -p "$PASSWORD" "$KEYCHAIN"
 security default-keychain -s "$KEYCHAIN"
