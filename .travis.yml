@@ -1,25 +1,28 @@
-# references:
-# * http://www.objc.io/issue-6/travis-ci.html
-# * https://github.com/supermarin/xcpretty#usage
-
 language: objective-c
 osx_image: xcode6.4
 xcode_project: YMCache.xcodeproj
 xcode_scheme: YMCache-iOS
 before_install:
-  - brew update || brew update
-  - brew install carthage || brew outdated carthage || brew upgrade carthage
-  - brew install xctool || brew outdated xctool || brew upgrade xctool
-  - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
-  - gem install slather --no-rdoc --no-ri --no-document --quiet
-  - ./script/travis-codesign-setup.sh
+- brew update || brew update
+- brew install carthage || brew outdated carthage || brew upgrade carthage
+- brew install xctool || brew outdated xctool || brew upgrade xctool
+- gem install xcpretty --no-rdoc --no-ri --no-document --quiet
+- gem install slather --no-rdoc --no-ri --no-document --quiet
+- "./script/travis-codesign-setup.sh"
 install:
-  - carthage bootstrap --verbose
+- carthage bootstrap --verbose
 after_install:
-  - ./script/travis-codesign-teardown.sh
+- "./script/travis-codesign-teardown.sh"
 script:
-  - set -o pipefail && xctool test -project YMCache.xcodeproj -scheme YMCache-iOS -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES | xcpretty -c
-  - set -o pipefail && xctool test -project YMCache.xcodeproj -scheme YMCache-Mac -sdk macosx ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES | xcpretty -c
-  - pod lib lint --quick
+- set -o pipefail && xctool test -project YMCache.xcodeproj -scheme YMCache-iOS -sdk
+  iphonesimulator ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES
+  | xcpretty -c
+- set -o pipefail && xctool test -project YMCache.xcodeproj -scheme YMCache-Mac -sdk
+  macosx ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES
+  | xcpretty -c
+- pod lib lint --quick
 after_success:
-  - slather
+- slather
+env:
+  global:
+    secure: NohdkQHpYeXd+xfCdydIVGy3oIzz3EZLNYA5DUBNbIS5gpy+CqeZAIsRfcRIXdoz+e/5hO3eV++mntZFsc8Eg1olY+WtE5e8zGnoRVeyxVLyzOobQuiowlCBEsHzLi04CQAWawZ+hup+9rGvM57lbpr4dFyolk5TuqpEp/QWDA9KlsxkYntQcv67jJ+h6/IUHFVUE/DU5SYdp2VEcouR+4oBzd1SZ50jsM7TljyioSE8IyXq2QaJCOGnkW/Ey7oBq+0ezZoaiqo774t1jpuqdXHOzhGenGamEg8WK81s6jJskWOBo6498NjAVGg/QdSf8yb34XL62eAnHrvlktANob2ojTbBqJDnRdkK1dxaXlgk+iZm9thPlzF4W6fDycW3q1QrZ04b09My3QiLZt+TMwf62wDIfXFrP7aV56lB83kxDdoNgIK/f2B8JtH3tB1AOx4lcdYkr3bsgeHr2KLEpwlsN9WHYSDUMXuXZ3TF3/29wT3zgG3T5CP2ORxnqLegCeiy3urNMiYPI8fjYeF6OVNLv1sQc+EBt/jGJNTY5JFcW0CzUmrrcT4AQ13Bp2jeH4PhMPoGC0SqPD7alhr95/iwniMR5ECnAC2AWm+Dj/HQrhURdRGg93XHl+i4FZQG27d7X3gweVN0fmS/pVIDHLFS3gng9fDl99H39qHc1JM=
