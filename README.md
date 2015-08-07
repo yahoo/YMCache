@@ -1,5 +1,15 @@
 # YMCache
 
+[![Build Status](https://travis-ci.org/yahoo/YMCache.svg?branch=master)](https://travis-ci.org/yahoo/YMCache)
+[![Coverage Status](https://coveralls.io/repos/yahoo/YMCache/badge.svg?branch=master&service=github)](https://coveralls.io/github/yahoo/YMCache?branch=master)
+
+[![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg)](https://github.com/Carthage/Carthage)
+[![CocoaPods Compatible](https://img.shields.io/badge/CocoaPods-compatible-brightgreen.svg)](https://github.com/CocoaPods/CocoaPods)
+[![GitHub license](https://img.shields.io/github/license/yahoo/YMCache.svg)](https://raw.githubusercontent.com/yahoo/YMCache/master/LICENSE.md)
+[![Supported Platforms](https://img.shields.io/cocoapods/p/YMCache.svg)]()
+
+---
+
 YMCache is a lightweight object caching solution for iOS and Mac OS X that is designed for highly parallel access scenarios. YMCache presents a familiar interface emulating `NSMutableDictionary`, while internally leveraging Apple's [Grand Central Dispath](https://developer.apple.com/library/ios/documentation/Performance/Reference/GCD_libdispatch_Ref/index.html) technology to strike a balance between perforamnce and consistency.
 
 The Yahoo Finance iOS team uses YMCache to multiplex access to it's database of thousands of real-time stocks, which change in unpredictable ways, with an unpredictable cadence. YMCache helps relieve the complexity of multi-thread access to a central data store by providing a set of easy to understand [reader-writer](https://en.wikipedia.org/wiki/Readers–writer_lock) access semantics.
