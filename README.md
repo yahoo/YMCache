@@ -50,7 +50,7 @@ We support the [CocoaPods](http://github.com/CocoaPods/CocoaPods) and [Carthage]
 1. Add YMCache to your project's `Cartfile`
 
     ```
-    github "YMCache/YMCache"
+    github "yahoo/YMCache"
     ```
 
 2. Run `carthage update` in your project directory
