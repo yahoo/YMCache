@@ -1,2 +1,3 @@
 coverage_service: coveralls
 xcodeproj: YMCache.xcodeproj
+source_directory: YMCache

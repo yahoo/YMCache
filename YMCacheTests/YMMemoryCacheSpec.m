@@ -6,27 +6,37 @@
 
 SpecBegin(YMMemoryCacheSpec)
 
-describe(@"YMMemoryCache", ^{
+fdescribe(@"YMMemoryCache", ^{
     
-    NSDictionary *cacheValues = @{@"Key0": @"Value0",
-                                  @"Key1": @"Value1",
-                                  @"Key2": @"Value2"};
+    NSDictionary *const cacheValues = @{ @"Key0": @"Value0",
+                                         @"Key1": @"Value1",
+                                         @"Key2": @"Value2" };
     
-    NSString *cacheName = @"TestCache";
-    __block YMMemoryCacheEvictionDecider decider = ^BOOL(id key, id value, void *ctx) {
-        return NO;
-    };
+    static NSString *const cacheName = @"TestCache";
+    
+    __block YMMemoryCacheEvictionDecider decider;
     __block YMMemoryCache *emptyCache;
     __block YMMemoryCache *populatedCache;
     
     beforeEach(^{
-        emptyCache = [[YMMemoryCache alloc] initWithName:cacheName evictionDecider:nil];
+        emptyCache = [YMMemoryCache memoryCacheWithName:cacheName];
         emptyCache.notificationInterval = 0.2;
+
+        decider = ^BOOL(id key, id value, void *ctx) {
+            return NO;
+        };
         
-        populatedCache = [[YMMemoryCache alloc] initWithName:cacheName evictionDecider:^BOOL(id key, id value, void *context) {
+        populatedCache = [YMMemoryCache memoryCacheWithName:cacheName evictionDecider:^BOOL(id key, id value, void *context) {
             return decider(key, value, context); // tests can swap this value out as needed.
         }];
         [populatedCache addEntriesFromDictionary:cacheValues];
+    });
+    
+    afterEach(^{
+        // Only YOU can prevent memory leaks!
+        emptyCache = nil;
+        populatedCache = nil;
+        decider = NULL;
     });
     
     // Single Setter
@@ -39,7 +49,7 @@ describe(@"YMMemoryCache", ^{
     // Single Getter
     
     it(@"Should return nil when a key has no value", ^{
-        expect(emptyCache[@"key"]).to.beNil;
+        expect(emptyCache[@"key"]).to.beNil();
     });
     
     context(@"Bulk setter", ^{
@@ -83,7 +93,7 @@ describe(@"YMMemoryCache", ^{
             [populatedCache removeAllObjects];
             
             for (id key in cacheValues) {
-                expect(populatedCache[key]).to.beNil;
+                expect(populatedCache[key]).to.beNil();
             }
         });
         
@@ -115,7 +125,7 @@ describe(@"YMMemoryCache", ^{
             
             [emptyCache removeObjectsForKeys:@[key]];
             
-            expect(emptyCache[key]).to.beNil;
+            expect(emptyCache[key]).to.beNil();
         });
         
         it(@"Should remove: single key in multi-value cache", ^{
@@ -125,7 +135,7 @@ describe(@"YMMemoryCache", ^{
             NSMutableDictionary *newValues = [cacheValues mutableCopy];
             [newValues removeObjectForKey:removedKey];
             
-            expect(populatedCache[removedKey]).to.beNil;
+            expect(populatedCache[removedKey]).to.beNil();
             for (id key in newValues) {
                 expect(populatedCache[key]).to.beIdenticalTo(cacheValues[key]);
             }
@@ -135,7 +145,7 @@ describe(@"YMMemoryCache", ^{
             [populatedCache removeObjectsForKeys:cacheValues.allKeys];
             
             for (id key in cacheValues) {
-                expect(populatedCache[key]).to.beNil;
+                expect(populatedCache[key]).to.beNil();
             }
         });
     });
@@ -204,7 +214,7 @@ describe(@"YMMemoryCache", ^{
             }
             
             for (id key in keysToRemove) { // test removed
-                expect(populatedCache[key]).to.beNil;
+                expect(populatedCache[key]).to.beNil();
             }
         });
         
@@ -277,94 +287,107 @@ describe(@"YMMemoryCache", ^{
             populatedCache.evictionInterval = interval;
             expect(context).will.beNull;
         });
+        
+        it(@"Should pass NULL for eviction contexxt", ^{ // easy dispatch_time bug
+            NSTimeInterval origInterval = emptyCache.evictionInterval;
+            emptyCache.evictionInterval = 123.0;
+            expect(emptyCache.evictionInterval).equal(origInterval);
+        });
     });
     
     context(@"-sendPendingNotifications", ^{
         
         it(@"Should send notification shortly after -addEntriesFromDictionary", ^{
-            // Kiwi notifications don't seem to work well with async notifications
-            __block BOOL passed = NO;
-            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
-                                                                            object:emptyCache
-                                                                             queue:[NSOperationQueue mainQueue]
-                                                                        usingBlock:^(NSNotification *note) {
-                                                                            passed = [note.userInfo isEqual:cacheValues];
-                                                                        }];
+            __block NSNotification *notification;
+            __block id observer;
+            waitUntilTimeout(emptyCache.notificationInterval + 0.10, ^(DoneCallback done) {
+                observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
+                                                                                object:emptyCache
+                                                                                 queue:[NSOperationQueue mainQueue]
+                                                                            usingBlock:^(NSNotification *note) {
+                                                                                notification = note;
+                                                                                done();
+                                                                            }];
+                [emptyCache addEntriesFromDictionary:cacheValues];
+            });
             
-            [emptyCache addEntriesFromDictionary:cacheValues];
+            expect(notification).toNot.beNil();
+            expect(notification.userInfo).to.equal(cacheValues);
             
-            expect(passed).after(emptyCache.notificationInterval + 0.25).beTruthy;
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });
         
         it(@"Should send notification shortly after -setObject:forKeyedSubscript:", ^{
-            // Kiwi notifications don't seem to work well with async notifications
-            __block BOOL passed = NO;
-            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
-                                                                            object:emptyCache
-                                                                             queue:[NSOperationQueue mainQueue]
-                                                                        usingBlock:^(NSNotification *note) {
-                                                                            passed = [note.userInfo isEqual:@{@"Key": @"Value"}];
-                                                                        }];
+            __block NSNotification *notification;
+            __block id observer;
+            waitUntilTimeout(emptyCache.notificationInterval + 0.10, ^(DoneCallback done) {
+                observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
+                                                                             object:emptyCache
+                                                                              queue:[NSOperationQueue mainQueue]
+                                                                         usingBlock:^(NSNotification *note) {
+                                                                             notification = note;
+                                                                             done();
+                                                                         }];
+                emptyCache[@"Key"] = @"Value";
+            });
             
-            emptyCache[@"Key"] = @"Value";
+            expect(notification.userInfo).to.equal(@{@"Key": @"Value"});
             
-            expect(passed).after(emptyCache.notificationInterval + 0.25).beTruthy;
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });
         
         it(@"Should send notification including multiple changes during the same period", ^{
-            // Kiwi notifications don't seem to work well with async notifications
-            __block BOOL passed = NO;
-            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
-                                                                            object:emptyCache
-                                                                             queue:[NSOperationQueue mainQueue]
-                                                                        usingBlock:^(NSNotification *note) {
-                                                                            NSMutableDictionary *d = [cacheValues mutableCopy];
-                                                                            d[@"Key"] = @"Value";
-                                                                            passed = [note.userInfo isEqual:[d copy]];
-                                                                        }];
+            __block NSNotification *notification;
+            __block id observer;
+            waitUntilTimeout(emptyCache.notificationInterval + 0.10, ^(DoneCallback done) {
+                observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
+                                                                             object:emptyCache
+                                                                              queue:[NSOperationQueue mainQueue]
+                                                                         usingBlock:^(NSNotification *note) {
+                                                                             notification = note;
+                                                                             done();
+                                                                         }];
+                
+                [emptyCache addEntriesFromDictionary:cacheValues];
+                emptyCache[@"Key"] = @"Value";
+            });
             
-            [emptyCache addEntriesFromDictionary:cacheValues];
-            emptyCache[@"Key"] = @"Value";
+            NSMutableDictionary *d = [cacheValues mutableCopy];
+            d[@"Key"] = @"Value";
+            expect(notification.userInfo).to.equal([d copy]);
             
-            expect(passed).after(emptyCache.notificationInterval + 0.25).beTruthy;
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });
         
         it(@"Should NOT send notification after -removeAllObjects", ^{
-            // Kiwi notifications don't seem to work well with async notifications
-            __block BOOL called = NO;
+            __block NSNotification *notification;
             id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
                                                                             object:populatedCache
                                                                              queue:[NSOperationQueue mainQueue]
                                                                         usingBlock:^(NSNotification *note) {
-                                                                            called = YES;
+                                                                            notification = note;
                                                                         }];
-            
             populatedCache.notificationInterval = 0.10;
             [populatedCache removeAllObjects];
             
-            [NSThread sleepForTimeInterval:0.35];
-            expect(called).to.beFalsy;
+            expect(notification).after(0.20).to.beNil();
+            
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });
         
         it(@"Should NOT send notification after -removeObjectsForKeys:", ^{
-            // Kiwi notifications don't seem to work well with async notifications
-            __block BOOL called = NO;
+            __block NSNotification *notification;
             id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
                                                                             object:populatedCache
                                                                              queue:[NSOperationQueue mainQueue]
                                                                         usingBlock:^(NSNotification *note) {
-                                                                            called = YES;
+                                                                            notification = note;
                                                                         }];
-            
             populatedCache.notificationInterval = 0.10;
             [populatedCache removeObjectsForKeys:cacheValues.allKeys];
             
-            [NSThread sleepForTimeInterval:0.35];
-            expect(called).to.beFalsy;
+            expect(notification).after(0.20).to.beNil();
+            
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });
     });
@@ -380,43 +403,45 @@ describe(@"YMMemoryCache", ^{
             expect(emptyCache.notificationInterval).will.equal(500.0);
         });
         
-        it(@"Should NOT send notification if interval is 0", ^{
-            // Kiwi notifications don't seem to work well with async notifications
-            __block BOOL called = NO;
+        it(@"Should NOT send notification when interval is 0", ^{
+            __block NSNotification *notification;
             id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
                                                                             object:populatedCache
                                                                              queue:[NSOperationQueue mainQueue]
                                                                         usingBlock:^(NSNotification *note) {
-                                                                            called = YES;
+                                                                            notification = note;
                                                                         }];
-            
+            populatedCache.notificationInterval = 0.2;
             populatedCache.notificationInterval = 0.0;
             [populatedCache removeAllObjects];
+            populatedCache.notificationInterval = 0.2;
+        
+            expect(notification).after(0.5).to.beNil();
             
-            [NSThread sleepForTimeInterval:1.2];
-            expect(called).to.beFalsy;
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });
         
-        it(@"Should send notifications after being disabled, not including items changed while notifications were disabled", ^{
-            // Kiwi notifications don't seem to work well with async notifications
-            __block BOOL passed = NO;
-            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
-                                                                            object:populatedCache
-                                                                             queue:[NSOperationQueue mainQueue]
-                                                                        usingBlock:^(NSNotification *note) {
-                                                                            passed = [note.userInfo isEqual:@{@"Key": @"Value"}];
-                                                                        }];
+        it(@"Should not include in notification changes that were made while notifications were disabled", ^{
+            __block NSDictionary *userInfo;
+            __block id observer;
+            waitUntil(^(DoneCallback done) {
+                observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
+                                                                             object:populatedCache
+                                                                              queue:[NSOperationQueue mainQueue]
+                                                                         usingBlock:^(NSNotification *note) {
+                                                                             userInfo = note.userInfo;
+                                                                             done();
+                                                                         }];
+                
+                populatedCache.notificationInterval = 0.0;
+                [populatedCache removeAllObjects];
+                
+                populatedCache.notificationInterval = 0.2;
+                populatedCache[@"Key"] = @"Value";
+            });
             
-            populatedCache.notificationInterval = 0.0;
-            [populatedCache removeAllObjects];
+            expect(userInfo).after(0.5).to.equal(@{@"Key": @"Value"});
             
-            [NSThread sleepForTimeInterval:0.5];
-            
-            populatedCache.notificationInterval = 0.10;
-            populatedCache[@"Key"] = @"Value";
-            
-            expect(passed).will.beTruthy;
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });
         
