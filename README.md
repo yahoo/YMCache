@@ -1,8 +1,18 @@
 # YMCache
 
-YMCache is a lightweight object caching solution for iOS and Mac OS X that is designed for highly parallel access scenarios. YMCache presents a familiar interface enumating `NSMutableDictionary`, while internally leveraging Apple's [Grand Central Dispath](https://developer.apple.com/library/ios/documentation/Performance/Reference/GCD_libdispatch_Ref/index.html) technology to strike a balance between perforamnce and consistency.
+[![Build Status](https://travis-ci.org/yahoo/YMCache.svg?branch=master)](https://travis-ci.org/yahoo/YMCache)
+[![Coverage Status](https://coveralls.io/repos/yahoo/YMCache/badge.svg?branch=master&service=github)](https://coveralls.io/github/yahoo/YMCache?branch=master)
 
-The Yahoo Finance iOS team uses YMCache to multiplex access to it's database of thousands of real-time stocks which change in unpredictable ways, at an unpredictable cadence. YMcache helps relieve the complexity of multi-thread access to a central data store by providing a set of easy to understand [reader-writer](https://en.wikipedia.org/wiki/Readers–writer_lock) access semantics.
+[![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg)](https://github.com/Carthage/Carthage)
+[![CocoaPods Compatible](https://img.shields.io/badge/CocoaPods-compatible-brightgreen.svg)](https://github.com/CocoaPods/CocoaPods)
+[![GitHub license](https://img.shields.io/github/license/yahoo/YMCache.svg)](https://raw.githubusercontent.com/yahoo/YMCache/master/LICENSE.md)
+[![Supported Platforms](https://img.shields.io/cocoapods/p/YMCache.svg)]()
+
+---
+
+YMCache is a lightweight object caching solution for iOS and Mac OS X that is designed for highly parallel access scenarios. YMCache presents a familiar interface emulating `NSMutableDictionary`, while internally leveraging Apple's [Grand Central Dispath](https://developer.apple.com/library/ios/documentation/Performance/Reference/GCD_libdispatch_Ref/index.html) technology to strike a balance between perforamnce and consistency.
+
+The Yahoo Finance iOS team uses YMCache to multiplex access to it's database of thousands of real-time stocks, which change in unpredictable ways, with an unpredictable cadence. YMCache helps relieve the complexity of multi-thread access to a central data store by providing a set of easy to understand [reader-writer](https://en.wikipedia.org/wiki/Readers–writer_lock) access semantics.
 
 ### Parallel Access
 
@@ -12,16 +22,12 @@ The Yahoo Finance iOS team uses YMCache to multiplex access to it's database of 
 
 The above rules allow for multiple readers, but a single writer. A nice result of this approach is that reads are serialized with respect to writes, enforcing a sensible order: you may read with the confidence that the expected data has been fully written.
 
-### Single vs Bulks Reads & Writes
-
-YMCache provides support for both single-value reads/writes, and efficient multi-value reads/writes. Bulk reads and writes follow the [Parallel Access](#ParallelAccess) rules, but count as a single operation.
-
 ### Features
 
-- Persistence: save/load a cache from disk once, or at intervals
-- Eviction: handle low memory situations in-band, using whatever logic suits your needs
-- Serialization: support for arbitrary model transformations comes for free. You can use Mantle, NSJSONSerialization or any serialization format you can think up!
-- Bulk operations: efficient multi-value reads/writes. (Bulk operations follow the [Parallel Access](#ParallelAccess) rules, but count as a single operation)
+- **Persistence**: save/load a cache from disk once, or at a defined interval
+- **Eviction**: handle low memory situations in-band, using whatever logic suits your needs
+- **Serialization**: arbitrary model transformations comes for free. You can use Mantle, straight NSJSONSerialization or any other format you can think up!
+- **Bulk operations**: efficient multi-value reads/writes. (Bulk operations follow the [Parallel Access](#ParallelAccess) rules, but count as a single operation)
 
 ## SETUP
 
@@ -53,7 +59,11 @@ We support the [CocoaPods](http://github.com/CocoaPods/CocoaPods) and [Carthage]
 
 ## Usage
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+To run the example projects, clone the repo, and run `pod install` from one of the directories in Example.
+
+### Example: Mantle Serialization
+
+It's very easy to use Mantle – version 1 or 2 – to serialize your cache to disk! Check out the pre-built, production-ready example in [Examples/Mantle](https://github.com/yahoo/YMCache/tree/master/Examples/Mantle).
 
 ## Support & Contributing
 
@@ -61,4 +71,4 @@ Report any bugs or send feature requests to the GitHub issues. Pull requests are
 
 ## License
 
-Apache 2.0 license. See the [LICENSE](https://github.com/yahoo/YMCache/blob/master/LICENSE) file for details.
+MIT license. See the [LICENSE](https://github.com/yahoo/YMCache/blob/master/LICENSE) file for details.
