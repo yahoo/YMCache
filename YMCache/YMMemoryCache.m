@@ -52,7 +52,7 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
         if (evictionDecider) {
             _evictionDecider = evictionDecider;
             NSString *evictionQueueName = [queueName stringByAppendingString:@" (eviction)"];
-            _evictionDeciderQueue = dispatch_queue_create([evictionQueueName UTF8String], DISPATCH_QUEUE_CONCURRENT);
+            _evictionDeciderQueue = dispatch_queue_create([evictionQueueName UTF8String], DISPATCH_QUEUE_SERIAL);
             
             // Time interval to notify UI. This sets the overall update cadence for the app.
             [self setEvictionInterval:600.0];
@@ -63,6 +63,21 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
         _items = [NSMutableDictionary dictionary];
     }
     return self;
+}
+
+- (void)dealloc {
+    self.queue = nil; // kill queue, then kill timers
+    self.evictionDeciderQueue = nil;
+    
+    dispatch_source_t evictionTimer = self.evictionTimer;
+    if (evictionTimer && 0 == dispatch_source_testcancel(evictionTimer)) {
+        dispatch_source_cancel(evictionTimer);
+    }
+    
+    dispatch_source_t notificationTimer = self.notificationTimer;
+    if (notificationTimer && 0 == dispatch_source_testcancel(notificationTimer)) {
+        dispatch_source_cancel(notificationTimer);
+    }
 }
 
 #pragma mark - Persistence
@@ -88,60 +103,63 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
 #pragma mark - Property Setters
 
 - (void)setEvictionInterval:(NSTimeInterval)evictionInterval {
-    if (!_evictionDeciderQueue) { // abort if this instance was not configured with an evictionDecider
+    if (!self.evictionDeciderQueue) { // abort if this instance was not configured with an evictionDecider
         return;
     }
     
-    dispatch_barrier_async(_evictionDeciderQueue, ^{
+    dispatch_barrier_async(self.evictionDeciderQueue, ^{
         _evictionInterval = evictionInterval;
         
-        if (_evictionTimer) {
-            dispatch_source_cancel(_evictionTimer);
-            _evictionTimer = nil;
+        if (self.evictionTimer) {
+            dispatch_source_cancel(self.evictionTimer);
+            self.evictionTimer = nil;
         }
         
         if (evictionInterval > 0) {
-            _evictionTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, _evictionDeciderQueue);
+            self.evictionTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, self.evictionDeciderQueue);
+            
+            __weak typeof(self) weakSelf = self;
+            dispatch_source_set_event_handler(self.evictionTimer, ^{ [weakSelf purgeEvictableItems:NULL]; });
             
             dispatch_source_set_timer(_evictionTimer,
                                       dispatch_time(DISPATCH_TIME_NOW, _evictionInterval * NSEC_PER_SEC),
-                                      _evictionInterval * NSEC_PER_SEC,
-                                      5.0 * NSEC_PER_SEC);
+                                      self.evictionInterval * NSEC_PER_SEC,
+                                      5 * NSEC_PER_MSEC);
             
-            __weak typeof(self) weakSelf = self;
-            dispatch_source_set_event_handler(_evictionTimer, ^{ [weakSelf purgeEvictableItems:NULL]; });
-            
-            dispatch_resume(_evictionTimer);
+            dispatch_resume(self.evictionTimer);
         }
     });
 }
 
 - (void)setNotificationInterval:(NSTimeInterval)notificationInterval {
+
     dispatch_barrier_async(self.queue, ^{
         _notificationInterval = notificationInterval;
         
-        if (_notificationTimer) {
-            dispatch_source_cancel(_notificationTimer);
-            _notificationTimer = nil;
+        if (self.notificationTimer) {
+            dispatch_source_cancel(self.notificationTimer);
+            self.notificationTimer = nil;
         }
         
-        if (_notificationInterval > 0) {
-            _pendingNotify = [NSMutableDictionary dictionary];
+        if (self.notificationInterval > 0) {
+            self.pendingNotify = [NSMutableDictionary dictionary];
             
-            _notificationTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
-            
-            dispatch_source_set_timer(_notificationTimer,
-                                      dispatch_time(DISPATCH_TIME_NOW, _notificationInterval * NSEC_PER_SEC),
-                                      _notificationInterval * NSEC_PER_SEC,
-                                      0.15 * NSEC_PER_SEC);
+            self.notificationTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, self.queue);
             
             __weak typeof(self) weakSelf = self;
-            dispatch_source_set_event_handler(_notificationTimer, ^{ [weakSelf sendPendingNotifications]; });
+            dispatch_source_set_event_handler(self.notificationTimer, ^{
+                [weakSelf sendPendingNotifications];
+            });
             
-            dispatch_resume(_notificationTimer);
+            dispatch_source_set_timer(self.notificationTimer,
+                                      dispatch_time(DISPATCH_TIME_NOW, self.notificationInterval * NSEC_PER_SEC),
+                                      self.notificationInterval * NSEC_PER_SEC,
+                                      5 * NSEC_PER_MSEC);
+            
+            dispatch_resume(self.notificationTimer);
         }
         else {
-            _pendingNotify = nil;
+            self.pendingNotify = nil;
         }
     });
 }
@@ -196,21 +214,18 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
 #pragma mark - Notification
 
 - (void)sendPendingNotifications {
-    NSAssert([NSThread isMainThread], @"Main thread only");
+    AssertPrivateQueue;
     
-    __block NSDictionary *pending;
-    dispatch_sync(self.queue, ^{ // does not require a barrier since setObject: is the only other mutator
-        if (_pendingNotify.count > 0) {
-            pending = [self.pendingNotify copy];
-            self.pendingNotify = [NSMutableDictionary dictionary];
-        }
-    });
-    
-    if (pending.count > 0) {
+    NSDictionary *pending = [self.pendingNotify copy];
+    if (!pending.count) {
+        return;
+    }
+
+    dispatch_async(dispatch_get_main_queue(), ^{ // does not require a barrier since setObject: is the only other mutator
         [[NSNotificationCenter defaultCenter] postNotificationName:kYFCacheItemsChangedNotificationKey
                                                             object:self
                                                           userInfo:pending];
-    }
+    });
 }
 
 #pragma mark - Cleanup

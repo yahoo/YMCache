@@ -3,26 +3,22 @@ osx_image: xcode6.4
 xcode_project: YMCache.xcodeproj
 xcode_scheme: YMCache-iOS
 before_install:
-- brew update || brew update
-- brew install carthage || brew outdated carthage || brew upgrade carthage
-- brew install xctool || brew outdated xctool || brew upgrade xctool
-- gem install xcpretty --no-rdoc --no-ri --no-document --quiet
-- gem install slather --no-rdoc --no-ri --no-document --quiet
-- "./script/travis-codesign-setup.sh"
+  - brew update || brew update
+  - brew install carthage || brew outdated carthage || brew upgrade carthage
+  - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
+  - gem install xcpretty-travis-formatter --no-rdoc --no-ri --no-document --quiet
+  - gem install slather --no-rdoc --no-ri --no-document --quiet
+  - "./script/travis-codesign-setup.sh"
 install:
-- carthage bootstrap --verbose
+  - carthage bootstrap
 after_install:
-- "./script/travis-codesign-teardown.sh"
+  - "./script/travis-codesign-teardown.sh"
 script:
-- set -o pipefail && xctool test -project YMCache.xcodeproj -scheme YMCache-iOS -sdk
-  iphonesimulator ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES
-  | xcpretty -c
-- set -o pipefail && xctool test -project YMCache.xcodeproj -scheme YMCache-Mac -sdk
-  macosx ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES
-  | xcpretty -c
-- pod lib lint --quick
+  - xcodebuild clean test -project YMCache.xcodeproj -scheme YMCache-iOS -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES | xcpretty -c -f `xcpretty-travis-formatter`
+  - set -o pipefail && xcodebuild clean test -project YMCache.xcodeproj -scheme YMCache-Mac -sdk macosx ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES | xcpretty -c -f `xcpretty-travis-formatter`
+  - pod lib lint --quick
 after_success:
-- slather
+  - slather
 env:
   global:
     secure: XjmvN8ABJy19pzTQtCnbi8PKei+fJ8m20LU2cuNEDP3LfTwt34tVtYGNaI4YTEiPpEvKTSWQpRUUQWzw3l2AyY6ia282URtxYXi3lSlH2WW0zjqkueWlFDCnrTeuv+DLQVE1uQt1F8ErWYTSCT81t13WeCgE3NKDGB0eDmEncUYqQOr7w8kMFoOZWxp7PRNHGDzqsZXTAmkLvoEwjEnWy/nXrO2ES4xckYR91NofFk6mfCecsWCmM/ZLOC/nRLG2GtHhvWWWkdaMqr7o8/n/YU/0uW3tR4J/D3YtdKgiNA1pROdqXZnIt6+MQO9M2v84BB123LMIeANxv9OyAzL1fZq/7h1hePOUW2gSo2HLOju1wtC2t6d+WuKLuUFB2l9hYj5fJggmVk9O3a25wlzMtP/LQMgQ/kCmrIVqMNSsLPuNXgYFb1tD65qd1zFHFPFoO+caTRoGyDAWO84CyOJGmBuOmkswZk70qtPbDPuHfKSf53lZaIfxAZ0mWGCOB4/UiT7Yy3cx2Q60o2rQTskZExL2dBpExCkRnSTBknrN13UFljBbZ16W9OiN5Q0BUVOcO3JjvGOOr4QCgYVh50cfWONJyiq6xxz/6WNESj6qTYJ7/uRtwhdW9oCOq53ci9q8pYFJ/VSojzNQjjPOyx8N8dtJ019PE6nGiREnd6a0EIU=
