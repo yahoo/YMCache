@@ -20,13 +20,16 @@ fdescribe(@"YMMemoryCache", ^{
     
     beforeEach(^{
         emptyCache = [YMMemoryCache memoryCacheWithName:cacheName];
-        emptyCache.notificationInterval = 0.2;
+        emptyCache.notificationInterval = 0.25;
 
         decider = ^BOOL(id key, id value, void *ctx) {
             return NO;
         };
         
         populatedCache = [YMMemoryCache memoryCacheWithName:cacheName evictionDecider:^BOOL(id key, id value, void *context) {
+            if (!decider) { // afterEach is brutal in it's cleanup.
+                return NO;
+            }
             return decider(key, value, context); // tests can swap this value out as needed.
         }];
         [populatedCache addEntriesFromDictionary:cacheValues];
@@ -248,6 +251,12 @@ fdescribe(@"YMMemoryCache", ^{
             expect(deciderCalled).to.beFalsy;
         });
         
+        it(@"Should ignore evictionInterval if no decider block set", ^{
+            NSTimeInterval originalInterval = emptyCache.evictionInterval;
+            emptyCache.evictionInterval = 123.0;
+            expect(emptyCache.evictionInterval).after(0.25).equal(originalInterval);
+        });
+        
         it(@"Should evict after interval", ^{
             __block BOOL deciderCalled = NO;
             decider = ^BOOL(id key, id value, void *ctx) {
@@ -255,9 +264,8 @@ fdescribe(@"YMMemoryCache", ^{
                 return NO;
             };
             
-            NSTimeInterval interval = 0.5;
-            populatedCache.evictionInterval = interval;
-            expect(deciderCalled).will.beTruthy;
+            populatedCache.evictionInterval = 0.01;
+            expect(deciderCalled).after(0.25).beTruthy;
         });
         
         it(@"Should disable eviction property", ^{
@@ -269,29 +277,23 @@ fdescribe(@"YMMemoryCache", ^{
             
             NSTimeInterval interval = 0.5;
             populatedCache.evictionInterval = interval;
-            [NSThread sleepForTimeInterval:interval / 2.0];
-            populatedCache.evictionInterval = 0;
+            dispatch_after((interval / 4.0) * NSEC_PER_SEC, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                populatedCache.evictionInterval = 0;
+            });
             
-            [NSThread sleepForTimeInterval:interval];
-            expect(deciderCalled).to.beFalsy;
+            expect(deciderCalled).after(interval * 2.0).beFalsy;
         });
         
-        it(@"Should pass NULL for eviction contexxt", ^{ // easy dispatch_time bug
+        it(@"Should pass NULL for eviction context", ^{ // easy dispatch_time bug
             __block void *context = "Not Null";
             decider = ^BOOL(id key, id value, void *ctx) {
                 context = ctx;
                 return NO;
             };
             
-            NSTimeInterval interval = 0.5;
+            NSTimeInterval interval = 0.01;
             populatedCache.evictionInterval = interval;
-            expect(context).will.beNull;
-        });
-        
-        it(@"Should pass NULL for eviction contexxt", ^{ // easy dispatch_time bug
-            NSTimeInterval origInterval = emptyCache.evictionInterval;
-            emptyCache.evictionInterval = 123.0;
-            expect(emptyCache.evictionInterval).equal(origInterval);
+            expect(context).after(0.25).beNull;
         });
     });
     
@@ -300,7 +302,7 @@ fdescribe(@"YMMemoryCache", ^{
         it(@"Should send notification shortly after -addEntriesFromDictionary", ^{
             __block NSNotification *notification;
             __block id observer;
-            waitUntilTimeout(emptyCache.notificationInterval + 0.10, ^(DoneCallback done) {
+            waitUntilTimeout(emptyCache.notificationInterval + 1.0, ^(DoneCallback done) {
                 observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
                                                                                 object:emptyCache
                                                                                  queue:[NSOperationQueue mainQueue]
@@ -311,7 +313,6 @@ fdescribe(@"YMMemoryCache", ^{
                 [emptyCache addEntriesFromDictionary:cacheValues];
             });
             
-            expect(notification).toNot.beNil();
             expect(notification.userInfo).to.equal(cacheValues);
             
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
@@ -320,7 +321,7 @@ fdescribe(@"YMMemoryCache", ^{
         it(@"Should send notification shortly after -setObject:forKeyedSubscript:", ^{
             __block NSNotification *notification;
             __block id observer;
-            waitUntilTimeout(emptyCache.notificationInterval + 0.10, ^(DoneCallback done) {
+            waitUntilTimeout(emptyCache.notificationInterval + 1.0, ^(DoneCallback done) {
                 observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
                                                                              object:emptyCache
                                                                               queue:[NSOperationQueue mainQueue]
@@ -339,7 +340,7 @@ fdescribe(@"YMMemoryCache", ^{
         it(@"Should send notification including multiple changes during the same period", ^{
             __block NSNotification *notification;
             __block id observer;
-            waitUntilTimeout(emptyCache.notificationInterval + 0.10, ^(DoneCallback done) {
+            waitUntilTimeout(emptyCache.notificationInterval + 1.0, ^(DoneCallback done) {
                 observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
                                                                              object:emptyCache
                                                                               queue:[NSOperationQueue mainQueue]
@@ -367,10 +368,10 @@ fdescribe(@"YMMemoryCache", ^{
                                                                         usingBlock:^(NSNotification *note) {
                                                                             notification = note;
                                                                         }];
-            populatedCache.notificationInterval = 0.10;
+            populatedCache.notificationInterval = 0.01;
             [populatedCache removeAllObjects];
             
-            expect(notification).after(0.20).to.beNil();
+            expect(notification).after(0.25).to.beNil();
             
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });
@@ -383,10 +384,10 @@ fdescribe(@"YMMemoryCache", ^{
                                                                         usingBlock:^(NSNotification *note) {
                                                                             notification = note;
                                                                         }];
-            populatedCache.notificationInterval = 0.10;
+            populatedCache.notificationInterval = 0.01;
             [populatedCache removeObjectsForKeys:cacheValues.allKeys];
             
-            expect(notification).after(0.20).to.beNil();
+            expect(notification).after(0.25).to.beNil();
             
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });
@@ -436,11 +437,11 @@ fdescribe(@"YMMemoryCache", ^{
                 populatedCache.notificationInterval = 0.0;
                 [populatedCache removeAllObjects];
                 
-                populatedCache.notificationInterval = 0.2;
+                populatedCache.notificationInterval = 0.01;
                 populatedCache[@"Key"] = @"Value";
             });
             
-            expect(userInfo).after(0.5).to.equal(@{@"Key": @"Value"});
+            expect(userInfo).will.equal(@{@"Key": @"Value"});
             
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });
