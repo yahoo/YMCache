@@ -6,15 +6,15 @@ before_install:
   - brew update || brew update
   - brew install carthage || brew outdated carthage || brew upgrade carthage
   - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
-  - gem install slather --no-rdoc --no-ri --no-document --quiet
   - gem install xcpretty-travis-formatter --no-rdoc --no-ri --no-document --quiet
+  - gem install slather --no-rdoc --no-ri --no-document --quiet
   - "./script/travis-codesign-setup.sh"
 install:
   - carthage bootstrap
 after_install:
   - "./script/travis-codesign-teardown.sh"
 script:
-  - xcodebuild clean test -project YMCache.xcodeproj -scheme YMCache-iOS -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES
+  - xcodebuild clean test -project YMCache.xcodeproj -scheme YMCache-iOS -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES | xcpretty -c -f `xcpretty-travis-formatter`
   - set -o pipefail && xcodebuild clean test -project YMCache.xcodeproj -scheme YMCache-Mac -sdk macosx ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES | xcpretty -c -f `xcpretty-travis-formatter`
   - pod lib lint --quick
 after_success:
