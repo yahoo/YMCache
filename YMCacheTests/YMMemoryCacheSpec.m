@@ -360,6 +360,21 @@ fdescribe(@"YMMemoryCache", ^{
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });
         
+        it(@"Should NOT send notification if there were no changes", ^{
+            __block NSNotification *notification;
+            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
+                                                                            object:populatedCache
+                                                                             queue:[NSOperationQueue mainQueue]
+                                                                        usingBlock:^(NSNotification *note) {
+                                                                            notification = note;
+                                                                        }];
+            populatedCache.notificationInterval = 0.01;
+            
+            expect(notification).after(0.2).to.beNil();
+            
+            [[NSNotificationCenter defaultCenter] removeObserver:observer];
+        });
+        
         it(@"Should NOT send notification after -removeAllObjects", ^{
             __block NSNotification *notification;
             id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
@@ -371,7 +386,7 @@ fdescribe(@"YMMemoryCache", ^{
             populatedCache.notificationInterval = 0.01;
             [populatedCache removeAllObjects];
             
-            expect(notification).after(0.25).to.beNil();
+            expect(notification).after(0.10).to.beNil();
             
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });
