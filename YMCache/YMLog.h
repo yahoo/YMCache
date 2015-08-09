@@ -3,7 +3,7 @@
 //  Licensed under the terms of the MIT License. See LICENSE file in the project root.
 
 //compile out any logging for production builds
-#ifdef DISTRIBUTION
+#ifndef DEBUG
 
 // no-op both YFLog and NSLog in release mode
 #define YMLog_(lvl, fmt, ...) NSLog
