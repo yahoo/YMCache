@@ -59,9 +59,100 @@ We support the [CocoaPods](http://github.com/CocoaPods/CocoaPods) and [Carthage]
 
 ## Usage
 
+#### Synopsis
+```objc
+YMMemoryCache *cache = [YMMemoryCache memoryCacheWithName:@"my-object-cache"];
+cache[@"Key1"] = valueA;
+MyVal *valueA = cache[@"Key1"];
+[cache addEntriesFromDictionary:@{ @"Key2": value2 }];
+NSDictionary *allItems = [cache allItems];
+[cache removeAllObjects];
+// cache = empty; allItems = @{ @"Key1": value1, @"Key2": value2 }
+```
+This cache is essentially a completely thread-safe NSDictionary with read-write order guarantees.
+
+#### Eviction
+
+##### Manual eviction
+```objc`
+// Create memory cache with an eviction decider block, which will be triggered for each item in the cache whenever
+// you call `-purgeEvictableItems:`.
+YMMemoryCache *cache = [YMMemoryCache memoryCacheWithName:@"my-object-cache"
+                                          evictionDecider:^(NSString *key, NewsStory *value, void *context) {
+                                              return value.publishDate > [NSDate dateWithTimeIntervalSinceNow:-300];
+                                          }];
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [cache purgeEvictableItems:nil];
+    });
+```
+This example cache includes an eviction block which is called once after a 10 second delay. You are responsible for implementing the logic to decide which items are safe to evict. In this case, `NewsStory` models published more than 5 minutes ago will be purged from the cache. In this case, the eviction decider will be invoked on the main queue, because that is where `-purgeEvictableItems:` is called from.
+
+##### Time-based eviction
+```objc`
+YMMemoryCache *cache = [YMMemoryCache memoryCacheWithName:@"my-object-cache"
+                                          evictionDecider:^(NSString *key, NewsStory *value, void *context) {
+                                              return value.publishDate > [NSDate dateWithTimeIntervalSinceNow:-300];
+                                          }];
+
+cache.evictionInterval = 60.0; // trigger eviction every 60 seconds
+```
+This creates a cache periodic time-based cache evictions every 60 seconds. Note that automatic invocations of the eviction decider execute on an arbitrary background thread. This approach can be combined with other manual eviction calls to provide a situations in which cache eviction is triggered on-demand, but at lease every N minutes.
+
+##### Automatic eviction on low memory
+```objc`
+// Create memory cache with an eviction decider block, which will be triggered for each item in the cache whenever
+// you call `-purgeEvictableItems:`.
+YMMemoryCache *cache = [YMMemoryCache memoryCacheWithName:@"my-object-cache"
+                                          evictionDecider:^(NSString *key, NewsStory *value, void *context) {
+                                              return value.publishDate > [NSDate dateWithTimeIntervalSinceNow:-300];
+                                          }];
+
+// Trigger in-band cache eviction during low memory events.
+[[NSNotificationCenter defaultCenter] addObserver:cache
+                                         selector:@selector(purgeEvictableItems:)
+                                             name:UIApplicationDidReceiveMemoryWarningNotification
+                                           object:nil];
+
+// or, more commonly commonly
+
+- (void)didReceiveMemoryWarning {
+	[super didReceiveMemoryWarning];
+    
+    // Trigger immediate synchronous cache cleanup
+    [self.cache purgeEvictableItems:nil];
+}
+```
+The eviction decider blocks that react to low memory situations will execute on the main thread becasue that is the only thread that sends low memory notifications or calls `-didReceiveMemoryWarning`.
+
+#### Observing Changes
+```objc
+YMMemoryCache *cache = [YMMemoryCache memoryCacheWithName:@"my-object-cache"
+                                          evictionDecider:^(NSString *key, NewsStory *value, void *context) {
+                                              return value.publishDate > [NSDate dateWithTimeIntervalSinceNow:-300];
+                                          }];
+
+cache.notificationInterval = 0.2;
+
+[[NSNotificationCenter defaultCenter] addObserver:self
+                                         selector:@selector(cacheUpdated:)
+                                             name:kYFCacheItemsChangedNotificationKey
+                                           object:cache];
+
+// from any thread, such as a network client on a background thread
+cache[@"Key"] = value;
+
+// within 0.2s (as per configuration) the notification will fire and call this
+- (void)cacheUpdated:(NSNotification *)notification {
+	// notification.userInfo == @{ @"Key": value ], plus any other changes since the last notification.
+}
+```
+
+### Examples
+
 To run the example projects, clone the repo, and run `pod install` from one of the directories in Example.
 
-### Example: Mantle Serialization
+#### Example: Mantle Serialization
 
 It's very easy to use Mantle – version 1 or 2 – to serialize your cache to disk! Check out the pre-built, production-ready example in [Examples/Mantle](https://github.com/yahoo/YMCache/tree/master/Examples/Mantle).
 
@@ -72,3 +163,8 @@ Report any bugs or send feature requests to the GitHub issues. Pull requests are
 ## License
 
 MIT license. See the [LICENSE](https://github.com/yahoo/YMCache/blob/master/LICENSE) file for details.
+
+
+[![Pixel](https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif)](#)
+[![Pixel](https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif)](#)
+[![Pixel](https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif)](#)
