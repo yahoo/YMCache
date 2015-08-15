@@ -122,7 +122,7 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
             dispatch_source_set_event_handler(self.evictionTimer, ^{ [weakSelf purgeEvictableItems:NULL]; });
             
             dispatch_source_set_timer(_evictionTimer,
-                                      dispatch_time(DISPATCH_TIME_NOW, _evictionInterval * NSEC_PER_SEC),
+                                      dispatch_time(DISPATCH_TIME_NOW, self.evictionInterval * NSEC_PER_SEC),
                                       self.evictionInterval * NSEC_PER_SEC,
                                       5 * NSEC_PER_MSEC);
             

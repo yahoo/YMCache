@@ -23,6 +23,8 @@
 		FC59B4561B713FC800093177 /* Specta.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FC59B4121B71359700093177 /* Specta.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FC59B4581B713FF000093177 /* Expecta.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FC59B4151B7135A200093177 /* Expecta.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FC59B4591B713FF000093177 /* Specta.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FC59B4161B7135A200093177 /* Specta.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FC81E4311B7E97DE00E1EEF9 /* YMCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC81E4301B7E97DE00E1EEF9 /* YMCache.swift */; };
+		FC81E4321B7E97DE00E1EEF9 /* YMCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC81E4301B7E97DE00E1EEF9 /* YMCache.swift */; };
 		FCD690821B710F520099E854 /* YMCachePersistenceController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB05DDB1B6FDFC300C7302B /* YMCachePersistenceController.m */; };
 		FCD690831B710F540099E854 /* YMMemoryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB05DDE1B6FDFC300C7302B /* YMMemoryCache.m */; };
 		FCD690841B710F5C0099E854 /* YMCache.h in Headers */ = {isa = PBXBuildFile; fileRef = FCDDAB611B7008D4006C333F /* YMCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -82,6 +84,7 @@
 		FC59B4121B71359700093177 /* Specta.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Specta.framework; path = Carthage/Build/Mac/Specta.framework; sourceTree = "<group>"; };
 		FC59B4151B7135A200093177 /* Expecta.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Expecta.framework; path = Carthage/Build/iOS/Expecta.framework; sourceTree = "<group>"; };
 		FC59B4161B7135A200093177 /* Specta.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Specta.framework; path = Carthage/Build/iOS/Specta.framework; sourceTree = "<group>"; };
+		FC81E4301B7E97DE00E1EEF9 /* YMCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YMCache.swift; sourceTree = "<group>"; };
 		FCB05DBA1B6FDF1800C7302B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = YMCacheTests/Info.plist; sourceTree = "<group>"; };
 		FCB05DDA1B6FDFC300C7302B /* YMCachePersistenceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMCachePersistenceController.h; sourceTree = "<group>"; };
 		FCB05DDB1B6FDFC300C7302B /* YMCachePersistenceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMCachePersistenceController.m; sourceTree = "<group>"; };
@@ -247,6 +250,7 @@
 				FCB05DDB1B6FDFC300C7302B /* YMCachePersistenceController.m */,
 				FCB05DDD1B6FDFC300C7302B /* YMMemoryCache.h */,
 				FCB05DDE1B6FDFC300C7302B /* YMMemoryCache.m */,
+				FC81E4301B7E97DE00E1EEF9 /* YMCache.swift */,
 			);
 			name = Public;
 			sourceTree = "<group>";
@@ -441,6 +445,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC81E4321B7E97DE00E1EEF9 /* YMCache.swift in Sources */,
 				FC59B37C1B7115FC00093177 /* YMCachePersistenceController.m in Sources */,
 				FC59B37D1B7115FD00093177 /* YMMemoryCache.m in Sources */,
 			);
@@ -458,6 +463,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC81E4311B7E97DE00E1EEF9 /* YMCache.swift in Sources */,
 				FCD690821B710F520099E854 /* YMCachePersistenceController.m in Sources */,
 				FCD690831B710F540099E854 /* YMMemoryCache.m in Sources */,
 			);
@@ -490,6 +496,7 @@
 		FC59B3771B71156B00093177 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -507,6 +514,7 @@
 				PRODUCT_NAME = "$(PROJECT_NAME)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -515,6 +523,7 @@
 		FC59B3781B71156B00093177 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -654,6 +663,7 @@
 		FCDDAB711B7008D4006C333F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -669,6 +679,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(PROJECT_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -678,6 +689,7 @@
 		FCDDAB721B7008D4006C333F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
