@@ -220,6 +220,7 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
     if (!pending.count) {
         return;
     }
+    [self.pendingNotify removeAllObjects];
 
     dispatch_async(dispatch_get_main_queue(), ^{ // does not require a barrier since setObject: is the only other mutator
         [[NSNotificationCenter defaultCenter] postNotificationName:kYFCacheItemsChangedNotificationKey
