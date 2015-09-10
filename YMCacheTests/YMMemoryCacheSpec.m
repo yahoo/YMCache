@@ -4,9 +4,17 @@
 
 #import <YMCache/YMCache.h>
 
+void pumpRunLoop(NSTimeInterval forSeconds) {
+    NSDate *stopDate = [NSDate dateWithTimeIntervalSinceNow:forSeconds];
+    NSTimeInterval stopInterval = stopDate.timeIntervalSinceReferenceDate;
+    while (stopInterval >= [NSDate date].timeIntervalSinceReferenceDate) {
+        [[NSRunLoop currentRunLoop] runUntilDate:stopDate];
+    }
+}
+
 SpecBegin(YMMemoryCacheSpec)
 
-fdescribe(@"YMMemoryCache", ^{
+describe(@"YMMemoryCache", ^{
     
     NSDictionary *const cacheValues = @{ @"Key0": @"Value0",
                                          @"Key1": @"Value1",
@@ -369,9 +377,38 @@ fdescribe(@"YMMemoryCache", ^{
                                                                             notification = note;
                                                                         }];
             populatedCache.notificationInterval = 0.01;
+            id all = populatedCache.allItems; all = nil; // force block until the interval was set (since it is queue barrier)
             
-            expect(notification).after(0.2).to.beNil();
+            pumpRunLoop(0.2);
             
+            expect(notification).to.beNil(); // expect 0 notifications here
+            
+            [[NSNotificationCenter defaultCenter] removeObserver:observer];
+        });
+        
+        it(@"Should NOT send notification if there were no changes AFTER a change", ^{ // this was a bug: YMCache #8
+            populatedCache.notificationInterval = 0.01;
+            id all = populatedCache.allItems; all = nil; // force block until the interval was set (since it is queue barrier)
+            
+            __block NSNotification *notification;
+            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
+                                                                            object:populatedCache
+                                                                             queue:[NSOperationQueue mainQueue]
+                                                                        usingBlock:^(NSNotification *note) {
+                                                                            NSLog(@"%@", note);
+                                                                            notification = note;
+                                                                        }];
+            
+            populatedCache[@"Something"] = @"ONE";
+            pumpRunLoop(0.25); // wait for the pending notifications to flush.
+            
+            expect(notification).toNot.beNil(); // expect 0 notifications here
+            notification = nil;
+            
+            pumpRunLoop(0.25);
+
+            expect(notification).to.beNil(); // expect 0 notifications here
+
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });
         
@@ -386,7 +423,9 @@ fdescribe(@"YMMemoryCache", ^{
             populatedCache.notificationInterval = 0.01;
             [populatedCache removeAllObjects];
             
-            expect(notification).after(0.10).to.beNil();
+            pumpRunLoop(0.10);
+            
+            expect(notification).to.beNil();
             
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });
@@ -402,7 +441,9 @@ fdescribe(@"YMMemoryCache", ^{
             populatedCache.notificationInterval = 0.01;
             [populatedCache removeObjectsForKeys:cacheValues.allKeys];
             
-            expect(notification).after(0.25).to.beNil();
+            pumpRunLoop(0.25);
+            
+            expect(notification).to.beNil();
             
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });
@@ -432,7 +473,8 @@ fdescribe(@"YMMemoryCache", ^{
             [populatedCache removeAllObjects];
             populatedCache.notificationInterval = 0.2;
         
-            expect(notification).after(0.5).to.beNil();
+            pumpRunLoop(0.5);
+            expect(notification).to.beNil();
             
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });

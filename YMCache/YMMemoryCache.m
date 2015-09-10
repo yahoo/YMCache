@@ -216,11 +216,11 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
 - (void)sendPendingNotifications {
     AssertPrivateQueue;
     
-    NSDictionary *pending = [self.pendingNotify copy];
+    NSDictionary *pending = self.pendingNotify;
     if (!pending.count) {
         return;
     }
-    [self.pendingNotify removeAllObjects];
+    self.pendingNotify = [NSMutableDictionary dictionary];
 
     dispatch_async(dispatch_get_main_queue(), ^{ // does not require a barrier since setObject: is the only other mutator
         [[NSNotificationCenter defaultCenter] postNotificationName:kYFCacheItemsChangedNotificationKey
