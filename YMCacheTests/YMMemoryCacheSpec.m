@@ -14,7 +14,7 @@ void pumpRunLoop(NSTimeInterval forSeconds) {
 
 SpecBegin(YMMemoryCacheSpec)
 
-fdescribe(@"YMMemoryCache", ^{
+describe(@"YMMemoryCache", ^{
     
     NSDictionary *const cacheValues = @{ @"Key0": @"Value0",
                                          @"Key1": @"Value1",
