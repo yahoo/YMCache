@@ -311,7 +311,7 @@ describe(@"YMMemoryCache", ^{
             __block NSNotification *notification;
             __block id observer;
             waitUntilTimeout(emptyCache.notificationInterval + 1.0, ^(DoneCallback done) {
-                observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
+                observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheDidChangeNotification
                                                                                 object:emptyCache
                                                                                  queue:[NSOperationQueue mainQueue]
                                                                             usingBlock:^(NSNotification *note) {
@@ -321,7 +321,10 @@ describe(@"YMMemoryCache", ^{
                 [emptyCache addEntriesFromDictionary:cacheValues];
             });
             
-            expect(notification.userInfo).to.equal(cacheValues);
+            NSDictionary *expectDict = @{ kYFCacheUpdatedItemsUserInfoKey: cacheValues,
+                                          kYFCacheRemovedItemsUserInfoKey: [NSSet set] };
+
+            expect(notification.userInfo).to.equal(expectDict);
             
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });
@@ -330,7 +333,7 @@ describe(@"YMMemoryCache", ^{
             __block NSNotification *notification;
             __block id observer;
             waitUntilTimeout(emptyCache.notificationInterval + 1.0, ^(DoneCallback done) {
-                observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
+                observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheDidChangeNotification
                                                                              object:emptyCache
                                                                               queue:[NSOperationQueue mainQueue]
                                                                          usingBlock:^(NSNotification *note) {
@@ -340,7 +343,10 @@ describe(@"YMMemoryCache", ^{
                 emptyCache[@"Key"] = @"Value";
             });
             
-            expect(notification.userInfo).to.equal(@{@"Key": @"Value"});
+            NSDictionary *expectDict = @{ kYFCacheUpdatedItemsUserInfoKey: @{@"Key": @"Value"},
+                                          kYFCacheRemovedItemsUserInfoKey: [NSSet set] };
+            
+            expect(notification.userInfo).to.equal(expectDict);
             
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });
@@ -349,7 +355,7 @@ describe(@"YMMemoryCache", ^{
             __block NSNotification *notification;
             __block id observer;
             waitUntilTimeout(emptyCache.notificationInterval + 1.0, ^(DoneCallback done) {
-                observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
+                observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheDidChangeNotification
                                                                              object:emptyCache
                                                                               queue:[NSOperationQueue mainQueue]
                                                                          usingBlock:^(NSNotification *note) {
@@ -363,14 +369,18 @@ describe(@"YMMemoryCache", ^{
             
             NSMutableDictionary *d = [cacheValues mutableCopy];
             d[@"Key"] = @"Value";
-            expect(notification.userInfo).to.equal([d copy]);
+            
+            NSDictionary *expectDict = @{ kYFCacheUpdatedItemsUserInfoKey: [d copy],
+                                          kYFCacheRemovedItemsUserInfoKey: [NSSet set] };
+            
+            expect(notification.userInfo).to.equal(expectDict);
             
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });
         
         it(@"Should NOT send notification if there were no changes", ^{
             __block NSNotification *notification;
-            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
+            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheDidChangeNotification
                                                                             object:populatedCache
                                                                              queue:[NSOperationQueue mainQueue]
                                                                         usingBlock:^(NSNotification *note) {
@@ -391,7 +401,7 @@ describe(@"YMMemoryCache", ^{
             id all = populatedCache.allItems; all = nil; // force block until the interval was set (since it is queue barrier)
             
             __block NSNotification *notification;
-            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
+            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheDidChangeNotification
                                                                             object:populatedCache
                                                                              queue:[NSOperationQueue mainQueue]
                                                                         usingBlock:^(NSNotification *note) {
@@ -412,27 +422,31 @@ describe(@"YMMemoryCache", ^{
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });
         
-        it(@"Should NOT send notification after -removeAllObjects", ^{
+        it(@"Should send notification after -removeAllObjects", ^{
             __block NSNotification *notification;
-            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
+            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheDidChangeNotification
                                                                             object:populatedCache
                                                                              queue:[NSOperationQueue mainQueue]
                                                                         usingBlock:^(NSNotification *note) {
                                                                             notification = note;
                                                                         }];
             populatedCache.notificationInterval = 0.01;
+            NSDictionary *allItems = populatedCache.allItems;
             [populatedCache removeAllObjects];
             
-            pumpRunLoop(0.10);
+            pumpRunLoop(0.25);
             
-            expect(notification).to.beNil();
+            NSDictionary *expectDict = @{ kYFCacheUpdatedItemsUserInfoKey: @{},
+                                          kYFCacheRemovedItemsUserInfoKey: [NSSet setWithArray:allItems.allKeys] };
             
+            expect(notification.userInfo).to.equal(expectDict);
+
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });
         
-        it(@"Should NOT send notification after -removeObjectsForKeys:", ^{
+        it(@"Should send notification after -removeObjectsForKeys: (all keys)", ^{
             __block NSNotification *notification;
-            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
+            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheDidChangeNotification
                                                                             object:populatedCache
                                                                              queue:[NSOperationQueue mainQueue]
                                                                         usingBlock:^(NSNotification *note) {
@@ -443,10 +457,39 @@ describe(@"YMMemoryCache", ^{
             
             pumpRunLoop(0.25);
             
-            expect(notification).to.beNil();
+            NSDictionary *expectDict = @{ kYFCacheUpdatedItemsUserInfoKey: @{},
+                                          kYFCacheRemovedItemsUserInfoKey: [NSSet setWithArray:cacheValues.allKeys] };
+            
+            expect(notification.userInfo).to.equal(expectDict);
+            
             
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });
+        
+        
+        it(@"Should send notification after -removeObjectsForKeys: (one key)", ^{
+            __block NSNotification *notification;
+            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheDidChangeNotification
+                                                                            object:populatedCache
+                                                                             queue:[NSOperationQueue mainQueue]
+                                                                        usingBlock:^(NSNotification *note) {
+                                                                            notification = note;
+                                                                        }];
+            populatedCache.notificationInterval = 0.01;
+            NSString *keyToRemove = cacheValues.allKeys.firstObject;
+            [populatedCache removeObjectsForKeys:@[keyToRemove]];
+            
+            pumpRunLoop(0.25);
+            
+            NSDictionary *expectDict = @{ kYFCacheUpdatedItemsUserInfoKey: @{},
+                                          kYFCacheRemovedItemsUserInfoKey: [NSSet setWithObject:keyToRemove] };
+            
+            expect(notification.userInfo).to.equal(expectDict);
+            
+            
+            [[NSNotificationCenter defaultCenter] removeObserver:observer];
+        });
+        
     });
     
     context(@"-notificationInterval", ^{
@@ -462,7 +505,7 @@ describe(@"YMMemoryCache", ^{
         
         it(@"Should NOT send notification when interval is 0", ^{
             __block NSNotification *notification;
-            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
+            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheDidChangeNotification
                                                                             object:populatedCache
                                                                              queue:[NSOperationQueue mainQueue]
                                                                         usingBlock:^(NSNotification *note) {
@@ -483,7 +526,7 @@ describe(@"YMMemoryCache", ^{
             __block NSDictionary *userInfo;
             __block id observer;
             waitUntil(^(DoneCallback done) {
-                observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
+                observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheDidChangeNotification
                                                                              object:populatedCache
                                                                               queue:[NSOperationQueue mainQueue]
                                                                          usingBlock:^(NSNotification *note) {
@@ -498,7 +541,10 @@ describe(@"YMMemoryCache", ^{
                 populatedCache[@"Key"] = @"Value";
             });
             
-            expect(userInfo).will.equal(@{@"Key": @"Value"});
+            NSDictionary *expectDict = @{ kYFCacheUpdatedItemsUserInfoKey: @{ @"Key": @"Value" },
+                                          kYFCacheRemovedItemsUserInfoKey: [NSSet set] };
+            
+            expect(userInfo).will.equal(expectDict);
             
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });

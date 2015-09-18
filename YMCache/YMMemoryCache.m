@@ -10,7 +10,12 @@ NSAssert(dispatch_get_specific(kYFPrivateQueueKey) == (__bridge void *)self, @"W
 #define AssertNotPrivateQueue \
 NSAssert(dispatch_get_specific(kYFPrivateQueueKey) != (__bridge void *)self, @"Potential deadlock: blocking call issues from current queue, to current queue")
 
-NSString *const kYFCacheItemsChangedNotificationKey = @"kYFCacheItemsChangedNotificationKey";
+NSString *const kYFCacheItemsChangedNotificationKey = @"kYFCacheItemsChangedNotificationKey"; // deprecated since 1.1.0
+
+NSString *const kYFCacheDidChangeNotification = @"kYFCacheDidChangeNotification";
+NSString *const kYFCacheUpdatedItemsUserInfoKey = @"kYFCacheUpdatedItemsUserInfoKey";
+NSString *const kYFCacheRemovedItemsUserInfoKey = @"kYFCacheRemovedItemsUserInfoKey";
+
 
 CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
 
@@ -19,7 +24,8 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
 @property (nonatomic) dispatch_source_t notificationTimer;
 @property (nonatomic) dispatch_source_t evictionTimer;
 @property (nonatomic) NSMutableDictionary *items;
-@property (nonatomic) NSMutableDictionary *pendingNotify;
+@property (nonatomic) NSMutableDictionary *updatedPendingNotify;
+@property (nonatomic) NSMutableSet *removedPendingNotify;
 
 @property (nonatomic, strong) YMMemoryCacheEvictionDecider evictionDecider;
 @property (nonatomic) dispatch_queue_t evictionDeciderQueue;
@@ -85,7 +91,10 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
 - (void)addEntriesFromDictionary:(NSDictionary *)dictionary {
     dispatch_barrier_async(self.queue, ^{
         [self.items addEntriesFromDictionary:dictionary];
-        [self.pendingNotify addEntriesFromDictionary:dictionary];
+        [self.updatedPendingNotify addEntriesFromDictionary:dictionary];
+        for (id key in dictionary) {
+            [self.removedPendingNotify removeObject:key];
+        }
     });
 }
 
@@ -142,7 +151,8 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
         }
         
         if (self.notificationInterval > 0) {
-            self.pendingNotify = [NSMutableDictionary dictionary];
+            self.updatedPendingNotify = [NSMutableDictionary dictionary];
+            self.removedPendingNotify = [NSMutableSet set];
             
             self.notificationTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, self.queue);
             
@@ -159,7 +169,8 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
             dispatch_resume(self.notificationTimer);
         }
         else {
-            self.pendingNotify = nil;
+            self.updatedPendingNotify = nil;
+            self.removedPendingNotify = nil;
         }
     });
 }
@@ -183,7 +194,13 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
     __weak typeof(self) weakSelf = self;
     dispatch_barrier_async(self.queue, ^{
         weakSelf.items[key] = obj;
-        weakSelf.pendingNotify[key] = obj;
+        weakSelf.updatedPendingNotify[key] = obj ?: [NSNull null];
+        
+        if (obj) {
+            [weakSelf.removedPendingNotify removeObject:key];
+        } else {
+            [weakSelf.removedPendingNotify addObject:key];
+        }
     });
 }
 
@@ -193,8 +210,12 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
     AssertNotPrivateQueue;
     
     dispatch_barrier_sync(self.queue, ^{
+        for (id key in self.items) {
+            self.updatedPendingNotify[key] = nil;
+            [self.removedPendingNotify addObject:key];
+        }
+        
         [self.items removeAllObjects];
-        [self.pendingNotify removeAllObjects];
     });
 }
 
@@ -206,8 +227,13 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
     }
     
     dispatch_barrier_sync(self.queue, ^{
-        [self.items removeObjectsForKeys:keys];
-        [self.pendingNotify removeObjectsForKeys:keys];
+        for (id key in keys) {
+            if (self.items[key]) {
+                [self.removedPendingNotify addObject:key];
+                self.updatedPendingNotify[key] = nil;
+                self.items[key] = nil;
+            }
+        }
     });
 }
 
@@ -216,16 +242,26 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
 - (void)sendPendingNotifications {
     AssertPrivateQueue;
     
-    NSDictionary *pending = self.pendingNotify;
-    if (!pending.count) {
+    NSDictionary *updatedPending = self.updatedPendingNotify ?: @{};
+    NSSet *removedPending = self.removedPendingNotify ?: [NSSet set];
+    if (!updatedPending.count && !removedPending.count) {
         return;
     }
-    self.pendingNotify = [NSMutableDictionary dictionary];
+    self.updatedPendingNotify = [NSMutableDictionary dictionary];
+    self.removedPendingNotify = [NSMutableSet set];
 
     dispatch_async(dispatch_get_main_queue(), ^{ // does not require a barrier since setObject: is the only other mutator
+        [[NSNotificationCenter defaultCenter] postNotificationName:kYFCacheDidChangeNotification
+                                                            object:self
+                                                          userInfo:@{ kYFCacheUpdatedItemsUserInfoKey: updatedPending,
+                                                                      kYFCacheRemovedItemsUserInfoKey: removedPending }];
+        
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated" // since 1.1.0
         [[NSNotificationCenter defaultCenter] postNotificationName:kYFCacheItemsChangedNotificationKey
                                                             object:self
-                                                          userInfo:pending];
+                                                          userInfo:updatedPending];
+#pragma clang diagnostic pop
     });
 }
 
