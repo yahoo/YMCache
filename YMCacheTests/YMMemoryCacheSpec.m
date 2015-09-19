@@ -3,14 +3,7 @@
 //  Licensed under the terms of the MIT License. See LICENSE file in the project root.
 
 #import <YMCache/YMCache.h>
-
-void pumpRunLoop(NSTimeInterval forSeconds) {
-    NSDate *stopDate = [NSDate dateWithTimeIntervalSinceNow:forSeconds];
-    NSTimeInterval stopInterval = stopDate.timeIntervalSinceReferenceDate;
-    while (stopInterval >= [NSDate date].timeIntervalSinceReferenceDate) {
-        [[NSRunLoop currentRunLoop] runUntilDate:stopDate];
-    }
-}
+#import "NSRunLoop+AsyncTestAdditions.h"
 
 SpecBegin(YMMemoryCacheSpec)
 
@@ -389,7 +382,7 @@ describe(@"YMMemoryCache", ^{
             populatedCache.notificationInterval = 0.01;
             id all = populatedCache.allItems; all = nil; // force block until the interval was set (since it is queue barrier)
             
-            pumpRunLoop(0.2);
+            [[NSRunLoop currentRunLoop] runContinuouslyForInterval:0.5];
             
             expect(notification).to.beNil(); // expect 0 notifications here
             
@@ -405,17 +398,20 @@ describe(@"YMMemoryCache", ^{
                                                                             object:populatedCache
                                                                              queue:[NSOperationQueue mainQueue]
                                                                         usingBlock:^(NSNotification *note) {
-                                                                            NSLog(@"%@", note);
                                                                             notification = note;
                                                                         }];
             
             populatedCache[@"Something"] = @"ONE";
-            pumpRunLoop(0.25); // wait for the pending notifications to flush.
+            
+            // wait for the pending notifications to flush.
+            [[NSRunLoop currentRunLoop] runUntilTrue:^BOOL{
+                return notification != nil;
+            } timeout:1.0];
             
             expect(notification).toNot.beNil(); // expect 0 notifications here
             notification = nil;
             
-            pumpRunLoop(0.25);
+            [[NSRunLoop currentRunLoop] runContinuouslyForInterval:0.25];
 
             expect(notification).to.beNil(); // expect 0 notifications here
 
@@ -434,7 +430,9 @@ describe(@"YMMemoryCache", ^{
             NSDictionary *allItems = populatedCache.allItems;
             [populatedCache removeAllObjects];
             
-            pumpRunLoop(0.25);
+            [[NSRunLoop currentRunLoop] runUntilTrue:^BOOL{
+                return notification != nil;
+            } timeout:1.0];
             
             NSDictionary *expectDict = @{ kYFCacheUpdatedItemsUserInfoKey: @{},
                                           kYFCacheRemovedItemsUserInfoKey: [NSSet setWithArray:allItems.allKeys] };
@@ -455,13 +453,14 @@ describe(@"YMMemoryCache", ^{
             populatedCache.notificationInterval = 0.01;
             [populatedCache removeObjectsForKeys:cacheValues.allKeys];
             
-            pumpRunLoop(0.25);
+            [[NSRunLoop currentRunLoop] runUntilTrue:^BOOL{
+                return notification != nil;
+            } timeout:1.0];
             
             NSDictionary *expectDict = @{ kYFCacheUpdatedItemsUserInfoKey: @{},
                                           kYFCacheRemovedItemsUserInfoKey: [NSSet setWithArray:cacheValues.allKeys] };
             
             expect(notification.userInfo).to.equal(expectDict);
-            
             
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });
@@ -479,7 +478,9 @@ describe(@"YMMemoryCache", ^{
             NSString *keyToRemove = cacheValues.allKeys.firstObject;
             [populatedCache removeObjectsForKeys:@[keyToRemove]];
             
-            pumpRunLoop(0.25);
+            [[NSRunLoop currentRunLoop] runUntilTrue:^BOOL{
+                return notification != nil;
+            } timeout:1.0];
             
             NSDictionary *expectDict = @{ kYFCacheUpdatedItemsUserInfoKey: @{},
                                           kYFCacheRemovedItemsUserInfoKey: [NSSet setWithObject:keyToRemove] };
@@ -516,21 +517,22 @@ describe(@"YMMemoryCache", ^{
             [populatedCache removeAllObjects];
             populatedCache.notificationInterval = 0.2;
         
-            pumpRunLoop(0.5);
+            [[NSRunLoop currentRunLoop] runContinuouslyForInterval:0.5];
+            
             expect(notification).to.beNil();
             
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });
         
         it(@"Should not include in notification changes that were made while notifications were disabled", ^{
-            __block NSDictionary *userInfo;
+            __block NSNotification *notification;
             __block id observer;
             waitUntil(^(DoneCallback done) {
                 observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheDidChangeNotification
                                                                              object:populatedCache
                                                                               queue:[NSOperationQueue mainQueue]
                                                                          usingBlock:^(NSNotification *note) {
-                                                                             userInfo = note.userInfo;
+                                                                             notification = note;
                                                                              done();
                                                                          }];
                 
@@ -544,7 +546,11 @@ describe(@"YMMemoryCache", ^{
             NSDictionary *expectDict = @{ kYFCacheUpdatedItemsUserInfoKey: @{ @"Key": @"Value" },
                                           kYFCacheRemovedItemsUserInfoKey: [NSSet set] };
             
-            expect(userInfo).will.equal(expectDict);
+            [[NSRunLoop currentRunLoop] runUntilTrue:^BOOL{
+                return notification != nil;
+            } timeout:1.0];
+            
+            expect(notification.userInfo).will.equal(expectDict);
             
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
         });

@@ -25,6 +25,8 @@
 		FC59B4561B713FC800093177 /* Specta.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FC59B4121B71359700093177 /* Specta.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FC59B4581B713FF000093177 /* Expecta.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FC59B4151B7135A200093177 /* Expecta.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FC59B4591B713FF000093177 /* Specta.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FC59B4161B7135A200093177 /* Specta.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FCD375111BACF80E0034AD3B /* NSRunLoop+AsyncTestAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD375101BACF80E0034AD3B /* NSRunLoop+AsyncTestAdditions.m */; settings = {ASSET_TAGS = (); }; };
+		FCD375121BACF80E0034AD3B /* NSRunLoop+AsyncTestAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD375101BACF80E0034AD3B /* NSRunLoop+AsyncTestAdditions.m */; settings = {ASSET_TAGS = (); }; };
 		FCD690821B710F520099E854 /* YMCachePersistenceController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB05DDB1B6FDFC300C7302B /* YMCachePersistenceController.m */; };
 		FCD690831B710F540099E854 /* YMMemoryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB05DDE1B6FDFC300C7302B /* YMMemoryCache.m */; };
 		FCD690841B710F5C0099E854 /* YMCache.h in Headers */ = {isa = PBXBuildFile; fileRef = FCDDAB611B7008D4006C333F /* YMCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -97,6 +99,8 @@
 		FCB05E171B6FE21300C7302B /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		FCB05E181B6FE21300C7302B /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		FCB05E341B6FE93F00C7302B /* Cartfile.private */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile.private; sourceTree = "<group>"; };
+		FCD3750F1BACF80E0034AD3B /* NSRunLoop+AsyncTestAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSRunLoop+AsyncTestAdditions.h"; path = "YMCacheTests/NSRunLoop+AsyncTestAdditions.h"; sourceTree = SOURCE_ROOT; };
+		FCD375101BACF80E0034AD3B /* NSRunLoop+AsyncTestAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSRunLoop+AsyncTestAdditions.m"; path = "YMCacheTests/NSRunLoop+AsyncTestAdditions.m"; sourceTree = SOURCE_ROOT; };
 		FCDDAAEE1B6FFE40006C333F /* YMCache.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = YMCache.podspec; path = Example/../YMCache.podspec; sourceTree = "<group>"; };
 		FCDDAB421B7008B2006C333F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FCDDAB5D1B7008D4006C333F /* YMCache.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = YMCache.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -188,6 +192,8 @@
 			children = (
 				FC4B27511BA1320C00F870A1 /* YMCachePersistenceControllerSpec.m */,
 				FCDDAB831B700DB7006C333F /* YMMemoryCacheSpec.m */,
+				FCD3750F1BACF80E0034AD3B /* NSRunLoop+AsyncTestAdditions.h */,
+				FCD375101BACF80E0034AD3B /* NSRunLoop+AsyncTestAdditions.m */,
 				FCB05DB91B6FDF1800C7302B /* Supporting Files */,
 			);
 			path = Tests;
@@ -454,6 +460,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCD375121BACF80E0034AD3B /* NSRunLoop+AsyncTestAdditions.m in Sources */,
 				FC59B3821B712AAA00093177 /* YMMemoryCacheSpec.m in Sources */,
 				FC4B27531BA1320C00F870A1 /* YMCachePersistenceControllerSpec.m in Sources */,
 			);
@@ -472,6 +479,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCD375111BACF80E0034AD3B /* NSRunLoop+AsyncTestAdditions.m in Sources */,
 				FCDDAB851B700DBA006C333F /* YMMemoryCacheSpec.m in Sources */,
 				FC4B27521BA1320C00F870A1 /* YMCachePersistenceControllerSpec.m in Sources */,
 			);
@@ -569,7 +577,6 @@
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS/**",
 				);
@@ -858,7 +865,6 @@
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS/**",
 				);
@@ -879,7 +885,6 @@
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS/**",
 				);
