@@ -1,5 +1,10 @@
-HEAD
-====
+CHANGELOG
+==================
+
+1.1.0 (2015-09-21)
+==================
+* [Feature] Added support for tracking item removal through a new change notification. Deprecated existing notification.
+* XCode 7 support
 
 1.0.2 (2015-09-09)
 ==================
@@ -12,7 +17,7 @@ HEAD
 * [Test] Increased code coverage in YMMemoryCache.m to 99%.
 * Improved the README with examples.
 
-0.0.1 (2015-08-01)
+1.0.0 (2015-08-01)
 ==================
 
 * Initial public release of library (@adamkaplan)
