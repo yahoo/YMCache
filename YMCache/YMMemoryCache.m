@@ -193,14 +193,14 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
     
     __weak typeof(self) weakSelf = self;
     dispatch_barrier_async(self.queue, ^{
-        weakSelf.items[key] = obj;
-        weakSelf.updatedPendingNotify[key] = obj ?: [NSNull null];
-        
         if (obj) {
             [weakSelf.removedPendingNotify removeObject:key];
-        } else {
+        } else if (weakSelf.items[key]) { // removing existing key
             [weakSelf.removedPendingNotify addObject:key];
         }
+        
+        weakSelf.items[key] = obj;
+        weakSelf.updatedPendingNotify[key] = obj;
     });
 }
 
