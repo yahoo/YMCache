@@ -35,7 +35,7 @@ static NSString *const kYFCachePersistenceErrorDomain = @"YFCachePersistenceErro
     NSParameterAssert(modelClass);
     NSParameterAssert(serializionDelegate);
     NSParameterAssert(cacheFileURL);
-    if (!cache || !modelClass || !cacheFileURL) {
+    if (!cache || !modelClass || !cacheFileURL || !serializionDelegate) {
         return nil;
     }
     
