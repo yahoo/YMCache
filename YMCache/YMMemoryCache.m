@@ -27,7 +27,7 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
 @property (nonatomic) NSMutableDictionary *updatedPendingNotify;
 @property (nonatomic) NSMutableSet *removedPendingNotify;
 
-@property (nonatomic, strong) YMMemoryCacheEvictionDecider evictionDecider;
+@property (nonatomic, copy) YMMemoryCacheEvictionDecider evictionDecider;
 @property (nonatomic) dispatch_queue_t evictionDeciderQueue;
 @end
 
