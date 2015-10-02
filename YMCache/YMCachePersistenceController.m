@@ -66,7 +66,6 @@ static NSString *const kYFCachePersistenceErrorDomain = @"YFCachePersistenceErro
     
     NSURL *defaultCacheDirectoryURL = [[self class] defaultCacheDirectory];
     NSURL *cacheFileURL = [defaultCacheDirectoryURL URLByAppendingPathComponent:cacheName isDirectory:NO];
-    YMLog(@"Persistence manager defaulting cache file URL to %@", cacheFileURL);
     return [self initWithCache:cache modelClass:modelClass delegate:serializionDelegate fileURL:cacheFileURL];
 }
 
@@ -88,22 +87,36 @@ static NSString *const kYFCachePersistenceErrorDomain = @"YFCachePersistenceErro
         
         // Create new timer if interval is positive
         if (saveInterval > 0) {
-            YMLog(@"Setting cache (%@) auto-save interval to %0.4fs", _cache.name, saveInterval);
+            //YMLog(@"Setting cache (%@) auto-save interval to %0.4fs", _cache.name, saveInterval);
             
             dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, self.updateQueue);
             dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, saveInterval * NSEC_PER_SEC, 0.1 * NSEC_PER_SEC);
             __weak typeof(self) weakSelf = self;
             dispatch_source_set_event_handler(timer, ^{
-                YMLog(@"Autosaving cache %@", weakSelf.cache.name);
+                if ([weakSelf.serializionDelegate respondsToSelector:@selector(persistenceControllerWillSaveMemoryCache:)]) {
+                    [weakSelf.serializionDelegate persistenceControllerWillSaveMemoryCache:weakSelf];
+                }
+                
                 NSError *error;
                 [weakSelf saveMemoryCache:&error];
+                
+                if (error) {
+                    if ([weakSelf.serializionDelegate respondsToSelector:@selector(persistenceController:didFailToSaveMemoryCacheWithError:)]) {
+                        [weakSelf.serializionDelegate persistenceController:weakSelf didFailToSaveMemoryCacheWithError:error];
+                    }
+                    return;
+                }
+                
+                if ([weakSelf.serializionDelegate respondsToSelector:@selector(persistenceControllerDidSaveMemoryCache:)]) {
+                    [weakSelf.serializionDelegate persistenceControllerDidSaveMemoryCache:weakSelf];
+                }
             });
             
             self.updateTimer = timer;
             dispatch_resume(timer);
         }
         else {
-            YMLog(@"Disabling cache (%@) auto-save", _cache.name);
+            //YMLog(@"Disabling cache (%@) auto-save", _cache.name);
         }
     });
 }
@@ -139,7 +152,7 @@ static NSString *const kYFCachePersistenceErrorDomain = @"YFCachePersistenceErro
     if ([is streamError]) {
         if (error) {
             *error = [is streamError];
-            YMLog(@"Cache read stream error: %@", *error);
+            //YMLog(@"Cache read stream error: %@", *error);
         }
         return NO;
     }
@@ -148,6 +161,8 @@ static NSString *const kYFCachePersistenceErrorDomain = @"YFCachePersistenceErro
     [is close];
     
     if (dict && ![dict isKindOfClass:[NSMutableDictionary class]]) {
+        //YMLog(@"Invalid cache file format, not a dictionary in %@", self.cacheFileURL);
+        
         if (error && !*error) { // set error if JSON parsing didn't fail, but the JSON root element was unexpected.
             NSString *errorStr = [NSString stringWithFormat:@"Invalid JSON format. Expected root element to be NSMutableDictionary, got %@", [dict class]];
             *error = [NSError errorWithDomain:@"YFCachePersistence" code:0 userInfo:@{ NSLocalizedDescriptionKey: errorStr }];
@@ -156,7 +171,6 @@ static NSString *const kYFCachePersistenceErrorDomain = @"YFCachePersistenceErro
         // Remove error can happen, but we can only return one error, so log it.
         NSError *removeError;
         [[NSFileManager defaultManager] removeItemAtURL:self.cacheFileURL error:&removeError];
-        YMLog(@"Invalid cache file format, not a dictionary in %@", self.cacheFileURL);
         if (removeError) {
             YMLog(@"Error while attempting to delete corrupt cache file %@", removeError);
         }
@@ -221,7 +235,7 @@ static NSString *const kYFCachePersistenceErrorDomain = @"YFCachePersistenceErro
         if (error) {
             *error = localError;
         }
-        YMLog(@"Error serializing cache to json: %@", localError.localizedDescription);
+        //YMLog(@"Error serializing cache to json: %@", localError.localizedDescription);
         return NO;
     }
     
@@ -237,7 +251,7 @@ static NSString *const kYFCachePersistenceErrorDomain = @"YFCachePersistenceErro
         if (error) {
             *error = localError;
         }
-        YMLog(@"Error writing cache to file '%@' %@", self.cacheFileURL, localError.localizedDescription);
+        //YMLog(@"Error writing cache to file '%@' %@", self.cacheFileURL, localError.localizedDescription);
     }
     return success;
 }
