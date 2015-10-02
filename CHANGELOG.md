@@ -1,6 +1,11 @@
 CHANGELOG
 ==================
 
+1.2.0 (Pre-release)
+==================
+* [Feature] Delegate callbacks for auto-save pre/post/fail
+* [Refactor] Reduce log messages and fix log message format
+
 1.1.0 (2015-09-21)
 ==================
 * [Feature] Added support for tracking item removal through a new change notification. Deprecated existing notification.
