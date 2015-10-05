@@ -16,6 +16,33 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSDictionary *)persistenceController:(YMCachePersistenceController *)controller JSONDictionaryFromModel:(id)value
                                            error:(NSError *__nullable*__nullable)error;
 
+@optional
+
+/**
+ *  Optional. Invoked immediately prior to saving the memory cache to disk.  This method will only be
+ *  invoked due to expiration of the `saveInterval`, not if `saveMemoryCache:` is called.
+ *
+ *  @param controller Cache persistence controller
+ */
+- (void)persistenceControllerWillSaveMemoryCache:(YMCachePersistenceController *)controller;
+
+/**
+ *  Optional. Invoked immediately after successfully saving the memory cache to disk. This method will
+ *  only be invoked due to expiration of the `saveInterval`, not if `saveMemoryCache:` is called.
+ *
+ *  @param controller Cache persistence controller
+ */
+- (void)persistenceControllerDidSaveMemoryCache:(YMCachePersistenceController *)controller;
+
+/**
+ *  Optional. Invoked immediately after failing to save the memory cache to disk. This method will
+ *  only be invoked due to expiration of the `saveInterval`, not if `saveMemoryCache:` is called.
+ *
+ *  @param controller   Cache persistence controller
+ *  @param error        The first error that was encountered
+ */
+- (void)persistenceController:(YMCachePersistenceController *)controller didFailToSaveMemoryCacheWithError:(NSError *)error;
+
 @end
 
 @class YMMemoryCache;
