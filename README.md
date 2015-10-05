@@ -123,7 +123,7 @@ YMMemoryCache *cache = [YMMemoryCache memoryCacheWithName:@"my-object-cache"
     [self.cache purgeEvictableItems:nil];
 }
 ```
-The eviction decider blocks that react to low memory situations will execute on the main thread becasue that is the only thread that sends low memory notifications or calls `-didReceiveMemoryWarning`.
+The eviction decider blocks that react to low memory situations will execute on the main thread because that is the only thread that sends low memory notifications or calls `-didReceiveMemoryWarning`.
 
 #### Observing Changes
 ```objc
