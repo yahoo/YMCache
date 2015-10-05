@@ -18,6 +18,6 @@ security import "$CA_CERTPATH" -k "$KEYCHAIN" -T /usr/bin/codesign
 
 # Import our development certificate.
 MY_CERTPATH="$SCRIPT_DIR/certificates/Development.p12"
-EXPIRY_DATE=`openssl pkcs12 -in "$MY_CERTPATH" -password "$KEY_PASSWORD" -nomacver -nokeys | openssl x509 -noout -enddate`
+EXPIRY_DATE=$(openssl pkcs12 -in "$MY_CERTPATH" -password "$KEY_PASSWORD" -nomacver -nokeys | openssl x509 -noout -enddate)
 echo "Codesign development certificate expiration: $EXPIRY_DATE"
 security import "$MY_CERTPATH" -k "$KEYCHAIN" -P "$KEY_PASSWORD" -T /usr/bin/codesign
