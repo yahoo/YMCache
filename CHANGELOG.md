@@ -1,10 +1,11 @@
 CHANGELOG
 ==================
 
-1.2.0 (Pre-release)
+1.2.0 (2015-10-05)
 ==================
 * [Feature] Delegate callbacks for auto-save pre/post/fail
 * [Refactor] Reduce log messages and fix log message format
+* [Travis] Log expiration of code signing certificate on build
 
 1.1.0 (2015-09-21)
 ==================
