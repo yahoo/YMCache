@@ -123,28 +123,28 @@ YMMemoryCache *cache = [YMMemoryCache memoryCacheWithName:@"my-object-cache"
     [self.cache purgeEvictableItems:nil];
 }
 ```
-The eviction decider blocks that react to low memory situations will execute on the main thread becasue that is the only thread that sends low memory notifications or calls `-didReceiveMemoryWarning`.
+The eviction decider blocks that react to low memory situations will execute on the main thread because that is the only thread that sends low memory notifications or calls `-didReceiveMemoryWarning`.
 
 #### Observing Changes
 ```objc
-YMMemoryCache *cache = [YMMemoryCache memoryCacheWithName:@"my-object-cache"
-                                          evictionDecider:^(NSString *key, NewsStory *value, void *context) {
-                                              return value.publishDate > [NSDate dateWithTimeIntervalSinceNow:-300];
-                                          }];
+YMMemoryCache *cache = [YMMemoryCache memoryCacheWithName:@"my-object-cache"];
 
-cache.notificationInterval = 0.2;
+cache.notificationInterval = 0.5;
 
 [[NSNotificationCenter defaultCenter] addObserver:self
                                          selector:@selector(cacheUpdated:)
-                                             name:kYFCacheItemsChangedNotificationKey
+                                             name:kYFCacheDidChangeNotification
                                            object:cache];
 
 // from any thread, such as a network client on a background thread
 cache[@"Key"] = value;
 
-// within 0.2s (as per configuration) the notification will fire and call this
+// within 0.5s (as per configuration) a notification will fire and call this:
 - (void)cacheUpdated:(NSNotification *)notification {
-	// notification.userInfo == @{ @"Key": value ], plus any other changes since the last notification.
+    // Get a snapshot of all values that were added or replaced since the last notification
+    NSDictionary *addedOrUpdated = notification.userInfo[kYFCacheUpdatedItemsUserInfoKey];
+    // Get a set of all keys that were removed since the last notification
+    NSSet *removedKeys = notification.userInfo[kYFCacheRemovedItemsUserInfoKey];
 }
 ```
 
