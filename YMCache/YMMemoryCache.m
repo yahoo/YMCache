@@ -188,8 +188,7 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
 }
 
 - (void)setObject:(id)obj forKeyedSubscript:(id)key {
-    NSParameterAssert(key);
-    NSParameterAssert(obj); // The collections will assert, but fail earlier to aid in async debugging
+    NSParameterAssert(key); // The collections will assert, but fail earlier to aid in async debugging
     
     __weak typeof(self) weakSelf = self;
     dispatch_barrier_async(self.queue, ^{
