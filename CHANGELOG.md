@@ -1,6 +1,11 @@
 CHANGELOG
 ==================
 
+1.2.1 (2015-10-09)
+==================
+* [Bug] Unable to clear value using nil value with keyed subscripting
+* [Travis] Fix travis secret variable format
+
 1.2.0 (2015-10-05)
 ==================
 * [Feature] Delegate callbacks for auto-save pre/post/fail
