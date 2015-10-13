@@ -23,8 +23,11 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
 @property (nonatomic) dispatch_queue_t queue;
 @property (nonatomic) dispatch_source_t notificationTimer;
 @property (nonatomic) dispatch_source_t evictionTimer;
+/// All of the key-value pairs stored in the cache
 @property (nonatomic) NSMutableDictionary *items;
+/// The keys (and their current value) that have been added/updated since the last kYFCacheDidChangeNotification
 @property (nonatomic) NSMutableDictionary *updatedPendingNotify;
+/// The keys that have been removed since the last kYFCacheDidChangeNotification
 @property (nonatomic) NSMutableSet *removedPendingNotify;
 
 @property (nonatomic, copy) YMMemoryCacheEvictionDecider evictionDecider;
@@ -194,12 +197,13 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
     dispatch_barrier_async(self.queue, ^{
         if (obj) {
             [weakSelf.removedPendingNotify removeObject:key];
+            weakSelf.items[key] = obj;
+            weakSelf.updatedPendingNotify[key] = obj;
         } else if (weakSelf.items[key]) { // removing existing key
             [weakSelf.removedPendingNotify addObject:key];
+            [weakSelf.items removeObjectForKey:key];
+            [weakSelf.updatedPendingNotify removeObjectForKey:key];
         }
-        
-        weakSelf.items[key] = obj;
-        weakSelf.updatedPendingNotify[key] = obj;
     });
 }
 
@@ -210,7 +214,7 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
     
     dispatch_barrier_sync(self.queue, ^{
         for (id key in self.items) {
-            self.updatedPendingNotify[key] = nil;
+            [self.updatedPendingNotify removeObjectForKey:key];
             [self.removedPendingNotify addObject:key];
         }
         
@@ -229,8 +233,8 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
         for (id key in keys) {
             if (self.items[key]) {
                 [self.removedPendingNotify addObject:key];
-                self.updatedPendingNotify[key] = nil;
-                self.items[key] = nil;
+                [self.updatedPendingNotify removeObjectForKey:key];
+                [self.items removeObjectForKey:key];
             }
         }
     });
