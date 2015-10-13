@@ -1,6 +1,10 @@
 CHANGELOG
 ==================
 
+1.2.2 (2015-10-12)
+==================
+* [Bug] iOS 7 crasher upon removing any single value from the cache (@e28eta)
+
 1.2.1 (2015-10-09)
 ==================
 * [Bug] Unable to clear value using nil value with keyed subscripting
