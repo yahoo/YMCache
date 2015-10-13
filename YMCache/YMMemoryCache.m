@@ -23,8 +23,11 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
 @property (nonatomic) dispatch_queue_t queue;
 @property (nonatomic) dispatch_source_t notificationTimer;
 @property (nonatomic) dispatch_source_t evictionTimer;
+/// All of the key-value pairs stored in the cache
 @property (nonatomic) NSMutableDictionary *items;
+/// The keys (and their current value) that have been added/updated since the last kYFCacheDidChangeNotification
 @property (nonatomic) NSMutableDictionary *updatedPendingNotify;
+/// The keys that have been removed since the last kYFCacheDidChangeNotification
 @property (nonatomic) NSMutableSet *removedPendingNotify;
 
 @property (nonatomic, copy) YMMemoryCacheEvictionDecider evictionDecider;
