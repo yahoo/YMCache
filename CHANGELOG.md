@@ -1,6 +1,10 @@
 CHANGELOG
 ==================
 
+1.3.0 (2015-10-19)
+==================
+* [Feature] Expose `NSDataWritingOptions` to clients (adds support for encryption on iOS)
+
 1.2.2 (2015-10-12)
 ==================
 * [Bug] iOS 7 crasher upon removing any single value from the cache (@e28eta)
@@ -34,5 +38,4 @@ CHANGELOG
 
 1.0.0 (2015-08-01)
 ==================
-
 * Initial public release of library (@adamkaplan)

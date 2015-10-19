@@ -148,6 +148,10 @@ cache[@"Key"] = value;
 }
 ```
 
+### File Encryption (iOS) and writing options
+
+The `YMCachePersistenceManager` uses `NSData` to read and write data to disk. By default, we write atomically. You may control write options by setting the persistence manager's `fileWritingOptions` property before the next write.
+
 ### Examples
 
 To run the example projects, clone the repo, and run `pod install` from one of the directories in Example.

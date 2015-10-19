@@ -67,6 +67,11 @@ NS_ASSUME_NONNULL_BEGIN
 /** The interval after which  `saveMemoryCache` will be automatically called. Set to 0 or negative to disable automatic saving. */
 @property (nonatomic) NSTimeInterval saveInterval;
 
+/** The options to pass to `-[NSData writeToFile:options:error:]` when saving the cache to disk. Default
+ *  is `NSDataWritingAtomic`.
+ */
+@property (nonatomic) NSDataWritingOptions fileWritingOptions;
+
 - (instancetype)init NS_UNAVAILABLE;
 
 /** Returns a directory suitable for cache file operations.
