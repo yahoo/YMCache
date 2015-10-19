@@ -45,6 +45,7 @@ static NSString *const kYFCachePersistenceErrorDomain = @"YFCachePersistenceErro
         _modelClass = modelClass;
         _cacheFileURL = cacheFileURL;
         _serializionDelegate = serializionDelegate;
+        _fileWritingOptions = NSDataWritingAtomic;
         
         NSString *queueName = @"com.yahoo.persist";
         if (cache.name) {
@@ -239,12 +240,7 @@ static NSString *const kYFCachePersistenceErrorDomain = @"YFCachePersistenceErro
         return NO;
     }
     
-    // File protection is only supported on iOS.
-    // TODO: allow these to be provided by the client.
-    NSDataWritingOptions dataWritingOpts = NSDataWritingAtomic;
-#if TARGET_OS_IPHONE
-    dataWritingOpts |= NSDataWritingFileProtectionNone;
-#endif
+    NSDataWritingOptions dataWritingOpts = self.fileWritingOptions;
     
     BOOL success = [data writeToURL:self.cacheFileURL options:dataWritingOpts error:&localError];
     if (localError) {
