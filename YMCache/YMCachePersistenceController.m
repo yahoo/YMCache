@@ -240,9 +240,7 @@ static NSString *const kYFCachePersistenceErrorDomain = @"YFCachePersistenceErro
         return NO;
     }
     
-    NSDataWritingOptions dataWritingOpts = self.fileWritingOptions;
-    
-    BOOL success = [data writeToURL:self.cacheFileURL options:dataWritingOpts error:&localError];
+    BOOL success = [data writeToURL:self.cacheFileURL options:self.fileWritingOptions error:&localError];
     if (localError) {
         if (error) {
             *error = localError;
