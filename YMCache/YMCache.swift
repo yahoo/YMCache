@@ -8,15 +8,48 @@
 
 import Foundation
 
-public class YMMemoryCacheSwift<Key: Hashable, Val> : NSObject {
+/** The YMMemoryCache class declares a programatic interface to objects that manage ephemeral
+ * associations of keys and values, similar to Foundation's NSMutableDictionary. The primary benefit
+ * is that YMMemoryCache is designed to be safely accessed and mutated across multiple threads. It
+ * offers specific optimizations for use in a multi-threaded environment, and hides certain functionality
+ * that may be potentially unsafe or behave in unexpected ways for users accustomed to an NSDictionary.
+ *
+ * Implementation Notes:
+ *
+ * In general, non-mutating access (getters) execute synchronously and in parallel (by way of a concurrent
+ * Grand Central Dispatch queue).
+ * Mutating access (setters), on the other hand, take advantage of dispatch barriers to provide safe,
+ * blocking writes while preserving in-band synchronous-like ordering behavior.
+ *
+ * In other words, getters behave as if they were run on a concurrent dispatch queue with respect to
+ * each other. However, setters behave as though they were run on a serial dispatch queue with respect
+ * to both getters and other setters.
+ *
+ * One side effect of this approach is that any access – even a non-mutating getter – may result in a
+ * blocking call, though overall latency should be extremely low. Users should plan for this and try
+ * to pull out all values at once (via `enumerateKeysAndObjectsUsingBlock`) or in the background.
+ */
+public class YMMemoryCacheSwift : NSObject {
     
-    typealias EvictionDeciderType = (key: Key, val: Val) -> Bool
+    public static let CacheItemsChangedNotificationKey = "kYFCacheItemsChangedNotificationKey"
     
-    let name: String?
-    
+    public typealias Key = String
+    public typealias Val = NSCopying
+    /** Type of a decider block for determining is an item is evictable.
+     * @param key The key associated with value in the cache.
+     * @param value The value of the item in the cache.
+     * @param context Arbitrary user-provided context.
+     */
+    public typealias EvictionDeciderType = (key: Key, val: Val) -> Bool
     let evictionDecider: EvictionDeciderType?
     
-    var evictionInterval: UInt64 = 0 {
+    /** Unique name identifying this cache, for example, in log messages. */
+    public let name: String
+    
+    /** Maximum amount of time between evictions checks. Evictions may occur at any time up to this value.
+     * Defaults to 600 seconds, or 10 minutes.
+     */
+    public var evictionInterval: UInt64 = 0 {
         didSet {
             // Exit early if no eviction queue, which means this is not an evicting memory cache
             guard let evictionQueue = evictionQueue else {
@@ -81,27 +114,32 @@ public class YMMemoryCacheSwift<Key: Hashable, Val> : NSObject {
         dispatch_resume(timer)
     }
     
-    var notificationInterval: UInt64 = 0 {
+    /** Maximum amount of time between notification of changes to cached items. After each notificationInterval,
+     * the cache will post a notification named `YMMemoryCacheSwift.CacheItemsChangedNotificationKey` which includes as
+     * user info, a dictionary containing all key-value pairs which have been added to the cache since
+     * the previous notification was posted.
+     *
+     * Values which have been removed from the cache prior to the notification are not included in the
+     * notification dictionary.
+     *
+     * Defaults to 0, disabled.
+     */
+    public var notificationInterval: UInt64 = 0 {
         didSet {
             write { $0._updateAfterNotificationIntervalChanged() }
         }
     }
     
-    var allItems: Dictionary<Key, Val> {
-        get {
-            return read ({ $0.items })!
-        }
-    }
-    
-    init(cacheName: String?, evictionDecider: EvictionDeciderType? = nil) {
-        name = cacheName
+    /** Creates and returns a new memory cache using the specified name, but no eviction delegate.
+     * @param name A unique name for this cache. Optional, helpful for debugging.
+     * @return a new cache identified by `name`
+     */
+    public init(cacheName: String?, evictionDecider: EvictionDeciderType?) {
+        name = cacheName ?? NSUUID().UUIDString
         
         // Initialize reader-writer queue
         
-        var queueId = "com.yahoo.cache"
-        if let queueSuffix = name {
-            queueId += " \(queueSuffix)"
-        }
+        let queueId = "com.yahoo.cache" + name
         
         self.queue = dispatch_queue_create(queueId.cStringUsingEncoding(NSUTF8StringEncoding)!,
             DISPATCH_QUEUE_CONCURRENT)
@@ -109,7 +147,7 @@ public class YMMemoryCacheSwift<Key: Hashable, Val> : NSObject {
         // Initialize eviction system, if needed
         
         self.evictionDecider = evictionDecider
-        if evictionDecider != nil {
+        if self.evictionDecider != nil {
             let evictionQueueId = queueId + ".eviction"
             
             self.evictionQueue = dispatch_queue_create(evictionQueueId.cStringUsingEncoding(NSUTF8StringEncoding)!,
@@ -118,7 +156,7 @@ public class YMMemoryCacheSwift<Key: Hashable, Val> : NSObject {
             self.evictionInterval = 600
         }
         else {
-            self.evictionQueue = nil
+            evictionQueue = nil
         }
     }
 
@@ -134,10 +172,6 @@ public class YMMemoryCacheSwift<Key: Hashable, Val> : NSObject {
                 dispatch_source_cancel(timer)
             }
         }
-    }
-    
-    convenience override init() {
-        self.init(cacheName: nil, evictionDecider: nil)
     }
     
     func write(block:(YMMemoryCacheSwift) -> () ) {
@@ -157,7 +191,17 @@ public class YMMemoryCacheSwift<Key: Hashable, Val> : NSObject {
         return ret
     }
     
-    subscript(key: Key) -> Val? {
+    /** Sets the value associated with a given key.
+     * @param obj The value for `key`
+     * @param key The key for `value`. The key is copied (keys must conform to the NSCopying protocol).
+     *  If `key` already exists in the cache, `object` takes its place. If `object` is `nil`, key is removed
+     *  from the cache.
+     */
+     /** Returns the value associated with a given key.
+     * @param key The key for which to return the corresponding value.
+     * @return The value associated with `key`, or `nil` if no value is associated with key.
+     */
+    public subscript(key: Key) -> Val? {
         // Synchronous (but parallel)
         get {
             return read { $0[key] }
@@ -172,23 +216,51 @@ public class YMMemoryCacheSwift<Key: Hashable, Val> : NSObject {
         }
     }
     
-    func addEntriesFromDictionary(dict: Dictionary<Key, Val>) {
+    /** Adds to the cache the entries from a dictionary.
+     * If the cache contains the same key as the dictionary, the cache's previous value object for that key
+     * is replaced with new value object. All entries from dictionary are added to the cache at once such
+     * that all of them are accessable by the next cache accessor, even if that accessor is triggered before
+     * this method returns.
+     *
+     * All entries in the dictionary will be part of the next change notification event, even if an identical
+     * key-value pair was already present in the cache.
+     *
+     * @param dictionary The dictionary from which to add entries.
+     */
+    public func addEntriesFromDictionary(dict: Dictionary<Key, Val>) {
+        append(dict)
+    }
+    
+    /** Adds to the cache the entries from a dictionary.
+     * The same as addEntriesFromDictionary
+     */
+    public func append(dict:Dictionary<Key, Val>) {
         write {
             for (key,val) in dict {
                 $0.items[key] = val
                 $0.pendingNotify[key] = val
             }
         }
+        
     }
-    
-    func removeAll() {
+    /** Empties the cache of its entries.
+     * Each key and corresponding value object is sent a release message.
+     */
+    public func removeAllObjects() {
+        removeAll()
+    }
+    public func removeAll() {
         write {
             $0.items.removeAll()
             $0.pendingNotify.removeAll()
         }
     }
-    
-    func removeObjectsForKeys(keys: [Key]) {
+    /** Removes from the cache entries specified by keys in a given array.
+     * If a key in `keys` does not exist, the entry is ignored. This method is more efficient at removing
+     * the values for multiple keys than calling `setObject:forKeyedSubscript` multiple times.
+     * @param keys An array of objects specifying the keys to remove.
+     */
+    public func removeObjectsForKeys(keys: [Key]) {
         guard keys.isEmpty == false else {
             return
         }
@@ -199,10 +271,21 @@ public class YMMemoryCacheSwift<Key: Hashable, Val> : NSObject {
             }
         }
     }
+    /** Returns a snapshot of all values in the cache.
+     * The returned dictionary may differ from the actual cache as soon as it is returned. Because of this,
+     * it is recommended to use `enumerateKeysAndObjectsUsingBlock:` for any operations that require a
+     * guarantee that all items are operated upon (such as in low-memory situations).
+     * @return A copy of the underlying dictionary upon which the cache is built.
+     */
+    public var allItems: Dictionary<Key, Val> {
+        get {
+            return read ({ $0.items })!
+        }
+    }
     
     // Notifications
     
-    func sendPendingNotifications() {
+    public func sendPendingNotifications() {
         // Assert private queue only
         
         guard self.pendingNotify.isEmpty == true else {
@@ -211,14 +294,17 @@ public class YMMemoryCacheSwift<Key: Hashable, Val> : NSObject {
         
         dispatch_async(dispatch_get_main_queue()) {
             let nc = NSNotificationCenter.defaultCenter()
-            //nc.postNotificationName(kYFCacheItemsChangedNotificationKey, object: self, userInfo: pending)
-            nc.postNotificationName(kYFCacheItemsChangedNotificationKey, object: self, userInfo: nil)
+            nc.postNotificationName(YMMemoryCacheSwift.CacheItemsChangedNotificationKey, object: self, userInfo: self.pendingNotify)
         }
     }
     
     // Eviction
     
-    func purgeEvictableItems() {
+    /** Triggers an immediate (synchronous) check for exired items, and releases those items that are expired.
+    * This method does nothing if no expirationDecider block was provided during initialization. The
+    * evictionDecider block is run on the queue that this method is called on.
+    */
+    public func purgeEvictableItems() {
         guard let evictionDecider = self.evictionDecider else {
             return
         }
