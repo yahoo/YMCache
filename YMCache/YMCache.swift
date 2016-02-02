@@ -37,9 +37,8 @@ public class YMMemoryCacheSwift<Key: Hashable, Val> : NSObject {
                 
                 self.evictionTimer = timer
                 
-                weak var weakSelf = self
-                dispatch_source_set_event_handler(timer, { () -> Void in
-                    //weakSelf.purgeevictableitems
+                dispatch_source_set_event_handler(timer, {[weak self] () -> Void in
+                    self?.purgeEvictableItems()
                 })
                 
                 dispatch_source_set_timer(timer,
@@ -94,7 +93,7 @@ public class YMMemoryCacheSwift<Key: Hashable, Val> : NSObject {
         }
     }
     
-    init(cacheName: String?, evictionDecider: EvictionDeciderType?) {
+    init(cacheName: String?, evictionDecider: EvictionDeciderType? = nil) {
         name = cacheName
         
         // Initialize reader-writer queue
