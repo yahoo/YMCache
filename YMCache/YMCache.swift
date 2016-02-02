@@ -89,11 +89,7 @@ public class YMMemoryCacheSwift<Key: Hashable, Val> : NSObject {
     
     var allItems: Dictionary<Key, Val> {
         get {
-            var itemsCopy = [Key: Val]()
-            dispatch_sync(self.queue) {
-                itemsCopy = self.items
-            }
-            return itemsCopy
+            return read ({ $0.items })!
         }
     }
     
@@ -164,40 +160,31 @@ public class YMMemoryCacheSwift<Key: Hashable, Val> : NSObject {
     subscript(key: Key) -> Val? {
         // Synchronous (but parallel)
         get {
-            var val: Val?
-            dispatch_sync(self.queue) {
-                val = self.items[key]
-            }
-            return val
+            return read { $0[key] }
         }
         
         // Concurrent (but not parallel)
         set(newVal) {
-            weak var weakSelf = self
-            dispatch_barrier_async(self.queue) {
-                weakSelf?.items[key] = newVal
-                weakSelf?.pendingNotify[key] = newVal
+            write {
+                $0.items[key] = newVal
+                $0.pendingNotify[key] = newVal
             }
         }
     }
     
     func addEntriesFromDictionary(dict: Dictionary<Key, Val>) {
-        weak var weakSelf = self
-        dispatch_barrier_async(self.queue) {
-            if let strongSelf = weakSelf {
-                for (key,val) in dict {
-                    strongSelf.items[key] = val
-                    strongSelf.pendingNotify[key] = val
-                }
+        write {
+            for (key,val) in dict {
+                $0.items[key] = val
+                $0.pendingNotify[key] = val
             }
         }
     }
     
     func removeAll() {
-        weak var weakSelf = self
-        dispatch_barrier_async(self.queue) {
-            weakSelf?.items.removeAll()
-            weakSelf?.pendingNotify.removeAll()
+        write {
+            $0.items.removeAll()
+            $0.pendingNotify.removeAll()
         }
     }
     
@@ -205,14 +192,10 @@ public class YMMemoryCacheSwift<Key: Hashable, Val> : NSObject {
         if keys.count == 0 {
             return
         }
-        
-        weak var weakSelf = self
-        dispatch_barrier_async(self.queue) {
-            if let strongSelf = weakSelf {
-                for key in keys {
-                    strongSelf.items.removeValueForKey(key)
-                    strongSelf.pendingNotify.removeValueForKey(key)
-                }
+        write {
+            for key in keys {
+                $0.items.removeValueForKey(key)
+                $0.pendingNotify.removeValueForKey(key)
             }
         }
     }
