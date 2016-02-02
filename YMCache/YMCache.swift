@@ -144,6 +144,23 @@ public class YMMemoryCacheSwift<Key: Hashable, Val> : NSObject {
         self.init(cacheName: nil, evictionDecider: nil)
     }
     
+    func write(block:(YMMemoryCacheSwift) -> () ) {
+        dispatch_barrier_async(self.queue) {[weak self] in
+            guard let it = self else {
+                return
+            }
+            block(it)
+        }
+    }
+    
+    func read<T>(block:(YMMemoryCacheSwift)->(T?)) -> T? {
+        var ret : T?
+        dispatch_sync(queue) { () -> Void in
+            ret = block(self)
+        }
+        return ret
+    }
+    
     subscript(key: Key) -> Val? {
         // Synchronous (but parallel)
         get {
