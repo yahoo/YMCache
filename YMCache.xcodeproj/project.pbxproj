@@ -372,6 +372,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = YM;
+				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0640;
 				ORGANIZATIONNAME = "Yahoo, Inc";
 				TargetAttributes = {
