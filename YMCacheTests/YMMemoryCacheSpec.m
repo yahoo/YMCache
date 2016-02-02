@@ -3,6 +3,7 @@
 //  Licensed under the terms of the MIT License. See LICENSE file in the project root.
 
 #import <YMCache/YMCache.h>
+//#import <YMCache/YMCache-Swift.h>
 
 SpecBegin(YMMemoryCacheSpec)
 
