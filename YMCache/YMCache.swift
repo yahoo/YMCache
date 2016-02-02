@@ -19,11 +19,11 @@ public class YMMemoryCacheSwift<Key: Hashable, Val> : NSObject {
     var evictionInterval: UInt64 = 0 {
         didSet {
             // Exit early if no eviction queue, which means this is not an evicting memory cache
-            if evictionQueue == nil {
+            guard let evictionQueue = evictionQueue else {
                 return;
             }
             
-            dispatch_async(evictionQueue!) {
+            dispatch_async(evictionQueue) {
                 if let oldTimer = self.evictionTimer {
                     dispatch_source_cancel(oldTimer)
                     self.evictionTimer = nil
@@ -33,7 +33,7 @@ public class YMMemoryCacheSwift<Key: Hashable, Val> : NSObject {
                     return
                 }
                 
-                let timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, self.evictionQueue!)
+                let timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, evictionQueue)
                 
                 self.evictionTimer = timer
                 
@@ -189,7 +189,7 @@ public class YMMemoryCacheSwift<Key: Hashable, Val> : NSObject {
     }
     
     func removeObjectsForKeys(keys: [Key]) {
-        if keys.count == 0 {
+        guard keys.isEmpty == false else {
             return
         }
         write {
@@ -205,8 +205,7 @@ public class YMMemoryCacheSwift<Key: Hashable, Val> : NSObject {
     func sendPendingNotifications() {
         // Assert private queue only
         
-        let pending = self.pendingNotify //as? Dictionary<NSObject, AnyObject>
-        if pending.count == 0 {
+        guard self.pendingNotify.isEmpty == true else {
             return
         }
         
@@ -220,19 +219,13 @@ public class YMMemoryCacheSwift<Key: Hashable, Val> : NSObject {
     // Eviction
     
     func purgeEvictableItems() {
-        if self.evictionDecider == nil {
+        guard let evictionDecider = self.evictionDecider else {
             return
         }
         
-        let allItems = self.allItems
-        var keysToEvict = [Key]()
-        
-        for (key, val) in allItems {
-            let shouldEvict = self.evictionDecider!(key: key, val: val)
-            if shouldEvict {
-                keysToEvict += [key]
-            }
-        }
+        let keysToEvict = self.allItems
+            .filter { evictionDecider(key: $0, val: $1) }
+            .map { return $0.0 }
         
         self.removeObjectsForKeys(keysToEvict)
     }
