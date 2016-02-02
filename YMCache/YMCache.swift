@@ -52,38 +52,39 @@ public class YMMemoryCacheSwift<Key: Hashable, Val> : NSObject {
         }
     }
 
+    private func _updateAfterNotificationIntervalChanged() {
+        if let oldTimer = self.notificationTimer {
+            dispatch_source_cancel(oldTimer)
+            self.notificationTimer = nil
+        }
+        
+        // Reset any pending notifications since they might be invalid for
+        // notification based on the new interval
+        self.pendingNotify = [Key: Val]()
+        
+        if self.notificationInterval == 0 {
+            return
+        }
+        
+        let timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER,
+            0, 0, self.queue)
+        self.notificationTimer = timer;
+        
+        dispatch_source_set_event_handler(timer, {[weak self] () -> Void in
+            self?.sendPendingNotifications()
+            })
+        
+        dispatch_source_set_timer(timer,
+            dispatch_time(DISPATCH_TIME_NOW, (Int64)(self.notificationInterval * NSEC_PER_SEC)),
+            self.notificationInterval * NSEC_PER_SEC,
+            5 * NSEC_PER_SEC)
+        
+        dispatch_resume(timer)
+    }
+    
     var notificationInterval: UInt64 = 0 {
         didSet {
-            dispatch_barrier_async(self.queue) {
-                if let oldTimer = self.notificationTimer {
-                    dispatch_source_cancel(oldTimer)
-                    self.notificationTimer = nil
-                }
-                
-                // Reset any pending notifications since they might be invalid for
-                // notification based on the new interval
-                self.pendingNotify = [Key: Val]()
-                
-                if self.notificationInterval == 0 {
-                    return
-                }
-                
-                let timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER,
-                    0, 0, self.queue)
-                self.notificationTimer = timer;
-                
-                weak var weakSelf = self
-                dispatch_source_set_event_handler(timer, { () -> Void in
-                    //weakSelf.sendPendingNotifications
-                })
-                
-                dispatch_source_set_timer(timer,
-                    dispatch_time(DISPATCH_TIME_NOW, (Int64)(self.notificationInterval * NSEC_PER_SEC)),
-                    self.notificationInterval * NSEC_PER_SEC,
-                    5 * NSEC_PER_SEC)
-                
-                dispatch_resume(timer)
-            }
+            write { $0._updateAfterNotificationIntervalChanged() }
         }
     }
     
