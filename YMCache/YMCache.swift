@@ -9,6 +9,9 @@
 
 import Foundation
 
+let CacheItemsChangedNotificationKey = kYMSheemCacheItemsChangedNotificationKey
+
+
 /** The YMMemoryCache class declares a programatic interface to objects that manage ephemeral
  * associations of keys and values, similar to Foundation's NSMutableDictionary. The primary benefit
  * is that YMMemoryCache is designed to be safely accessed and mutated across multiple threads. It
@@ -32,7 +35,6 @@ import Foundation
  */
 public class YMMemoryCacheSwift : NSObject {
     
-    public static let CacheItemsChangedNotificationKey = "kYFCacheItemsChangedNotificationKey"
     
     public typealias Key = String
     public typealias Val = NSCopying
@@ -116,7 +118,7 @@ public class YMMemoryCacheSwift : NSObject {
     }
     
     /** Maximum amount of time between notification of changes to cached items. After each notificationInterval,
-     * the cache will post a notification named `YMMemoryCacheSwift.CacheItemsChangedNotificationKey` which includes as
+     * the cache will post a notification named `kYMSheemCacheItemsChangedNotificationKey` which includes as
      * user info, a dictionary containing all key-value pairs which have been added to the cache since
      * the previous notification was posted.
      *
@@ -295,7 +297,7 @@ public class YMMemoryCacheSwift : NSObject {
         
         dispatch_async(dispatch_get_main_queue()) {
             let nc = NSNotificationCenter.defaultCenter()
-            nc.postNotificationName(YMMemoryCacheSwift.CacheItemsChangedNotificationKey, object: self, userInfo: self.pendingNotify)
+            nc.postNotificationName(kYMSheemCacheItemsChangedNotificationKey, object: self, userInfo: pending)
         }
     }
     
