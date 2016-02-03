@@ -303,7 +303,8 @@ public class YMMemoryCacheSwift : NSObject {
     public func sendPendingNotifications() {
         // Assert private queue only
         
-        guard self.pendingNotify.isEmpty == true else {
+        
+        guard let pending = read ({ $0.pendingNotify }) where pending.isEmpty == true else {
             return
         }
         
