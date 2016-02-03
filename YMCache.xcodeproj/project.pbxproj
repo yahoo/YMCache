@@ -7,335 +7,219 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FC59B36E1B71156B00093177 /* YMCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC59B3631B71156B00093177 /* YMCache.framework */; };
-		FC59B37C1B7115FC00093177 /* YMCachePersistenceController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB05DDB1B6FDFC300C7302B /* YMCachePersistenceController.m */; };
-		FC59B37D1B7115FD00093177 /* YMMemoryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB05DDE1B6FDFC300C7302B /* YMMemoryCache.m */; };
-		FC59B37E1B71160100093177 /* YMCache.h in Headers */ = {isa = PBXBuildFile; fileRef = FCDDAB611B7008D4006C333F /* YMCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FC59B37F1B71160600093177 /* YMCachePersistenceController.h in Headers */ = {isa = PBXBuildFile; fileRef = FCB05DDA1B6FDFC300C7302B /* YMCachePersistenceController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FC59B3801B71160900093177 /* YMMemoryCache.h in Headers */ = {isa = PBXBuildFile; fileRef = FCB05DDD1B6FDFC300C7302B /* YMMemoryCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FC59B3811B71160B00093177 /* YMLog.h in Headers */ = {isa = PBXBuildFile; fileRef = FCB05DDC1B6FDFC300C7302B /* YMLog.h */; };
-		FC59B3821B712AAA00093177 /* YMMemoryCacheSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = FCDDAB831B700DB7006C333F /* YMMemoryCacheSpec.m */; };
-		FC59B4131B71359700093177 /* Expecta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC59B4111B71359700093177 /* Expecta.framework */; };
-		FC59B4141B71359700093177 /* Specta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC59B4121B71359700093177 /* Specta.framework */; };
-		FC59B4171B7135A200093177 /* Expecta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC59B4151B7135A200093177 /* Expecta.framework */; };
-		FC59B4181B7135A200093177 /* Specta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC59B4161B7135A200093177 /* Specta.framework */; };
-		FC59B4551B713FC800093177 /* Expecta.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FC59B4111B71359700093177 /* Expecta.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		FC59B4561B713FC800093177 /* Specta.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FC59B4121B71359700093177 /* Specta.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		FC59B4581B713FF000093177 /* Expecta.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FC59B4151B7135A200093177 /* Expecta.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		FC59B4591B713FF000093177 /* Specta.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FC59B4161B7135A200093177 /* Specta.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		FC81E4311B7E97DE00E1EEF9 /* YMCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC81E4301B7E97DE00E1EEF9 /* YMCache.swift */; };
-		FC81E4321B7E97DE00E1EEF9 /* YMCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC81E4301B7E97DE00E1EEF9 /* YMCache.swift */; };
-		FCD690821B710F520099E854 /* YMCachePersistenceController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB05DDB1B6FDFC300C7302B /* YMCachePersistenceController.m */; };
-		FCD690831B710F540099E854 /* YMMemoryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB05DDE1B6FDFC300C7302B /* YMMemoryCache.m */; };
-		FCD690841B710F5C0099E854 /* YMCache.h in Headers */ = {isa = PBXBuildFile; fileRef = FCDDAB611B7008D4006C333F /* YMCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FCD690851B710F5E0099E854 /* YMCachePersistenceController.h in Headers */ = {isa = PBXBuildFile; fileRef = FCB05DDA1B6FDFC300C7302B /* YMCachePersistenceController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FCD690861B710F600099E854 /* YMMemoryCache.h in Headers */ = {isa = PBXBuildFile; fileRef = FCB05DDD1B6FDFC300C7302B /* YMMemoryCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FCD690871B710F6E0099E854 /* YMLog.h in Headers */ = {isa = PBXBuildFile; fileRef = FCB05DDC1B6FDFC300C7302B /* YMLog.h */; };
-		FCDDAB681B7008D4006C333F /* YMCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FCDDAB5D1B7008D4006C333F /* YMCache.framework */; };
-		FCDDAB851B700DBA006C333F /* YMMemoryCacheSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = FCDDAB831B700DB7006C333F /* YMMemoryCacheSpec.m */; };
+		E677A7711C60639100AF5908 /* YMCache.h in Headers */ = {isa = PBXBuildFile; fileRef = E677A7701C60639100AF5908 /* YMCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E677A7791C6063A600AF5908 /* YMCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E677A7781C6063A600AF5908 /* YMCache.swift */; };
+		E677A7831C6063B800AF5908 /* YMCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E677A76D1C60639100AF5908 /* YMCache.framework */; };
+		E69370E31C615D8F00BA27CF /* YMCachePersistenceController.h in Headers */ = {isa = PBXBuildFile; fileRef = E69370DC1C615D8F00BA27CF /* YMCachePersistenceController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E69370E41C615D8F00BA27CF /* YMMemoryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = E69370DD1C615D8F00BA27CF /* YMMemoryCache.m */; };
+		E69370E71C615D8F00BA27CF /* YMCachePersistenceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E69370E01C615D8F00BA27CF /* YMCachePersistenceController.m */; };
+		E69370E81C615D8F00BA27CF /* YMLog.h in Headers */ = {isa = PBXBuildFile; fileRef = E69370E11C615D8F00BA27CF /* YMLog.h */; };
+		E69370E91C615D8F00BA27CF /* YMMemoryCache.h in Headers */ = {isa = PBXBuildFile; fileRef = E69370E21C615D8F00BA27CF /* YMMemoryCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E69370F61C615DB000BA27CF /* CONTRIBUTING.md in Sources */ = {isa = PBXBuildFile; fileRef = E69370EE1C615DB000BA27CF /* CONTRIBUTING.md */; };
+		E69370F71C615DB000BA27CF /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = E69370EF1C615DB000BA27CF /* LICENSE */; };
+		E69371021C615E6000BA27CF /* Tests-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = E69370FF1C615E6000BA27CF /* Tests-Prefix.pch */; };
+		E69371031C615EFE00BA27CF /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E677A7721C60639100AF5908 /* Info.plist */; };
+		E69371041C615F1300BA27CF /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E69370FE1C615E6000BA27CF /* Info.plist */; };
+		E693710C1C61625300BA27CF /* Specta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E693710A1C61625300BA27CF /* Specta.framework */; };
+		E693710D1C61625300BA27CF /* Expecta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E693710B1C61625300BA27CF /* Expecta.framework */; };
+		E693710E1C61627A00BA27CF /* Specta.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E693710A1C61625300BA27CF /* Specta.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E693710F1C61627A00BA27CF /* Expecta.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E693710B1C61625300BA27CF /* Expecta.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E69371151C61773300BA27CF /* YMMemoryCacheShim.m in Sources */ = {isa = PBXBuildFile; fileRef = E69371121C6168AC00BA27CF /* YMMemoryCacheShim.m */; };
+		E69371161C6179BF00BA27CF /* YMMemoryCacheShim.h in Headers */ = {isa = PBXBuildFile; fileRef = E69371111C6168AC00BA27CF /* YMMemoryCacheShim.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E69371191C61924E00BA27CF /* YMMemoryCacheShimSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = E69371171C6191A600BA27CF /* YMMemoryCacheShimSpec.m */; };
+		E693711A1C6194D900BA27CF /* YMMemoryCacheSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = E677A78C1C60642800AF5908 /* YMMemoryCacheSpec.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		FC59B36F1B71156B00093177 /* PBXContainerItemProxy */ = {
+		E677A7841C6063B800AF5908 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = FCB05DA11B6FDF1800C7302B /* Project object */;
+			containerPortal = E677A7641C60639100AF5908 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = FC59B3621B71156B00093177;
-			remoteInfo = "YMCache-Mac";
-		};
-		FCDDAB691B7008D4006C333F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FCB05DA11B6FDF1800C7302B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FCDDAB5C1B7008D4006C333F;
+			remoteGlobalIDString = E677A76C1C60639100AF5908;
 			remoteInfo = YMCache;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		FC59B4541B713FC100093177 /* CopyFiles */ = {
+		E69371091C61621E00BA27CF /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				FC59B4551B713FC800093177 /* Expecta.framework in CopyFiles */,
-				FC59B4561B713FC800093177 /* Specta.framework in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FC59B4571B713FE700093177 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				FC59B4581B713FF000093177 /* Expecta.framework in CopyFiles */,
-				FC59B4591B713FF000093177 /* Specta.framework in CopyFiles */,
+				E693710E1C61627A00BA27CF /* Specta.framework in CopyFiles */,
+				E693710F1C61627A00BA27CF /* Expecta.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		FC59B3631B71156B00093177 /* YMCache.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = YMCache.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		FC59B36D1B71156B00093177 /* YMCache-MacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "YMCache-MacTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		FC59B4111B71359700093177 /* Expecta.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Expecta.framework; path = Carthage/Build/Mac/Expecta.framework; sourceTree = "<group>"; };
-		FC59B4121B71359700093177 /* Specta.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Specta.framework; path = Carthage/Build/Mac/Specta.framework; sourceTree = "<group>"; };
-		FC59B4151B7135A200093177 /* Expecta.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Expecta.framework; path = Carthage/Build/iOS/Expecta.framework; sourceTree = "<group>"; };
-		FC59B4161B7135A200093177 /* Specta.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Specta.framework; path = Carthage/Build/iOS/Specta.framework; sourceTree = "<group>"; };
-		FC81E4301B7E97DE00E1EEF9 /* YMCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YMCache.swift; sourceTree = "<group>"; };
-		FCB05DBA1B6FDF1800C7302B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = YMCacheTests/Info.plist; sourceTree = "<group>"; };
-		FCB05DDA1B6FDFC300C7302B /* YMCachePersistenceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMCachePersistenceController.h; sourceTree = "<group>"; };
-		FCB05DDB1B6FDFC300C7302B /* YMCachePersistenceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMCachePersistenceController.m; sourceTree = "<group>"; };
-		FCB05DDC1B6FDFC300C7302B /* YMLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLog.h; sourceTree = "<group>"; };
-		FCB05DDD1B6FDFC300C7302B /* YMMemoryCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMMemoryCache.h; sourceTree = "<group>"; };
-		FCB05DDE1B6FDFC300C7302B /* YMMemoryCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMMemoryCache.m; sourceTree = "<group>"; };
-		FCB05E101B6FE1D600C7302B /* Tests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Tests-Prefix.pch"; path = "YMCacheTests/Tests-Prefix.pch"; sourceTree = "<group>"; };
-		FCB05E151B6FE21300C7302B /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
-		FCB05E161B6FE21300C7302B /* CONTRIBUTING.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTING.md; sourceTree = "<group>"; };
-		FCB05E171B6FE21300C7302B /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		FCB05E181B6FE21300C7302B /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		FCB05E341B6FE93F00C7302B /* Cartfile.private */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile.private; sourceTree = "<group>"; };
-		FCDDAAEE1B6FFE40006C333F /* YMCache.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = YMCache.podspec; path = Example/../YMCache.podspec; sourceTree = "<group>"; };
-		FCDDAB421B7008B2006C333F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FCDDAB5D1B7008D4006C333F /* YMCache.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = YMCache.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		FCDDAB611B7008D4006C333F /* YMCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YMCache.h; sourceTree = "<group>"; };
-		FCDDAB671B7008D4006C333F /* YMCache-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "YMCache-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		FCDDAB831B700DB7006C333F /* YMMemoryCacheSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YMMemoryCacheSpec.m; path = YMCacheTests/YMMemoryCacheSpec.m; sourceTree = SOURCE_ROOT; };
+		E677A76D1C60639100AF5908 /* YMCache.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = YMCache.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E677A7701C60639100AF5908 /* YMCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YMCache.h; sourceTree = "<group>"; };
+		E677A7721C60639100AF5908 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E677A7781C6063A600AF5908 /* YMCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YMCache.swift; sourceTree = "<group>"; };
+		E677A77E1C6063B800AF5908 /* YMCache-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "YMCache-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E677A78C1C60642800AF5908 /* YMMemoryCacheSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMMemoryCacheSpec.m; sourceTree = "<group>"; };
+		E69370DC1C615D8F00BA27CF /* YMCachePersistenceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMCachePersistenceController.h; sourceTree = "<group>"; };
+		E69370DD1C615D8F00BA27CF /* YMMemoryCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMMemoryCache.m; sourceTree = "<group>"; };
+		E69370E01C615D8F00BA27CF /* YMCachePersistenceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMCachePersistenceController.m; sourceTree = "<group>"; };
+		E69370E11C615D8F00BA27CF /* YMLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLog.h; sourceTree = "<group>"; };
+		E69370E21C615D8F00BA27CF /* YMMemoryCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMMemoryCache.h; sourceTree = "<group>"; };
+		E69370EB1C615DB000BA27CF /* Cartfile.private */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile.private; sourceTree = "<group>"; };
+		E69370EC1C615DB000BA27CF /* Cartfile.resolved */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile.resolved; sourceTree = "<group>"; };
+		E69370ED1C615DB000BA27CF /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
+		E69370EE1C615DB000BA27CF /* CONTRIBUTING.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTING.md; sourceTree = "<group>"; };
+		E69370EF1C615DB000BA27CF /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		E69370F01C615DB000BA27CF /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
+		E69370F11C615DB000BA27CF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		E69370F21C615DB000BA27CF /* YMCache.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = YMCache.podspec; sourceTree = "<group>"; };
+		E69370FE1C615E6000BA27CF /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = YMCacheTests/Info.plist; sourceTree = SOURCE_ROOT; };
+		E69370FF1C615E6000BA27CF /* Tests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Tests-Prefix.pch"; path = "YMCacheTests/Tests-Prefix.pch"; sourceTree = SOURCE_ROOT; };
+		E693710A1C61625300BA27CF /* Specta.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Specta.framework; path = ../Carthage/Build/iOS/Specta.framework; sourceTree = "<group>"; };
+		E693710B1C61625300BA27CF /* Expecta.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Expecta.framework; path = ../Carthage/Build/iOS/Expecta.framework; sourceTree = "<group>"; };
+		E69371111C6168AC00BA27CF /* YMMemoryCacheShim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMMemoryCacheShim.h; sourceTree = "<group>"; };
+		E69371121C6168AC00BA27CF /* YMMemoryCacheShim.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMMemoryCacheShim.m; sourceTree = "<group>"; };
+		E69371171C6191A600BA27CF /* YMMemoryCacheShimSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMMemoryCacheShimSpec.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		FC59B35F1B71156B00093177 /* Frameworks */ = {
+		E677A7691C60639100AF5908 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FC59B36A1B71156B00093177 /* Frameworks */ = {
+		E677A77B1C6063B800AF5908 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FC59B36E1B71156B00093177 /* YMCache.framework in Frameworks */,
-				FC59B4141B71359700093177 /* Specta.framework in Frameworks */,
-				FC59B4131B71359700093177 /* Expecta.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FCDDAB591B7008D4006C333F /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FCDDAB641B7008D4006C333F /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FCDDAB681B7008D4006C333F /* YMCache.framework in Frameworks */,
-				FC59B4181B7135A200093177 /* Specta.framework in Frameworks */,
-				FC59B4171B7135A200093177 /* Expecta.framework in Frameworks */,
+				E693710C1C61625300BA27CF /* Specta.framework in Frameworks */,
+				E693710D1C61625300BA27CF /* Expecta.framework in Frameworks */,
+				E677A7831C6063B800AF5908 /* YMCache.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		FC59B40F1B71357E00093177 /* iOS */ = {
+		E677A7631C60639100AF5908 = {
 			isa = PBXGroup;
 			children = (
-				FC59B4151B7135A200093177 /* Expecta.framework */,
-				FC59B4161B7135A200093177 /* Specta.framework */,
-			);
-			name = iOS;
-			sourceTree = "<group>";
-		};
-		FC59B4101B71358300093177 /* Mac */ = {
-			isa = PBXGroup;
-			children = (
-				FC59B4111B71359700093177 /* Expecta.framework */,
-				FC59B4121B71359700093177 /* Specta.framework */,
-			);
-			name = Mac;
-			sourceTree = "<group>";
-		};
-		FCB05DA01B6FDF1800C7302B = {
-			isa = PBXGroup;
-			children = (
-				FCB05E131B6FE1FA00C7302B /* Project Metadata */,
-				FCD690881B7110010099E854 /* YMCache */,
-				FCB05DB81B6FDF1800C7302B /* Tests */,
-				FCB05E1E1B6FE38700C7302B /* Frameworks */,
-				FCB05DAA1B6FDF1800C7302B /* Products */,
+				E69370EA1C615D9C00BA27CF /* Stuff */,
+				E677A76F1C60639100AF5908 /* YMCache */,
+				E677A77F1C6063B800AF5908 /* YMCache-iOSTests */,
+				E677A76E1C60639100AF5908 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		FCB05DAA1B6FDF1800C7302B /* Products */ = {
+		E677A76E1C60639100AF5908 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				FCDDAB5D1B7008D4006C333F /* YMCache.framework */,
-				FCDDAB671B7008D4006C333F /* YMCache-iOSTests.xctest */,
-				FC59B3631B71156B00093177 /* YMCache.framework */,
-				FC59B36D1B71156B00093177 /* YMCache-MacTests.xctest */,
+				E677A76D1C60639100AF5908 /* YMCache.framework */,
+				E677A77E1C6063B800AF5908 /* YMCache-iOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		FCB05DB81B6FDF1800C7302B /* Tests */ = {
+		E677A76F1C60639100AF5908 /* YMCache */ = {
 			isa = PBXGroup;
 			children = (
-				FCDDAB831B700DB7006C333F /* YMMemoryCacheSpec.m */,
-				FCB05DB91B6FDF1800C7302B /* Supporting Files */,
-			);
-			path = Tests;
-			sourceTree = "<group>";
-		};
-		FCB05DB91B6FDF1800C7302B /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				FCB05E101B6FE1D600C7302B /* Tests-Prefix.pch */,
-				FCB05DBA1B6FDF1800C7302B /* Info.plist */,
-			);
-			name = "Supporting Files";
-			path = "../YMCacheTests/Supporting Files";
-			sourceTree = "<group>";
-		};
-		FCB05E131B6FE1FA00C7302B /* Project Metadata */ = {
-			isa = PBXGroup;
-			children = (
-				FCB05E341B6FE93F00C7302B /* Cartfile.private */,
-				FCB05E151B6FE21300C7302B /* CHANGELOG.md */,
-				FCB05E161B6FE21300C7302B /* CONTRIBUTING.md */,
-				FCB05E171B6FE21300C7302B /* LICENSE */,
-				FCB05E181B6FE21300C7302B /* README.md */,
-				FCDDAAEE1B6FFE40006C333F /* YMCache.podspec */,
-			);
-			name = "Project Metadata";
-			sourceTree = "<group>";
-		};
-		FCB05E1E1B6FE38700C7302B /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				FC59B40F1B71357E00093177 /* iOS */,
-				FC59B4101B71358300093177 /* Mac */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		FCD690881B7110010099E854 /* YMCache */ = {
-			isa = PBXGroup;
-			children = (
-				FCDDAB611B7008D4006C333F /* YMCache.h */,
-				FCD6908A1B7110DF0099E854 /* Public */,
-				FCD6908B1B7110ED0099E854 /* Private */,
-				FCD690891B71106E0099E854 /* Supporting Files */,
+				E677A7701C60639100AF5908 /* YMCache.h */,
+				E69370FC1C615DC300BA27CF /* Public */,
+				E69370FB1C615DBD00BA27CF /* Private */,
+				E677A7721C60639100AF5908 /* Info.plist */,
 			);
 			path = YMCache;
 			sourceTree = "<group>";
 		};
-		FCD690891B71106E0099E854 /* Supporting Files */ = {
+		E677A77F1C6063B800AF5908 /* YMCache-iOSTests */ = {
 			isa = PBXGroup;
 			children = (
-				FCDDAB421B7008B2006C333F /* Info.plist */,
+				E69371101C61637900BA27CF /* Frameworks */,
+				E677A78C1C60642800AF5908 /* YMMemoryCacheSpec.m */,
+				E69371171C6191A600BA27CF /* YMMemoryCacheShimSpec.m */,
+				E69370FE1C615E6000BA27CF /* Info.plist */,
+				E69370FF1C615E6000BA27CF /* Tests-Prefix.pch */,
 			);
-			name = "Supporting Files";
+			name = "YMCache-iOSTests";
+			path = YMCacheTests;
 			sourceTree = "<group>";
 		};
-		FCD6908A1B7110DF0099E854 /* Public */ = {
+		E69370EA1C615D9C00BA27CF /* Stuff */ = {
 			isa = PBXGroup;
 			children = (
-				FCB05DDA1B6FDFC300C7302B /* YMCachePersistenceController.h */,
-				FCB05DDB1B6FDFC300C7302B /* YMCachePersistenceController.m */,
-				FCB05DDD1B6FDFC300C7302B /* YMMemoryCache.h */,
-				FCB05DDE1B6FDFC300C7302B /* YMMemoryCache.m */,
-				FC81E4301B7E97DE00E1EEF9 /* YMCache.swift */,
+				E69370EB1C615DB000BA27CF /* Cartfile.private */,
+				E69370EC1C615DB000BA27CF /* Cartfile.resolved */,
+				E69370ED1C615DB000BA27CF /* CHANGELOG.md */,
+				E69370EE1C615DB000BA27CF /* CONTRIBUTING.md */,
+				E69370EF1C615DB000BA27CF /* LICENSE */,
+				E69370F01C615DB000BA27CF /* Podfile */,
+				E69370F11C615DB000BA27CF /* README.md */,
+				E69370F21C615DB000BA27CF /* YMCache.podspec */,
+			);
+			name = Stuff;
+			sourceTree = "<group>";
+		};
+		E69370FB1C615DBD00BA27CF /* Private */ = {
+			isa = PBXGroup;
+			children = (
+				E69370E11C615D8F00BA27CF /* YMLog.h */,
+			);
+			name = Private;
+			sourceTree = "<group>";
+		};
+		E69370FC1C615DC300BA27CF /* Public */ = {
+			isa = PBXGroup;
+			children = (
+				E69370DC1C615D8F00BA27CF /* YMCachePersistenceController.h */,
+				E69370E01C615D8F00BA27CF /* YMCachePersistenceController.m */,
+				E69370E21C615D8F00BA27CF /* YMMemoryCache.h */,
+				E69370DD1C615D8F00BA27CF /* YMMemoryCache.m */,
+				E69371111C6168AC00BA27CF /* YMMemoryCacheShim.h */,
+				E69371121C6168AC00BA27CF /* YMMemoryCacheShim.m */,
+				E677A7781C6063A600AF5908 /* YMCache.swift */,
 			);
 			name = Public;
 			sourceTree = "<group>";
 		};
-		FCD6908B1B7110ED0099E854 /* Private */ = {
+		E69371101C61637900BA27CF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FCB05DDC1B6FDFC300C7302B /* YMLog.h */,
+				E693710A1C61625300BA27CF /* Specta.framework */,
+				E693710B1C61625300BA27CF /* Expecta.framework */,
 			);
-			name = Private;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		FC59B3601B71156B00093177 /* Headers */ = {
+		E677A76A1C60639100AF5908 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FC59B37E1B71160100093177 /* YMCache.h in Headers */,
-				FC59B37F1B71160600093177 /* YMCachePersistenceController.h in Headers */,
-				FC59B3801B71160900093177 /* YMMemoryCache.h in Headers */,
-				FC59B3811B71160B00093177 /* YMLog.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FCDDAB5A1B7008D4006C333F /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FCD690841B710F5C0099E854 /* YMCache.h in Headers */,
-				FCD690851B710F5E0099E854 /* YMCachePersistenceController.h in Headers */,
-				FCD690861B710F600099E854 /* YMMemoryCache.h in Headers */,
-				FCD690871B710F6E0099E854 /* YMLog.h in Headers */,
+				E69371161C6179BF00BA27CF /* YMMemoryCacheShim.h in Headers */,
+				E69370E91C615D8F00BA27CF /* YMMemoryCache.h in Headers */,
+				E69370E31C615D8F00BA27CF /* YMCachePersistenceController.h in Headers */,
+				E69370E81C615D8F00BA27CF /* YMLog.h in Headers */,
+				E69371021C615E6000BA27CF /* Tests-Prefix.pch in Headers */,
+				E677A7711C60639100AF5908 /* YMCache.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		FC59B3621B71156B00093177 /* YMCache-Mac */ = {
+		E677A76C1C60639100AF5908 /* YMCache-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FC59B3761B71156B00093177 /* Build configuration list for PBXNativeTarget "YMCache-Mac" */;
+			buildConfigurationList = E677A7751C60639100AF5908 /* Build configuration list for PBXNativeTarget "YMCache-iOS" */;
 			buildPhases = (
-				FC59B35E1B71156B00093177 /* Sources */,
-				FC59B35F1B71156B00093177 /* Frameworks */,
-				FC59B3601B71156B00093177 /* Headers */,
-				FC59B3611B71156B00093177 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "YMCache-Mac";
-			productName = "YMCache-Mac";
-			productReference = FC59B3631B71156B00093177 /* YMCache.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		FC59B36C1B71156B00093177 /* YMCache-MacTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = FC59B3791B71156B00093177 /* Build configuration list for PBXNativeTarget "YMCache-MacTests" */;
-			buildPhases = (
-				FC59B3691B71156B00093177 /* Sources */,
-				FC59B36A1B71156B00093177 /* Frameworks */,
-				FC59B36B1B71156B00093177 /* Resources */,
-				FC59B4541B713FC100093177 /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				FC59B3701B71156B00093177 /* PBXTargetDependency */,
-			);
-			name = "YMCache-MacTests";
-			productName = "YMCache-MacTests";
-			productReference = FC59B36D1B71156B00093177 /* YMCache-MacTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		FCDDAB5C1B7008D4006C333F /* YMCache-iOS */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = FCDDAB701B7008D4006C333F /* Build configuration list for PBXNativeTarget "YMCache-iOS" */;
-			buildPhases = (
-				FCDDAB581B7008D4006C333F /* Sources */,
-				FCDDAB591B7008D4006C333F /* Frameworks */,
-				FCDDAB5A1B7008D4006C333F /* Headers */,
-				FCDDAB5B1B7008D4006C333F /* Resources */,
+				E677A7681C60639100AF5908 /* Sources */,
+				E677A7691C60639100AF5908 /* Frameworks */,
+				E677A76A1C60639100AF5908 /* Headers */,
+				E677A76B1C60639100AF5908 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -343,244 +227,118 @@
 			);
 			name = "YMCache-iOS";
 			productName = YMCache;
-			productReference = FCDDAB5D1B7008D4006C333F /* YMCache.framework */;
+			productReference = E677A76D1C60639100AF5908 /* YMCache.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		FCDDAB661B7008D4006C333F /* YMCache-iOSTests */ = {
+		E677A77D1C6063B800AF5908 /* YMCache-iOSTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FCDDAB731B7008D4006C333F /* Build configuration list for PBXNativeTarget "YMCache-iOSTests" */;
+			buildConfigurationList = E677A7861C6063B800AF5908 /* Build configuration list for PBXNativeTarget "YMCache-iOSTests" */;
 			buildPhases = (
-				FCDDAB631B7008D4006C333F /* Sources */,
-				FCDDAB641B7008D4006C333F /* Frameworks */,
-				FCDDAB651B7008D4006C333F /* Resources */,
-				FC59B4571B713FE700093177 /* CopyFiles */,
+				E677A77A1C6063B800AF5908 /* Sources */,
+				E677A77B1C6063B800AF5908 /* Frameworks */,
+				E677A77C1C6063B800AF5908 /* Resources */,
+				E69371091C61621E00BA27CF /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				FCDDAB6A1B7008D4006C333F /* PBXTargetDependency */,
+				E677A7851C6063B800AF5908 /* PBXTargetDependency */,
 			);
 			name = "YMCache-iOSTests";
-			productName = YMCacheTests;
-			productReference = FCDDAB671B7008D4006C333F /* YMCache-iOSTests.xctest */;
+			productName = "YMCache-iOSTests";
+			productReference = E677A77E1C6063B800AF5908 /* YMCache-iOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		FCB05DA11B6FDF1800C7302B /* Project object */ = {
+		E677A7641C60639100AF5908 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				CLASSPREFIX = YM;
-				LastUpgradeCheck = 0640;
-				ORGANIZATIONNAME = "Yahoo, Inc";
+				LastSwiftUpdateCheck = 0720;
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = Yahoo.com;
 				TargetAttributes = {
-					FC59B3621B71156B00093177 = {
-						CreatedOnToolsVersion = 6.4;
+					E677A76C1C60639100AF5908 = {
+						CreatedOnToolsVersion = 7.2;
 					};
-					FC59B36C1B71156B00093177 = {
-						CreatedOnToolsVersion = 6.4;
-					};
-					FCDDAB5C1B7008D4006C333F = {
-						CreatedOnToolsVersion = 6.4;
-					};
-					FCDDAB661B7008D4006C333F = {
-						CreatedOnToolsVersion = 6.4;
+					E677A77D1C6063B800AF5908 = {
+						CreatedOnToolsVersion = 7.2;
 					};
 				};
 			};
-			buildConfigurationList = FCB05DA41B6FDF1800C7302B /* Build configuration list for PBXProject "YMCache" */;
+			buildConfigurationList = E677A7671C60639100AF5908 /* Build configuration list for PBXProject "YMCache" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 			);
-			mainGroup = FCB05DA01B6FDF1800C7302B;
-			productRefGroup = FCB05DAA1B6FDF1800C7302B /* Products */;
+			mainGroup = E677A7631C60639100AF5908;
+			productRefGroup = E677A76E1C60639100AF5908 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				FCDDAB5C1B7008D4006C333F /* YMCache-iOS */,
-				FCDDAB661B7008D4006C333F /* YMCache-iOSTests */,
-				FC59B3621B71156B00093177 /* YMCache-Mac */,
-				FC59B36C1B71156B00093177 /* YMCache-MacTests */,
+				E677A76C1C60639100AF5908 /* YMCache-iOS */,
+				E677A77D1C6063B800AF5908 /* YMCache-iOSTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		FC59B3611B71156B00093177 /* Resources */ = {
+		E677A76B1C60639100AF5908 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E69370F71C615DB000BA27CF /* LICENSE in Resources */,
+				E69371031C615EFE00BA27CF /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FC59B36B1B71156B00093177 /* Resources */ = {
+		E677A77C1C6063B800AF5908 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FCDDAB5B1B7008D4006C333F /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FCDDAB651B7008D4006C333F /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				E69371041C615F1300BA27CF /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		FC59B35E1B71156B00093177 /* Sources */ = {
+		E677A7681C60639100AF5908 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FC81E4321B7E97DE00E1EEF9 /* YMCache.swift in Sources */,
-				FC59B37C1B7115FC00093177 /* YMCachePersistenceController.m in Sources */,
-				FC59B37D1B7115FD00093177 /* YMMemoryCache.m in Sources */,
+				E69370E71C615D8F00BA27CF /* YMCachePersistenceController.m in Sources */,
+				E69371151C61773300BA27CF /* YMMemoryCacheShim.m in Sources */,
+				E69370F61C615DB000BA27CF /* CONTRIBUTING.md in Sources */,
+				E677A7791C6063A600AF5908 /* YMCache.swift in Sources */,
+				E69370E41C615D8F00BA27CF /* YMMemoryCache.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FC59B3691B71156B00093177 /* Sources */ = {
+		E677A77A1C6063B800AF5908 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FC59B3821B712AAA00093177 /* YMMemoryCacheSpec.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FCDDAB581B7008D4006C333F /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FC81E4311B7E97DE00E1EEF9 /* YMCache.swift in Sources */,
-				FCD690821B710F520099E854 /* YMCachePersistenceController.m in Sources */,
-				FCD690831B710F540099E854 /* YMMemoryCache.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FCDDAB631B7008D4006C333F /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FCDDAB851B700DBA006C333F /* YMMemoryCacheSpec.m in Sources */,
+				E693711A1C6194D900BA27CF /* YMMemoryCacheSpec.m in Sources */,
+				E69371191C61924E00BA27CF /* YMMemoryCacheShimSpec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		FC59B3701B71156B00093177 /* PBXTargetDependency */ = {
+		E677A7851C6063B800AF5908 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = FC59B3621B71156B00093177 /* YMCache-Mac */;
-			targetProxy = FC59B36F1B71156B00093177 /* PBXContainerItemProxy */;
-		};
-		FCDDAB6A1B7008D4006C333F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FCDDAB5C1B7008D4006C333F /* YMCache-iOS */;
-			targetProxy = FCDDAB691B7008D4006C333F /* PBXContainerItemProxy */;
+			target = E677A76C1C60639100AF5908 /* YMCache-iOS */;
+			targetProxy = E677A7841C6063B800AF5908 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		FC59B3771B71156B00093177 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = YMCache/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(PROJECT_NAME)";
-				SDKROOT = macosx;
-				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		FC59B3781B71156B00093177 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = YMCache/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(PROJECT_NAME)";
-				SDKROOT = macosx;
-				SKIP_INSTALL = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		FC59B37A1B71156B00093177 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
-				GCC_PREFIX_HEADER = "YMCacheTests/Tests-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = YMCacheTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks $(PROJECT_DIR)/Carthage/Build/Mac";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-			};
-			name = Debug;
-		};
-		FC59B37B1B71156B00093177 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
-				GCC_PREFIX_HEADER = "YMCacheTests/Tests-Prefix.pch";
-				INFOPLIST_FILE = YMCacheTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks $(PROJECT_DIR)/Carthage/Build/Mac";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-			};
-			name = Release;
-		};
-		FCB05DBB1B6FDF1800C7302B /* Debug */ = {
+		E677A7731C60639100AF5908 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -597,9 +355,12 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -608,22 +369,24 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
-		FCB05DBC1B6FDF1800C7302B /* Release */ = {
+		E677A7741C60639100AF5908 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -640,7 +403,9 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -652,146 +417,128 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
-		FCDDAB711B7008D4006C333F /* Debug */ = {
+		E677A7761C60639100AF5908 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = YMCache/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.yahoo.YMCache;
 				PRODUCT_NAME = "$(PROJECT_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
-		FCDDAB721B7008D4006C333F /* Release */ = {
+		E677A7771C60639100AF5908 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = YMCache/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.yahoo.YMCache;
 				PRODUCT_NAME = "$(PROJECT_NAME)";
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
-		FCDDAB741B7008D4006C333F /* Debug */ = {
+		E677A7871C6063B800AF5908 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CLANG_ENABLE_MODULES = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS/**",
-				);
-				GCC_PREFIX_HEADER = "YMCacheTests/Tests-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = YMCacheTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Carthage/Build/iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yahoo.YMCache-iOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "YMCache-iOSTests/YMCache-iOSTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
-		FCDDAB751B7008D4006C333F /* Release */ = {
+		E677A7881C6063B800AF5908 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CLANG_ENABLE_MODULES = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS/**",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
-				GCC_PREFIX_HEADER = "YMCacheTests/Tests-Prefix.pch";
+				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = YMCacheTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Carthage/Build/iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yahoo.YMCache-iOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "YMCache-iOSTests/YMCache-iOSTests-Bridging-Header.h";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		FC59B3761B71156B00093177 /* Build configuration list for PBXNativeTarget "YMCache-Mac" */ = {
+		E677A7671C60639100AF5908 /* Build configuration list for PBXProject "YMCache" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FC59B3771B71156B00093177 /* Debug */,
-				FC59B3781B71156B00093177 /* Release */,
+				E677A7731C60639100AF5908 /* Debug */,
+				E677A7741C60639100AF5908 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FC59B3791B71156B00093177 /* Build configuration list for PBXNativeTarget "YMCache-MacTests" */ = {
+		E677A7751C60639100AF5908 /* Build configuration list for PBXNativeTarget "YMCache-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FC59B37A1B71156B00093177 /* Debug */,
-				FC59B37B1B71156B00093177 /* Release */,
+				E677A7761C60639100AF5908 /* Debug */,
+				E677A7771C60639100AF5908 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FCB05DA41B6FDF1800C7302B /* Build configuration list for PBXProject "YMCache" */ = {
+		E677A7861C6063B800AF5908 /* Build configuration list for PBXNativeTarget "YMCache-iOSTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FCB05DBB1B6FDF1800C7302B /* Debug */,
-				FCB05DBC1B6FDF1800C7302B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		FCDDAB701B7008D4006C333F /* Build configuration list for PBXNativeTarget "YMCache-iOS" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				FCDDAB711B7008D4006C333F /* Debug */,
-				FCDDAB721B7008D4006C333F /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		FCDDAB731B7008D4006C333F /* Build configuration list for PBXNativeTarget "YMCache-iOSTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				FCDDAB741B7008D4006C333F /* Debug */,
-				FCDDAB751B7008D4006C333F /* Release */,
+				E677A7871C6063B800AF5908 /* Debug */,
+				E677A7881C6063B800AF5908 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = FCB05DA11B6FDF1800C7302B /* Project object */;
+	rootObject = E677A7641C60639100AF5908 /* Project object */;
 }
