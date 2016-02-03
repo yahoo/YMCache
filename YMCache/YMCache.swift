@@ -207,7 +207,7 @@ public class YMMemoryCacheSwift : NSObject {
     public subscript(key: Key) -> Val? {
         // Synchronous (but parallel)
         get {
-            return read { $0[key] }
+            return read { $0.items[key] }
         }
         
         // Concurrent (but not parallel)
