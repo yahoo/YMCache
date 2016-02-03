@@ -1,13 +1,19 @@
-//  Created by Adam Kaplan on 8/2/15.
-//  Copyright 2015 Yahoo.
-//  Licensed under the terms of the MIT License. See LICENSE file in the project root.
+//
+//  YMMemoryCacheShimSpec.m
+//  YMCache
+//
+//  Created by Amos Elmaliah on 2/2/16.
+//  Copyright © 2016 Yahoo, Inc. All rights reserved.
+//
+
+@import Specta;
+@import Expecta;
 
 #import <YMCache/YMCache.h>
-//#import <YMCache/YMCache-Swift.h>
 
-SpecBegin(YMMemoryCacheSpec)
+SpecBegin(YMMemoryCacheShimSpec)
 
-fdescribe(@"YMMemoryCache", ^{
+describe(@"YMMemoryCacheShim", ^{
     
     NSDictionary *const cacheValues = @{ @"Key0": @"Value0",
                                          @"Key1": @"Value1",
@@ -15,19 +21,19 @@ fdescribe(@"YMMemoryCache", ^{
     
     static NSString *const cacheName = @"TestCache";
     
-    __block YMMemoryCacheEvictionDecider decider;
-    __block YMMemoryCache *emptyCache;
-    __block YMMemoryCache *populatedCache;
+    __block YMMemoryCacheShimEvictionDecider decider;
+    __block YMMemoryCacheShim *emptyCache;
+    __block YMMemoryCacheShim *populatedCache;
     
     beforeEach(^{
-        emptyCache = [YMMemoryCache memoryCacheWithName:cacheName];
+        emptyCache = [YMMemoryCacheShim memoryCacheWithName:cacheName];
         emptyCache.notificationInterval = 0.25;
-
-        decider = ^BOOL(id key, id value, void *ctx) {
+        
+        decider = ^BOOL (NSString *key, id<NSCopying> value,id __nullable ctx) {
             return NO;
         };
         
-        populatedCache = [YMMemoryCache memoryCacheWithName:cacheName evictionDecider:^BOOL(id key, id value, void *context) {
+        populatedCache = [YMMemoryCacheShim memoryCacheWithName:cacheName evictionDecider:^BOOL(id key, id value, id __nullable context) {
             if (!decider) { // afterEach is brutal in it's cleanup.
                 return NO;
             }
@@ -183,7 +189,7 @@ fdescribe(@"YMMemoryCache", ^{
         
         it(@"Should do nothing on empty cache with decider", ^{
             __block BOOL deciderCalled = NO;
-            decider = ^BOOL(id key, id value, void *ctx) {
+            decider = ^BOOL(id key, id value, id __nullable ctx) {
                 deciderCalled = YES;
                 return NO;
             };
@@ -197,7 +203,7 @@ fdescribe(@"YMMemoryCache", ^{
         });
         
         it(@"Should remove all items from cache with an always YES decider", ^{
-            decider = ^BOOL(id key, id value, void *ctx) {
+            decider = ^BOOL(id key, id value, id __nullable ctx) {
                 return YES;
             };
             [populatedCache purgeEvictableItems:NULL];
@@ -208,7 +214,7 @@ fdescribe(@"YMMemoryCache", ^{
             NSArray *keys = cacheValues.allKeys;
             NSArray *keysToRemove = [keys subarrayWithRange:NSMakeRange(0, 2)]; // 2 of 3
             NSArray *keysToKeep = [keys subarrayWithRange:NSMakeRange(2, keys.count - 2)];
-            decider = ^BOOL(id key, id value, void *ctx) {
+            decider = ^BOOL(id key, id value, id __nullable ctx) {
                 return [keysToRemove containsObject:key];
             };
             [populatedCache purgeEvictableItems:NULL];
@@ -224,13 +230,13 @@ fdescribe(@"YMMemoryCache", ^{
         
         it(@"Should pass the eviction contexxt", ^{ // easy dispatch_time bug
             __block NSString *context;
-            decider = ^BOOL(id key, id value, void *ctx) {
-                context = (__bridge NSString *)(ctx);
+            decider = ^BOOL(id key, id value, id __nullable ctx) {
+                context = ctx;
                 return NO;
             };
             
             NSString *notNullPtr = @"Not Null";
-            [populatedCache purgeEvictableItems:(__bridge void * __nullable)(notNullPtr)];
+            [populatedCache purgeEvictableItems:(notNullPtr)];
             expect(context).will.beIdenticalTo(notNullPtr);
         });
     });
@@ -243,7 +249,7 @@ fdescribe(@"YMMemoryCache", ^{
         
         it(@"Should not evict after upon initialization", ^{ // easy dispatch_time bug
             __block BOOL deciderCalled = NO;
-            decider = ^BOOL(id key, id value, void *ctx) {
+            decider = ^BOOL(id key, id value, id __nullable ctx) {
                 deciderCalled = YES;
                 return NO;
             };
@@ -260,7 +266,7 @@ fdescribe(@"YMMemoryCache", ^{
         
         it(@"Should evict after interval", ^{
             __block BOOL deciderCalled = NO;
-            decider = ^BOOL(id key, id value, void *ctx) {
+            decider = ^BOOL(id key, id value, id __nullable ctx) {
                 deciderCalled = YES;
                 return NO;
             };
@@ -271,7 +277,7 @@ fdescribe(@"YMMemoryCache", ^{
         
         it(@"Should disable eviction property", ^{
             __block BOOL deciderCalled = NO;
-            decider = ^BOOL(id key, id value, void *ctx) {
+            decider = ^BOOL(id key, id value, id __nullable ctx) {
                 deciderCalled = YES;
                 return NO;
             };
@@ -286,8 +292,8 @@ fdescribe(@"YMMemoryCache", ^{
         });
         
         it(@"Should pass NULL for eviction context", ^{ // easy dispatch_time bug
-            __block void *context = "Not Null";
-            decider = ^BOOL(id key, id value, void *ctx) {
+            __block id context = @"Not Null";
+            decider = ^BOOL(id key, id value, id __nullable ctx) {
                 context = ctx;
                 return NO;
             };
@@ -304,13 +310,13 @@ fdescribe(@"YMMemoryCache", ^{
             __block NSNotification *notification;
             __block id observer;
             waitUntilTimeout(emptyCache.notificationInterval + 1.0, ^(DoneCallback done) {
-                observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
-                                                                                object:emptyCache
-                                                                                 queue:[NSOperationQueue mainQueue]
-                                                                            usingBlock:^(NSNotification *note) {
-                                                                                notification = note;
-                                                                                done();
-                                                                            }];
+                observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYMShimCacheItemsChangedNotificationKey
+                                                                             object:emptyCache
+                                                                              queue:[NSOperationQueue mainQueue]
+                                                                         usingBlock:^(NSNotification *note) {
+                                                                             notification = note;
+                                                                             done();
+                                                                         }];
                 [emptyCache addEntriesFromDictionary:cacheValues];
             });
             
@@ -323,7 +329,7 @@ fdescribe(@"YMMemoryCache", ^{
             __block NSNotification *notification;
             __block id observer;
             waitUntilTimeout(emptyCache.notificationInterval + 1.0, ^(DoneCallback done) {
-                observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
+                observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYMShimCacheItemsChangedNotificationKey
                                                                              object:emptyCache
                                                                               queue:[NSOperationQueue mainQueue]
                                                                          usingBlock:^(NSNotification *note) {
@@ -342,7 +348,7 @@ fdescribe(@"YMMemoryCache", ^{
             __block NSNotification *notification;
             __block id observer;
             waitUntilTimeout(emptyCache.notificationInterval + 1.0, ^(DoneCallback done) {
-                observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
+                observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYMShimCacheItemsChangedNotificationKey
                                                                              object:emptyCache
                                                                               queue:[NSOperationQueue mainQueue]
                                                                          usingBlock:^(NSNotification *note) {
@@ -363,7 +369,7 @@ fdescribe(@"YMMemoryCache", ^{
         
         it(@"Should NOT send notification if there were no changes", ^{
             __block NSNotification *notification;
-            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
+            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYMShimCacheItemsChangedNotificationKey
                                                                             object:populatedCache
                                                                              queue:[NSOperationQueue mainQueue]
                                                                         usingBlock:^(NSNotification *note) {
@@ -378,7 +384,7 @@ fdescribe(@"YMMemoryCache", ^{
         
         it(@"Should NOT send notification after -removeAllObjects", ^{
             __block NSNotification *notification;
-            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
+            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYMShimCacheItemsChangedNotificationKey
                                                                             object:populatedCache
                                                                              queue:[NSOperationQueue mainQueue]
                                                                         usingBlock:^(NSNotification *note) {
@@ -394,7 +400,7 @@ fdescribe(@"YMMemoryCache", ^{
         
         it(@"Should NOT send notification after -removeObjectsForKeys:", ^{
             __block NSNotification *notification;
-            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
+            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYMShimCacheItemsChangedNotificationKey
                                                                             object:populatedCache
                                                                              queue:[NSOperationQueue mainQueue]
                                                                         usingBlock:^(NSNotification *note) {
@@ -422,7 +428,7 @@ fdescribe(@"YMMemoryCache", ^{
         
         it(@"Should NOT send notification when interval is 0", ^{
             __block NSNotification *notification;
-            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
+            id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYMShimCacheItemsChangedNotificationKey
                                                                             object:populatedCache
                                                                              queue:[NSOperationQueue mainQueue]
                                                                         usingBlock:^(NSNotification *note) {
@@ -432,7 +438,7 @@ fdescribe(@"YMMemoryCache", ^{
             populatedCache.notificationInterval = 0.0;
             [populatedCache removeAllObjects];
             populatedCache.notificationInterval = 0.2;
-        
+            
             expect(notification).after(0.5).to.beNil();
             
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
@@ -442,7 +448,7 @@ fdescribe(@"YMMemoryCache", ^{
             __block NSDictionary *userInfo;
             __block id observer;
             waitUntil(^(DoneCallback done) {
-                observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYFCacheItemsChangedNotificationKey
+                observer = [[NSNotificationCenter defaultCenter] addObserverForName:kYMShimCacheItemsChangedNotificationKey
                                                                              object:populatedCache
                                                                               queue:[NSOperationQueue mainQueue]
                                                                          usingBlock:^(NSNotification *note) {

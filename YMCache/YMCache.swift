@@ -3,109 +3,150 @@
 //  YMCache
 //
 //  Created by Adam Kaplan on 8/14/15.
+//  Modified by Amos Elmaliah on 2//16
 //  Copyright (c) 2015 Yahoo, Inc. All rights reserved.
 //
 
 import Foundation
 
-public class YMMemoryCacheSwift<Key: Hashable, Val> : NSObject {
+let kYMShimCacheItemsChangedNotificationKey = "kYFCacheItemsChangedNotificationKey"
+
+
+/** The YMMemoryCache class declares a programatic interface to objects that manage ephemeral
+ * associations of keys and values, similar to Foundation's NSMutableDictionary. The primary benefit
+ * is that YMMemoryCache is designed to be safely accessed and mutated across multiple threads. It
+ * offers specific optimizations for use in a multi-threaded environment, and hides certain functionality
+ * that may be potentially unsafe or behave in unexpected ways for users accustomed to an NSDictionary.
+ *
+ * Implementation Notes:
+ *
+ * In general, non-mutating access (getters) execute synchronously and in parallel (by way of a concurrent
+ * Grand Central Dispatch queue).
+ * Mutating access (setters), on the other hand, take advantage of dispatch barriers to provide safe,
+ * blocking writes while preserving in-band synchronous-like ordering behavior.
+ *
+ * In other words, getters behave as if they were run on a concurrent dispatch queue with respect to
+ * each other. However, setters behave as though they were run on a serial dispatch queue with respect
+ * to both getters and other setters.
+ *
+ * One side effect of this approach is that any access – even a non-mutating getter – may result in a
+ * blocking call, though overall latency should be extremely low. Users should plan for this and try
+ * to pull out all values at once (via `enumerateKeysAndObjectsUsingBlock`) or in the background.
+ */
+public class YMMemoryCacheSwift : NSObject {
     
-    typealias EvictionDeciderType = (key: Key, val: Val) -> Bool
     
-    let name: String?
-    
+    public typealias Key = String
+    public typealias Val = NSCopying
+    // AutoreleasingUnsafeMutablePointer<Void> somehow doesn't work here:
+    public typealias Context = AnyObject?
+    /** Type of a decider block for determining is an item is evictable.
+     * @param key The key associated with value in the cache.
+     * @param value The value of the item in the cache.
+     * @param context Arbitrary user-provided context.
+     */
+    public typealias EvictionDeciderType = (key: Key, val: Val, context: Context) -> Bool
     let evictionDecider: EvictionDeciderType?
     
-    var evictionInterval: UInt64 = 0 {
+    /** Unique name identifying this cache, for example, in log messages. */
+    public let name: String
+    
+    
+    private func updateAferEvictionIntervalChanged() {
+        if let queue = self.evictionQueue {
+            dispatch_async(queue, _updateAferEvictionIntervalChanged)
+        }
+    }
+    
+    private func _updateAferEvictionIntervalChanged() {
+        if let oldTimer = self.evictionTimer {
+            dispatch_source_cancel(oldTimer)
+            self.evictionTimer = nil
+        }
+        
+        if self.evictionInterval == 0 {
+            return
+        }
+        
+        let timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, evictionQueue)
+        
+        self.evictionTimer = timer
+        
+        dispatch_source_set_event_handler(timer, {[weak self] () -> Void in
+            self?.purgeEvictableItems(nil)
+            })
+        
+        dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, UInt64(self.evictionInterval) * NSEC_PER_SEC, 5 * NSEC_PER_SEC)
+        
+        dispatch_resume(timer)
+    }
+    
+    /** Maximum amount of time between evictions checks. Evictions may occur at any time up to this value.
+     * Defaults to 600 seconds, or 10 minutes.
+     */
+    public var evictionInterval: UInt64 = 0 {
         didSet {
             // Exit early if no eviction queue, which means this is not an evicting memory cache
-            if evictionQueue == nil {
-                return;
+            guard oldValue != evictionInterval else {
+                evictionInterval = oldValue
+                return
             }
-            
-            dispatch_async(evictionQueue!) {
-                if let oldTimer = self.evictionTimer {
-                    dispatch_source_cancel(oldTimer)
-                    self.evictionTimer = nil
-                }
-
-                if self.evictionInterval == 0 {
-                    return
-                }
-                
-                let timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, self.evictionQueue!)
-                
-                self.evictionTimer = timer
-                
-                weak var weakSelf = self
-                dispatch_source_set_event_handler(timer, { () -> Void in
-                    //weakSelf.purgeevictableitems
-                })
-                
-                dispatch_source_set_timer(timer,
-                    dispatch_time(DISPATCH_TIME_NOW, (Int64)(self.evictionInterval * NSEC_PER_SEC)),
-                    self.evictionInterval * NSEC_PER_SEC,
-                    5 * NSEC_PER_MSEC)
-                
-                dispatch_resume(timer)
-            }
+            updateAferEvictionIntervalChanged()
         }
     }
 
-    var notificationInterval: UInt64 = 0 {
+    private func updateAfterNotificationIntervalChanged() {
+        if let oldTimer = self.notificationTimer {
+            dispatch_source_cancel(oldTimer)
+            self.notificationTimer = nil
+        }
+        
+        // Reset any pending notifications since they might be invalid for
+        // notification based on the new interval
+        self.pendingNotify = [Key: Val]()
+        
+        guard self.notificationInterval > 0 else {
+            return
+        }
+        
+        let timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue)
+        self.notificationTimer = timer;
+        
+        dispatch_source_set_event_handler(timer, {[weak self] () -> Void in
+            self?.sendPendingNotifications()
+            })
+        
+        dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, UInt64(notificationInterval) * NSEC_PER_SEC, 5 * NSEC_PER_SEC)
+        
+        dispatch_resume(timer)
+    }
+    
+    /** Maximum amount of time between notification of changes to cached items. After each notificationInterval,
+     * the cache will post a notification named `kYMShimCacheItemsChangedNotificationKey` which includes as
+     * user info, a dictionary containing all key-value pairs which have been added to the cache since
+     * the previous notification was posted.
+     *
+     * Values which have been removed from the cache prior to the notification are not included in the
+     * notification dictionary.
+     *
+     * Defaults to 0, disabled.
+     */
+    public var notificationInterval: NSTimeInterval = 0 {
         didSet {
-            dispatch_barrier_async(self.queue) {
-                if let oldTimer = self.notificationTimer {
-                    dispatch_source_cancel(oldTimer)
-                    self.notificationTimer = nil
-                }
-                
-                // Reset any pending notifications since they might be invalid for
-                // notification based on the new interval
-                self.pendingNotify = [Key: Val]()
-                
-                if self.notificationInterval == 0 {
-                    return
-                }
-                
-                let timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER,
-                    0, 0, self.queue)
-                self.notificationTimer = timer;
-                
-                weak var weakSelf = self
-                dispatch_source_set_event_handler(timer, { () -> Void in
-                    //weakSelf.sendPendingNotifications
-                })
-                
-                dispatch_source_set_timer(timer,
-                    dispatch_time(DISPATCH_TIME_NOW, (Int64)(self.notificationInterval * NSEC_PER_SEC)),
-                    self.notificationInterval * NSEC_PER_SEC,
-                    5 * NSEC_PER_SEC)
-                
-                dispatch_resume(timer)
-            }
+            write { $0.updateAfterNotificationIntervalChanged() }
         }
     }
     
-    var allItems: Dictionary<Key, Val> {
-        get {
-            var itemsCopy = [Key: Val]()
-            dispatch_sync(self.queue) {
-                itemsCopy = self.items
-            }
-            return itemsCopy
-        }
-    }
-    
-    init(cacheName: String?, evictionDecider: EvictionDeciderType?) {
-        name = cacheName
+    /** Creates and returns a new memory cache using the specified name, but no eviction delegate.
+     * @param name A unique name for this cache. Optional, helpful for debugging.
+     * @return a new cache identified by `name`
+     */
+    public init(cacheName: String?, evictionDecider: EvictionDeciderType?) {
+        name = cacheName ?? NSUUID().UUIDString
         
         // Initialize reader-writer queue
         
-        var queueId = "com.yahoo.cache"
-        if let queueSuffix = name {
-            queueId += " \(queueSuffix)"
-        }
+        let queueId = "com.yahoo.cache" + name
         
         self.queue = dispatch_queue_create(queueId.cStringUsingEncoding(NSUTF8StringEncoding)!,
             DISPATCH_QUEUE_CONCURRENT)
@@ -113,17 +154,25 @@ public class YMMemoryCacheSwift<Key: Hashable, Val> : NSObject {
         // Initialize eviction system, if needed
         
         self.evictionDecider = evictionDecider
-        if evictionDecider != nil {
+        if self.evictionDecider != nil {
             let evictionQueueId = queueId + ".eviction"
             
-            self.evictionQueue = dispatch_queue_create(evictionQueueId.cStringUsingEncoding(NSUTF8StringEncoding)!,
+            let evictionQueue = dispatch_queue_create(evictionQueueId.cStringUsingEncoding(NSUTF8StringEncoding)!,
                 DISPATCH_QUEUE_SERIAL)
+            self.evictionQueue = evictionQueue
             
             self.evictionInterval = 600
         }
         else {
-            self.evictionQueue = nil
+            evictionQueue = nil
         }
+        
+        super.init()
+        
+        updateAferEvictionIntervalChanged()
+
+        updateAfterNotificationIntervalChanged()
+        
     }
 
     deinit {
@@ -140,99 +189,145 @@ public class YMMemoryCacheSwift<Key: Hashable, Val> : NSObject {
         }
     }
     
-    convenience override init() {
-        self.init(cacheName: nil, evictionDecider: nil)
+    func write(block:(YMMemoryCacheSwift) -> () ) {
+        dispatch_barrier_async(self.queue) {[weak self] in
+            guard let it = self else {
+                return
+            }
+            block(it)
+        }
     }
     
-    subscript(key: Key) -> Val? {
+    func read<T>(block:(YMMemoryCacheSwift)->(T?)) -> T? {
+        var ret : T?
+        dispatch_sync(queue) { () -> Void in
+            ret = block(self)
+        }
+        return ret
+    }
+    
+    /** Sets the value associated with a given key.
+     * @param obj The value for `key`
+     * @param key The key for `value`. The key is copied (keys must conform to the NSCopying protocol).
+     *  If `key` already exists in the cache, `object` takes its place. If `object` is `nil`, key is removed
+     *  from the cache.
+     */
+     /** Returns the value associated with a given key.
+     * @param key The key for which to return the corresponding value.
+     * @return The value associated with `key`, or `nil` if no value is associated with key.
+     */
+    public subscript(key: Key) -> Val? {
         // Synchronous (but parallel)
         get {
-            var val: Val?
-            dispatch_sync(self.queue) {
-                val = self.items[key]
-            }
-            return val
+            return read { $0.items[key] }
         }
         
         // Concurrent (but not parallel)
         set(newVal) {
-            weak var weakSelf = self
-            dispatch_barrier_async(self.queue) {
-                weakSelf?.items[key] = newVal
-                weakSelf?.pendingNotify[key] = newVal
+            write {
+                $0.items[key] = newVal
+                $0.pendingNotify[key] = newVal
             }
         }
     }
     
-    func addEntriesFromDictionary(dict: Dictionary<Key, Val>) {
-        weak var weakSelf = self
-        dispatch_barrier_async(self.queue) {
-            if let strongSelf = weakSelf {
-                for (key,val) in dict {
-                    strongSelf.items[key] = val
-                    strongSelf.pendingNotify[key] = val
-                }
+    /** Adds to the cache the entries from a dictionary.
+     * If the cache contains the same key as the dictionary, the cache's previous value object for that key
+     * is replaced with new value object. All entries from dictionary are added to the cache at once such
+     * that all of them are accessable by the next cache accessor, even if that accessor is triggered before
+     * this method returns.
+     *
+     * All entries in the dictionary will be part of the next change notification event, even if an identical
+     * key-value pair was already present in the cache.
+     *
+     * @param dictionary The dictionary from which to add entries.
+     */
+    public func addEntriesFromDictionary(dict: Dictionary<Key, Val>) {
+        append(dict)
+    }
+    
+    /** Adds to the cache the entries from a dictionary.
+     * The same as addEntriesFromDictionary
+     */
+    public func append(dict:Dictionary<Key, Val>) {
+        write {
+            for (key,val) in dict {
+                $0.items[key] = val
+                $0.pendingNotify[key] = val
             }
-        }
-    }
-    
-    func removeAll() {
-        weak var weakSelf = self
-        dispatch_barrier_async(self.queue) {
-            weakSelf?.items.removeAll()
-            weakSelf?.pendingNotify.removeAll()
-        }
-    }
-    
-    func removeObjectsForKeys(keys: [Key]) {
-        if keys.count == 0 {
-            return
         }
         
-        weak var weakSelf = self
-        dispatch_barrier_async(self.queue) {
-            if let strongSelf = weakSelf {
-                for key in keys {
-                    strongSelf.items.removeValueForKey(key)
-                    strongSelf.pendingNotify.removeValueForKey(key)
-                }
+    }
+    /** Empties the cache of its entries.
+     * Each key and corresponding value object is sent a release message.
+     */
+    public func removeAllObjects() {
+        removeAll()
+    }
+    public func removeAll() {
+        write {
+            $0.items.removeAll()
+            $0.pendingNotify.removeAll()
+        }
+    }
+    /** Removes from the cache entries specified by keys in a given array.
+     * If a key in `keys` does not exist, the entry is ignored. This method is more efficient at removing
+     * the values for multiple keys than calling `setObject:forKeyedSubscript` multiple times.
+     * @param keys An array of objects specifying the keys to remove.
+     */
+    public func removeObjectsForKeys(keys: [Key]) {
+        guard keys.isEmpty == false else {
+            return
+        }
+        write {
+            for key in keys {
+                $0.items.removeValueForKey(key)
+                $0.pendingNotify.removeValueForKey(key)
             }
+        }
+    }
+    /** Returns a snapshot of all values in the cache.
+     * The returned dictionary may differ from the actual cache as soon as it is returned. Because of this,
+     * it is recommended to use `enumerateKeysAndObjectsUsingBlock:` for any operations that require a
+     * guarantee that all items are operated upon (such as in low-memory situations).
+     * @return A copy of the underlying dictionary upon which the cache is built.
+     */
+    public var allItems: Dictionary<Key, Val> {
+        get {
+            return read ({ $0.items })!
         }
     }
     
     // Notifications
     
-    func sendPendingNotifications() {
+    public func sendPendingNotifications() {
         // Assert private queue only
         
-        let pending = self.pendingNotify //as? Dictionary<NSObject, AnyObject>
-        if pending.count == 0 {
+        
+        guard let pending = read ({ $0.pendingNotify }) where pending.isEmpty == true else {
             return
         }
         
         dispatch_async(dispatch_get_main_queue()) {
             let nc = NSNotificationCenter.defaultCenter()
-            //nc.postNotificationName(kYFCacheItemsChangedNotificationKey, object: self, userInfo: pending)
-            nc.postNotificationName(kYFCacheItemsChangedNotificationKey, object: self, userInfo: nil)
+            nc.postNotificationName(kYMShimCacheItemsChangedNotificationKey, object: self, userInfo: pending)
         }
     }
     
     // Eviction
     
-    func purgeEvictableItems() {
-        if self.evictionDecider == nil {
+    /** Triggers an immediate (synchronous) check for exired items, and releases those items that are expired.
+    * This method does nothing if no expirationDecider block was provided during initialization. The
+    * evictionDecider block is run on the queue that this method is called on.
+    */
+    public func purgeEvictableItems(context:Context) {
+        guard let evictionDecider = self.evictionDecider else {
             return
         }
         
-        let allItems = self.allItems
-        var keysToEvict = [Key]()
-        
-        for (key, val) in allItems {
-            let shouldEvict = self.evictionDecider!(key: key, val: val)
-            if shouldEvict {
-                keysToEvict += [key]
-            }
-        }
+        let keysToEvict = self.allItems
+            .filter { evictionDecider(key: $0, val: $1, context:context) }
+            .map { return $0.0 }
         
         self.removeObjectsForKeys(keysToEvict)
     }
