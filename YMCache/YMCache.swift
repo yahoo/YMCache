@@ -164,6 +164,13 @@ public class YMMemoryCacheSwift : NSObject {
         else {
             evictionQueue = nil
         }
+        
+        super.init()
+        
+        updateAferEvictionIntervalChanged()
+
+        updateAfterNotificationIntervalChanged()
+        
     }
 
     deinit {
