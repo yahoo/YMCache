@@ -38,12 +38,14 @@ public class YMMemoryCacheSwift : NSObject {
     
     public typealias Key = String
     public typealias Val = NSCopying
+    // AutoreleasingUnsafeMutablePointer<Void> somehow doesn't work here:
+    public typealias Context = AnyObject?
     /** Type of a decider block for determining is an item is evictable.
      * @param key The key associated with value in the cache.
      * @param value The value of the item in the cache.
      * @param context Arbitrary user-provided context.
      */
-    public typealias EvictionDeciderType = (key: Key, val: Val) -> Bool
+    public typealias EvictionDeciderType = (key: Key, val: Val, context: Context) -> Bool
     let evictionDecider: EvictionDeciderType?
     
     /** Unique name identifying this cache, for example, in log messages. */
