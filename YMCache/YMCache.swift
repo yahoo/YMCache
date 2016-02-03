@@ -9,7 +9,7 @@
 
 import Foundation
 
-let CacheItemsChangedNotificationKey = kYMSheemCacheItemsChangedNotificationKey
+let kYMShimCacheItemsChangedNotificationKey = "kYFCacheItemsChangedNotificationKey"
 
 
 /** The YMMemoryCache class declares a programatic interface to objects that manage ephemeral
@@ -122,7 +122,7 @@ public class YMMemoryCacheSwift : NSObject {
     }
     
     /** Maximum amount of time between notification of changes to cached items. After each notificationInterval,
-     * the cache will post a notification named `kYMSheemCacheItemsChangedNotificationKey` which includes as
+     * the cache will post a notification named `kYMShimCacheItemsChangedNotificationKey` which includes as
      * user info, a dictionary containing all key-value pairs which have been added to the cache since
      * the previous notification was posted.
      *
@@ -310,7 +310,7 @@ public class YMMemoryCacheSwift : NSObject {
         
         dispatch_async(dispatch_get_main_queue()) {
             let nc = NSNotificationCenter.defaultCenter()
-            nc.postNotificationName(kYMSheemCacheItemsChangedNotificationKey, object: self, userInfo: pending)
+            nc.postNotificationName(kYMShimCacheItemsChangedNotificationKey, object: self, userInfo: pending)
         }
     }
     
