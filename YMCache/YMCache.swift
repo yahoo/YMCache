@@ -49,41 +49,47 @@ public class YMMemoryCacheSwift : NSObject {
     /** Unique name identifying this cache, for example, in log messages. */
     public let name: String
     
+    
+    private func updateAferEvictionIntervalChanged() {
+        if let queue = self.evictionQueue {
+            dispatch_async(queue, _updateAferEvictionIntervalChanged)
+        }
+    }
+    
+    private func _updateAferEvictionIntervalChanged() {
+        if let oldTimer = self.evictionTimer {
+            dispatch_source_cancel(oldTimer)
+            self.evictionTimer = nil
+        }
+        
+        if self.evictionInterval == 0 {
+            return
+        }
+        
+        let timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, evictionQueue)
+        
+        self.evictionTimer = timer
+        
+        dispatch_source_set_event_handler(timer, {[weak self] () -> Void in
+            self?.purgeEvictableItems(nil)
+            })
+        
+        dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, UInt64(self.evictionInterval) * NSEC_PER_SEC, 5 * NSEC_PER_SEC)
+        
+        dispatch_resume(timer)
+    }
+    
     /** Maximum amount of time between evictions checks. Evictions may occur at any time up to this value.
      * Defaults to 600 seconds, or 10 minutes.
      */
     public var evictionInterval: UInt64 = 0 {
         didSet {
             // Exit early if no eviction queue, which means this is not an evicting memory cache
-            guard let evictionQueue = evictionQueue else {
-                return;
+            guard oldValue != evictionInterval else {
+                evictionInterval = oldValue
+                return
             }
-            
-            dispatch_async(evictionQueue) {
-                if let oldTimer = self.evictionTimer {
-                    dispatch_source_cancel(oldTimer)
-                    self.evictionTimer = nil
-                }
-
-                if self.evictionInterval == 0 {
-                    return
-                }
-                
-                let timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, evictionQueue)
-                
-                self.evictionTimer = timer
-                
-                dispatch_source_set_event_handler(timer, {[weak self] () -> Void in
-                    self?.purgeEvictableItems()
-                })
-                
-                dispatch_source_set_timer(timer,
-                    dispatch_time(DISPATCH_TIME_NOW, (Int64)(self.evictionInterval * NSEC_PER_SEC)),
-                    self.evictionInterval * NSEC_PER_SEC,
-                    5 * NSEC_PER_MSEC)
-                
-                dispatch_resume(timer)
-            }
+            updateAferEvictionIntervalChanged()
         }
     }
 
@@ -153,8 +159,9 @@ public class YMMemoryCacheSwift : NSObject {
         if self.evictionDecider != nil {
             let evictionQueueId = queueId + ".eviction"
             
-            self.evictionQueue = dispatch_queue_create(evictionQueueId.cStringUsingEncoding(NSUTF8StringEncoding)!,
+            let evictionQueue = dispatch_queue_create(evictionQueueId.cStringUsingEncoding(NSUTF8StringEncoding)!,
                 DISPATCH_QUEUE_SERIAL)
+            self.evictionQueue = evictionQueue
             
             self.evictionInterval = 600
         }
@@ -307,13 +314,13 @@ public class YMMemoryCacheSwift : NSObject {
     * This method does nothing if no expirationDecider block was provided during initialization. The
     * evictionDecider block is run on the queue that this method is called on.
     */
-    public func purgeEvictableItems() {
+    public func purgeEvictableItems(context:Context) {
         guard let evictionDecider = self.evictionDecider else {
             return
         }
         
         let keysToEvict = self.allItems
-            .filter { evictionDecider(key: $0, val: $1) }
+            .filter { evictionDecider(key: $0, val: $1, context:context) }
             .map { return $0.0 }
         
         self.removeObjectsForKeys(keysToEvict)
