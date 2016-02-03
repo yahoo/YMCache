@@ -93,7 +93,7 @@ public class YMMemoryCacheSwift : NSObject {
         }
     }
 
-    private func _updateAfterNotificationIntervalChanged() {
+    private func updateAfterNotificationIntervalChanged() {
         if let oldTimer = self.notificationTimer {
             dispatch_source_cancel(oldTimer)
             self.notificationTimer = nil
@@ -103,22 +103,18 @@ public class YMMemoryCacheSwift : NSObject {
         // notification based on the new interval
         self.pendingNotify = [Key: Val]()
         
-        if self.notificationInterval == 0 {
+        guard self.notificationInterval > 0 else {
             return
         }
         
-        let timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER,
-            0, 0, self.queue)
+        let timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue)
         self.notificationTimer = timer;
         
         dispatch_source_set_event_handler(timer, {[weak self] () -> Void in
             self?.sendPendingNotifications()
             })
         
-        dispatch_source_set_timer(timer,
-            dispatch_time(DISPATCH_TIME_NOW, (Int64)(self.notificationInterval * NSEC_PER_SEC)),
-            self.notificationInterval * NSEC_PER_SEC,
-            5 * NSEC_PER_SEC)
+        dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, UInt64(notificationInterval) * NSEC_PER_SEC, 5 * NSEC_PER_SEC)
         
         dispatch_resume(timer)
     }
@@ -133,9 +129,9 @@ public class YMMemoryCacheSwift : NSObject {
      *
      * Defaults to 0, disabled.
      */
-    public var notificationInterval: UInt64 = 0 {
+    public var notificationInterval: NSTimeInterval = 0 {
         didSet {
-            write { $0._updateAfterNotificationIntervalChanged() }
+            write { $0.updateAfterNotificationIntervalChanged() }
         }
     }
     
