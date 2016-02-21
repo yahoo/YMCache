@@ -2,7 +2,7 @@
 //  Copyright 2015 Yahoo.
 //  Licensed under the terms of the MIT License. See LICENSE file in the project root.
 
-@import Foundation;
+#import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

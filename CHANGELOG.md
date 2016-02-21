@@ -1,6 +1,10 @@
 CHANGELOG
 ==================
 
+1.3.1 ()
+==================
+* [Feature] Remove use of `@import` in order to support ObjC++
+
 1.3.0 (2015-10-19)
 ==================
 * [Feature] Expose `NSDataWritingOptions` to clients (adds support for encryption on iOS)
