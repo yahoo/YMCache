@@ -1,9 +1,10 @@
 CHANGELOG
 ==================
 
-1.3.1 ()
+1.3.1 (2016-03-06)
 ==================
 * [Feature] Remove use of `@import` in order to support ObjC++
+* [Pod] Reduce minimum OS X version to 10.8
 
 1.3.0 (2015-10-19)
 ==================
