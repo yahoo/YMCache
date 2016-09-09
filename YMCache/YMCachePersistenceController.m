@@ -32,10 +32,29 @@ static NSString *const kYFCachePersistenceErrorDomain = @"YFCachePersistenceErro
                      delegate:(id<YMSerializationDelegate>)serializionDelegate
                       fileURL:(NSURL *)cacheFileURL {
     NSParameterAssert(cache);
-    NSParameterAssert(modelClass);
     NSParameterAssert(serializionDelegate);
     NSParameterAssert(cacheFileURL);
-    if (!cache || !modelClass || !cacheFileURL || !serializionDelegate) {
+    if (!cache || !cacheFileURL || !serializionDelegate) {
+        // If any of these variables are nil, the persistence controller cannot do it's job.
+        NSString *exceptionReason;
+        if (!cache) {
+            exceptionReason = @"A cache is required to use cache persistence controller.";
+        }
+        
+        if (!cacheFileURL) {
+            exceptionReason = @"The cache file URL is required to use cache persistence controller."
+            @" If the cache is not meant to be stored in a file, do not use a persistence controller.";
+        }
+        
+        if (!serializionDelegate) {
+            exceptionReason = @"Serialization delegate is required for the persistence controller to "
+            @"map between representations of the cache data between file and memory.";
+        }
+        
+        @throw [NSException exceptionWithName:@"InvalidParameterException"
+                                       reason:exceptionReason
+                                     userInfo:nil];
+        
         return nil;
     }
     
