@@ -52,61 +52,86 @@ describe(@"YMCachePersistenceControllerSpec", ^{
         expect(expectUrl).to.equal(gotUrl);
     });
     
-    context(@"Default initializer", ^{
+    describe(@"Default initializer", ^{
         
-        it(@"return nil if arguments are not valid", ^{
-            id obj;
-
-            YMMemoryCache *cache = nil;
-            Class class = [NSObject class];
-            id<YMSerializationDelegate> delegate = [TestDelegate new];
-            NSURL *fileUrl = [NSURL URLWithString:@"file:///"];
-            
-            obj = [[YMCachePersistenceController alloc] initWithCache:cache
-                                                           modelClass:class
-                                                             delegate:delegate
-                                                              fileURL:fileUrl];
-            expect(obj).to.beNil();
-            
+        __block YMMemoryCache *cache;
+        __block Class class;
+        __block id<YMSerializationDelegate> delegate;
+        __block NSURL *fileUrl;
+        
+        beforeEach(^{
             cache = [[YMMemoryCache alloc] initWithName:@"Name" evictionDecider:nil];
-            class = nil;
-            obj = [[YMCachePersistenceController alloc] initWithCache:cache
-                                                           modelClass:class
-                                                             delegate:delegate
-                                                              fileURL:fileUrl];
-            expect(obj).to.beNil();
-
             class = [NSObject class];
-            delegate = nil;
-            obj = [[YMCachePersistenceController alloc] initWithCache:cache
-                                                           modelClass:class
-                                                             delegate:delegate
-                                                              fileURL:fileUrl];
-            expect(obj).to.beNil();
-            
             delegate = [TestDelegate new];
-            fileUrl = nil;
-            obj = [[YMCachePersistenceController alloc] initWithCache:cache
-                                                           modelClass:class
-                                                             delegate:delegate
-                                                              fileURL:fileUrl];
-            expect(obj).to.beNil();
+            fileUrl = [NSURL URLWithString:@"file:///"];
         });
         
-        it(@"correctly set all initial values", ^{
-            YMMemoryCache *cache = [[YMMemoryCache alloc] initWithName:@"Name" evictionDecider:nil];
-            Class class = [NSObject class];
-            id<YMSerializationDelegate> delegate = [TestDelegate new];
-            NSURL *fileUrl = [NSURL URLWithString:@"file:///"];
+        context(@"required args", ^{
+            __block id unused;
             
-            YMCachePersistenceController *con = [[YMCachePersistenceController alloc] initWithCache:cache
-                                                                                         modelClass:class
-                                                                                           delegate:delegate
-                                                                                            fileURL:fileUrl];
-            expect(con.cache).to.beIdenticalTo(cache);
-            expect(con.modelClass).to.beIdenticalTo(class);
-            expect(con.serializionDelegate).to.beIdenticalTo(delegate);
-            expect(con.cacheFileURL).to.equal(fileUrl);
+            it(@"throws exception if cache is nil", ^{
+                cache = nil;
+                expect(^{
+                    unused = [[YMCachePersistenceController alloc] initWithCache:cache
+                                                                      modelClass:class
+                                                                        delegate:delegate
+                                                                         fileURL:fileUrl];
+                }).to.raiseWithReason(@"InvalidParameterException",
+                                      @"A cache is required to use cache persistence controller.");
+            });
+            
+            it(@"throws exception if delegate is nil", ^{
+                delegate = nil;
+                expect(^{
+                    unused = [[YMCachePersistenceController alloc] initWithCache:cache
+                                                                      modelClass:class
+                                                                        delegate:delegate
+                                                                         fileURL:fileUrl];
+                }).to.raiseWithReason(@"InvalidParameterException",
+                                      @"Serialization delegate is required for the persistence controller to "
+                                      @"map between representations of the cache data between file and memory.");
+            });
+            
+            it(@"throws exception if fileURL is nil", ^{
+                fileUrl = nil;
+                expect(^{
+                    unused = [[YMCachePersistenceController alloc] initWithCache:cache
+                                                                      modelClass:class
+                                                                        delegate:delegate
+                                                                         fileURL:fileUrl];
+                }).to.raiseWithReason(@"InvalidParameterException",
+                                      @"The cache file URL is required to use cache persistence controller."
+                                      @" If the cache is not meant to be stored in a file, do not use a"
+                                      @" persistence controller.");
+            });
+        });
+        
+        context(@"correctly set initial values", ^{
+            
+            it(@"sets all values", ^{
+                YMCachePersistenceController *con = [[YMCachePersistenceController alloc] initWithCache:cache
+                                                                                             modelClass:class
+                                                                                               delegate:delegate
+                                                                                                fileURL:fileUrl];
+                expect(con.cache).to.beIdenticalTo(cache);
+                expect(con.modelClass).to.beIdenticalTo(class);
+                expect(con.serializionDelegate).to.beIdenticalTo(delegate);
+                expect(con.cacheFileURL).to.equal(fileUrl);
+            });
+            
+            it(@"sets minimum values", ^{
+                class = nil;
+                
+                YMCachePersistenceController *con = [[YMCachePersistenceController alloc] initWithCache:cache
+                                                                                             modelClass:class
+                                                                                               delegate:delegate
+                                                                                                fileURL:fileUrl];
+                expect(con.cache).to.beIdenticalTo(cache);
+                expect(con.modelClass).to.beNil();
+                expect(con.serializionDelegate).to.beIdenticalTo(delegate);
+                expect(con.cacheFileURL).to.equal(fileUrl);
+            });
+            
         });
         
     });

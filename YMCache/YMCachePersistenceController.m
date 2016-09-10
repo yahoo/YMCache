@@ -21,7 +21,7 @@ static NSString *const kYFCachePersistenceErrorDomain = @"YFCachePersistenceErro
 + (NSURL *)defaultCacheDirectory {
     NSArray *urls = [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
     if (!urls.count) {
-        NSAssert(false, @"Unable to find suitable cache directory URL");
+        NSAssert(false, @"%@", @"Unable to find suitable cache directory URL");
         return nil;
     }
     return [urls lastObject];
@@ -32,10 +32,29 @@ static NSString *const kYFCachePersistenceErrorDomain = @"YFCachePersistenceErro
                      delegate:(id<YMSerializationDelegate>)serializionDelegate
                       fileURL:(NSURL *)cacheFileURL {
     NSParameterAssert(cache);
-    NSParameterAssert(modelClass);
     NSParameterAssert(serializionDelegate);
     NSParameterAssert(cacheFileURL);
-    if (!cache || !modelClass || !cacheFileURL || !serializionDelegate) {
+    if (!cache || !cacheFileURL || !serializionDelegate) {
+        // If any of these variables are nil, the persistence controller cannot do it's job.
+        NSString *exceptionReason;
+        if (!cache) {
+            exceptionReason = @"A cache is required to use cache persistence controller.";
+        }
+        
+        if (!cacheFileURL) {
+            exceptionReason = @"The cache file URL is required to use cache persistence controller."
+            @" If the cache is not meant to be stored in a file, do not use a persistence controller.";
+        }
+        
+        if (!serializionDelegate) {
+            exceptionReason = @"Serialization delegate is required for the persistence controller to "
+            @"map between representations of the cache data between file and memory.";
+        }
+        
+        @throw [NSException exceptionWithName:@"InvalidParameterException"
+                                       reason:exceptionReason
+                                     userInfo:nil];
+        
         return nil;
     }
     
@@ -92,7 +111,7 @@ static NSString *const kYFCachePersistenceErrorDomain = @"YFCachePersistenceErro
             
             dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, self.updateQueue);
             dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, saveInterval * NSEC_PER_SEC, 0.1 * NSEC_PER_SEC);
-            __weak typeof(self) weakSelf = self;
+            __weak __typeof__(self) weakSelf = self;
             dispatch_source_set_event_handler(timer, ^{
                 if ([weakSelf.serializionDelegate respondsToSelector:@selector(persistenceControllerWillSaveMemoryCache:)]) {
                     [weakSelf.serializionDelegate persistenceControllerWillSaveMemoryCache:weakSelf];

@@ -25,8 +25,8 @@
 		FC59B4561B713FC800093177 /* Specta.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FC59B4121B71359700093177 /* Specta.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FC59B4581B713FF000093177 /* Expecta.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FC59B4151B7135A200093177 /* Expecta.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FC59B4591B713FF000093177 /* Specta.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FC59B4161B7135A200093177 /* Specta.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		FCD375111BACF80E0034AD3B /* NSRunLoop+AsyncTestAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD375101BACF80E0034AD3B /* NSRunLoop+AsyncTestAdditions.m */; settings = {ASSET_TAGS = (); }; };
-		FCD375121BACF80E0034AD3B /* NSRunLoop+AsyncTestAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD375101BACF80E0034AD3B /* NSRunLoop+AsyncTestAdditions.m */; settings = {ASSET_TAGS = (); }; };
+		FCD375111BACF80E0034AD3B /* NSRunLoop+AsyncTestAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD375101BACF80E0034AD3B /* NSRunLoop+AsyncTestAdditions.m */; };
+		FCD375121BACF80E0034AD3B /* NSRunLoop+AsyncTestAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD375101BACF80E0034AD3B /* NSRunLoop+AsyncTestAdditions.m */; };
 		FCD690821B710F520099E854 /* YMCachePersistenceController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB05DDB1B6FDFC300C7302B /* YMCachePersistenceController.m */; };
 		FCD690831B710F540099E854 /* YMMemoryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB05DDE1B6FDFC300C7302B /* YMMemoryCache.m */; };
 		FCD690841B710F5C0099E854 /* YMCache.h in Headers */ = {isa = PBXBuildFile; fileRef = FCDDAB611B7008D4006C333F /* YMCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -378,7 +378,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = YM;
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Yahoo, Inc";
 				TargetAttributes = {
 					FC59B3621B71156B00093177 = {
@@ -514,8 +514,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
@@ -535,6 +537,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_PEDANTIC = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
@@ -550,7 +553,7 @@
 		FC4B27551BA13A2000F870A1 /* Test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -742,8 +745,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
@@ -763,6 +768,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_PEDANTIC = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
@@ -788,8 +794,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
@@ -802,6 +810,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_PEDANTIC = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
@@ -817,7 +826,7 @@
 		FCDDAB711B7008D4006C333F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -842,7 +851,7 @@
 		FCDDAB721B7008D4006C333F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
