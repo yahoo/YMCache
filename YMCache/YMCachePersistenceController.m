@@ -97,7 +97,7 @@ static NSString *const kYFCachePersistenceErrorDomain = @"YFCachePersistenceErro
     // B) Without a change check: 20s after the first call, 10s after the second call – first caller is confused
     
     dispatch_sync(self.updateQueue, ^{
-        _saveInterval = saveInterval;
+        self->_saveInterval = saveInterval;
         
         // Invalidate existing source timer.
         if (self.updateTimer) {
@@ -110,25 +110,27 @@ static NSString *const kYFCachePersistenceErrorDomain = @"YFCachePersistenceErro
             //YMLog(@"Setting cache (%@) auto-save interval to %0.4fs", _cache.name, saveInterval);
             
             dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, self.updateQueue);
-            dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, saveInterval * NSEC_PER_SEC, 0.1 * NSEC_PER_SEC);
-            __weak __typeof__(self) weakSelf = self;
+            dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, (UInt64)(saveInterval * NSEC_PER_SEC), NSEC_PER_SEC / 10);
+            __weak __typeof(self) weakSelf = self;
             dispatch_source_set_event_handler(timer, ^{
-                if ([weakSelf.serializionDelegate respondsToSelector:@selector(persistenceControllerWillSaveMemoryCache:)]) {
-                    [weakSelf.serializionDelegate persistenceControllerWillSaveMemoryCache:weakSelf];
+                __strong __typeof(self) strongSelf = weakSelf;
+                
+                if ([strongSelf.serializionDelegate respondsToSelector:@selector(persistenceControllerWillSaveMemoryCache:)]) {
+                    [strongSelf.serializionDelegate persistenceControllerWillSaveMemoryCache:strongSelf];
                 }
                 
                 NSError *error;
-                [weakSelf saveMemoryCache:&error];
+                [strongSelf saveMemoryCache:&error];
                 
                 if (error) {
-                    if ([weakSelf.serializionDelegate respondsToSelector:@selector(persistenceController:didFailToSaveMemoryCacheWithError:)]) {
-                        [weakSelf.serializionDelegate persistenceController:weakSelf didFailToSaveMemoryCacheWithError:error];
+                    if ([strongSelf.serializionDelegate respondsToSelector:@selector(persistenceController:didFailToSaveMemoryCacheWithError:)]) {
+                        [strongSelf.serializionDelegate persistenceController:strongSelf didFailToSaveMemoryCacheWithError:error];
                     }
                     return;
                 }
                 
-                if ([weakSelf.serializionDelegate respondsToSelector:@selector(persistenceControllerDidSaveMemoryCache:)]) {
-                    [weakSelf.serializionDelegate persistenceControllerDidSaveMemoryCache:weakSelf];
+                if ([strongSelf.serializionDelegate respondsToSelector:@selector(persistenceControllerDidSaveMemoryCache:)]) {
+                    [strongSelf.serializionDelegate persistenceControllerDidSaveMemoryCache:strongSelf];
                 }
             });
             
@@ -141,7 +143,7 @@ static NSString *const kYFCachePersistenceErrorDomain = @"YFCachePersistenceErro
     });
 }
 
-- (NSInteger)loadMemoryCache:(NSError * __autoreleasing *)error {
+- (NSUInteger)loadMemoryCache:(NSError * __autoreleasing *)error {
     // NSJSONSerialization and NSValueTransformers can be rather agressive in their exceptions.
     // Reading the pre-existing cache is not critical. If an exception is thrown, we'll swallow it here and wrap
     // it in an error. The app will act as though it did not have any cached data.
@@ -156,7 +158,7 @@ static NSString *const kYFCachePersistenceErrorDomain = @"YFCachePersistenceErro
     }
 }
 
-- (NSInteger)p_loadMemoryCacheUnsafe:(NSError * __autoreleasing *)error {
+- (NSUInteger)p_loadMemoryCacheUnsafe:(NSError * __autoreleasing *)error {
     if (error) {
         *error = nil;
     }
@@ -174,7 +176,7 @@ static NSString *const kYFCachePersistenceErrorDomain = @"YFCachePersistenceErro
             *error = [is streamError];
             //YMLog(@"Cache read stream error: %@", *error);
         }
-        return NO;
+        return 0;
     }
     
     NSMutableDictionary *dict = [NSJSONSerialization JSONObjectWithStream:is options:NSJSONReadingMutableContainers error:error];

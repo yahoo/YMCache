@@ -12,7 +12,7 @@
     [self runUntilNonNil:&neverTrue timeout:timeout];
 }
 
-- (void)runUntilNonNil:(id *)objPtr timeout:(NSTimeInterval)timeout {
+- (void)runUntilNonNil:(id __autoreleasing *)objPtr timeout:(NSTimeInterval)timeout {
     NSParameterAssert(objPtr);
     if (!objPtr) {
         return;

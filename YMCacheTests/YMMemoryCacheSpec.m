@@ -288,9 +288,10 @@ describe(@"YMMemoryCache", ^{
             
             NSTimeInterval interval = 0.5;
             populatedCache.evictionInterval = interval;
-            dispatch_after((interval / 4.0) * NSEC_PER_SEC, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-                populatedCache.evictionInterval = 0;
-            });
+            dispatch_after((dispatch_time_t)((interval / 4.0) * NSEC_PER_SEC),
+                           dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                               populatedCache.evictionInterval = 0;
+                           });
             
             expect(deciderCalled).after(interval * 2.0).beFalsy;
         });
