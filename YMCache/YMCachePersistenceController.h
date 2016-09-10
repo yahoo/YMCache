@@ -11,10 +11,10 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol YMSerializationDelegate <NSObject>
 
 - (nullable id)persistenceController:(YMCachePersistenceController *)controller modelFromJSONDictionary:(NSDictionary *)value
-                               error:(NSError *__nullable*__nullable)error;
+                               error:(NSError * _Nullable * _Nullable)error;
 
 - (nullable NSDictionary *)persistenceController:(YMCachePersistenceController *)controller JSONDictionaryFromModel:(id)value
-                                           error:(NSError *__nullable*__nullable)error;
+                                           error:(NSError * _Nullable * _Nullable)error;
 
 @optional
 
@@ -116,7 +116,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @return The number of items loaded from the cache file and added to the memory cache. Zero if
  *  memoryCache or filename are not valid.
  */
-- (NSInteger)loadMemoryCache:(NSError **)error;
+- (NSUInteger)loadMemoryCache:(NSError * __autoreleasing *)error;
 
 /** Saves the memory cache to the specified location on disk.
  * @param error If there is an error writing the data, upon return contains an NSError object that
@@ -124,7 +124,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @return True if the memory cache was written to disk. False if an error occurred or if either
  *  memoryCache or filename are not valid.
  */
-- (BOOL)saveMemoryCache:(NSError **)error;
+- (BOOL)saveMemoryCache:(NSError * __autoreleasing *)error;
 
 @end
 
