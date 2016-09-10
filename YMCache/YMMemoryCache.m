@@ -130,7 +130,7 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
         if (evictionInterval > 0) {
             self.evictionTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, self.evictionDeciderQueue);
             
-            __weak typeof(self) weakSelf = self;
+            __weak __typeof(self) weakSelf = self;
             dispatch_source_set_event_handler(self.evictionTimer, ^{ [weakSelf purgeEvictableItems:NULL]; });
             
             dispatch_source_set_timer(_evictionTimer,
@@ -159,7 +159,7 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
             
             self.notificationTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, self.queue);
             
-            __weak typeof(self) weakSelf = self;
+            __weak __typeof(self) weakSelf = self;
             dispatch_source_set_event_handler(self.notificationTimer, ^{
                 [weakSelf sendPendingNotifications];
             });
@@ -193,7 +193,7 @@ CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
 - (void)setObject:(id)obj forKeyedSubscript:(id)key {
     NSParameterAssert(key); // The collections will assert, but fail earlier to aid in async debugging
     
-    __weak typeof(self) weakSelf = self;
+    __weak __typeof(self) weakSelf = self;
     dispatch_barrier_async(self.queue, ^{
         if (obj) {
             [weakSelf.removedPendingNotify removeObject:key];
