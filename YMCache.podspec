@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "YMCache"
-  s.version          = "1.3.1"
+  s.version          = "2.0.0"
   s.summary          = "Fast & simple small object cache. GCD-based and thread-safe."
   s.homepage         = "https://github.com/yahoo/YMCache"
   s.license          = 'MIT'
@@ -8,8 +8,8 @@ Pod::Spec.new do |s|
   s.source           = { :git => "https://github.com/yahoo/YMCache.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/adkap'
 
-  s.ios.deployment_target = "7.0"
-  s.osx.deployment_target = "10.8"
+  s.ios.deployment_target = "8.0"
+  s.osx.deployment_target = "10.10"
 
   s.requires_arc = true
 

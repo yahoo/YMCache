@@ -1,6 +1,14 @@
 CHANGELOG
 ==================
 
+2.0.0 (2016-09-13)
+==================
+* [Fix] The method `loadMemoryCache` now returns NSUInteger, in line with it's documented behavior.
+* [Fix] Persistence manager initializer throws exception when the required parameters are nil. Previous implementation returned nil in release-mode, effectively swallowing the errors.
+* [Pod] Bump minimum version for iOS to 8.0, OSX to 10.10. No known breaking changes on the old versions, we just don't test against them.
+* [Refactor] Enable many more warnings and patch code to fix resulting warnings
+* [Refactor] Remove deprecated methods from 1.x
+
 1.3.1 (2016-03-06)
 ==================
 * [Feature] Remove use of `@import` in order to support ObjC++

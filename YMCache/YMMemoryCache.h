@@ -6,9 +6,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-extern NSString *const kYFCacheItemsChangedNotificationKey
-    __attribute__((deprecated("Since YMCache 1.1.0; Use kYFCacheDidChangeNotification instead.")));
-
 /**
  *  Cache update notification. The userInfo dictionary in the notification contains two values:
  *  `kYFCacheUpdatedItemsUserInfoKey` containing key-value pairs that have been added/updated and
