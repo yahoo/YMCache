@@ -10,8 +10,6 @@ NSAssert(dispatch_get_specific(kYFPrivateQueueKey) == (__bridge void *)self, @"W
 #define AssertNotPrivateQueue \
 NSAssert(dispatch_get_specific(kYFPrivateQueueKey) != (__bridge void *)self, @"Potential deadlock: blocking call issued from current queue, to current queue")
 
-NSString *const kYFCacheItemsChangedNotificationKey = @"kYFCacheItemsChangedNotificationKey"; // deprecated since 1.1.0
-
 NSString *const kYFCacheDidChangeNotification = @"kYFCacheDidChangeNotification";
 NSString *const kYFCacheUpdatedItemsUserInfoKey = @"kYFCacheUpdatedItemsUserInfoKey";
 NSString *const kYFCacheRemovedItemsUserInfoKey = @"kYFCacheRemovedItemsUserInfoKey";
@@ -260,13 +258,6 @@ static const CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
                                                             object:self
                                                           userInfo:@{ kYFCacheUpdatedItemsUserInfoKey: updatedPending,
                                                                       kYFCacheRemovedItemsUserInfoKey: removedPending }];
-        
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated" // since 1.1.0
-        [[NSNotificationCenter defaultCenter] postNotificationName:kYFCacheItemsChangedNotificationKey
-                                                            object:self
-                                                          userInfo:updatedPending];
-#pragma clang diagnostic pop
     });
 }
 
