@@ -1,6 +1,11 @@
 CHANGELOG
 ==================
 
+2.0.1 (2017-04-20)
+==================
+* [Fix] Reduce new warnings in Xcode 8.3
+* [Fix] Incorrect AppleDoc comments
+
 2.0.0 (2016-09-13)
 ==================
 * [Fix] The method `loadMemoryCache` now returns NSUInteger, in line with it's documented behavior.
