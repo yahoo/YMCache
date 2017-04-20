@@ -84,7 +84,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param modelClass    Required. The class of the items that will be stored in the cache. Currently only
  *  homogenously typed caches are supported.
  * @param cache         Required. The cache instance from which data shall be loaded into or saved from.
- * @param delegate      Required. the object responsible for serializing and de-serializing models
+ * @param serializionDelegate   Required. the object responsible for serializing and de-serializing models
  * @param cacheFileURL  Required. The url on disk to use for saving and loading caches.
  * @return a new cache persistence manager or nil if `cacheDirectoryURL` was omitted and no suitable
  *  cache directory could be located.
@@ -99,7 +99,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param modelClass    Required. The class of the items that will be stored in the cache. Currently only
  *  homogenously typed caches are supported.
  * @param cache         Required. The cache instance from which data shall be loaded into or saved from.
- * @param delegate      the object responsible for serializing and de-serializing models
+ * @param serializionDelegate   the object responsible for serializing and de-serializing models
  * @param cacheName     Required. The name of the cache file on disk to use for saving and loading.
  * @return a new cache persistence manager or nil if `cacheDirectoryURL` was omitted and no suitable
  *  cache directory could be located.
