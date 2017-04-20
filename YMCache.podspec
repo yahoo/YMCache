@@ -1,15 +1,15 @@
 Pod::Spec.new do |s|
-  s.name             = "YMCache"
-  s.version          = "2.0.0"
-  s.summary          = "Fast & simple small object cache. GCD-based and thread-safe."
-  s.homepage         = "https://github.com/yahoo/YMCache"
+  s.name             = 'YMCache'
+  s.version          = '2.0.1'
+  s.summary          = 'Fast & simple small object cache. GCD-based and thread-safe.'
+  s.homepage         = 'https://github.com/yahoo/YMCache'
   s.license          = 'MIT'
-  s.author           = { "adamkaplan" => "adamkaplan@yahoo-inc.com" }
-  s.source           = { :git => "https://github.com/yahoo/YMCache.git", :tag => s.version.to_s }
+  s.author           = { 'adamkaplan' => 'adamkaplan@yahoo-inc.com' }
+  s.source           = { :git => 'https://github.com/yahoo/YMCache.git', :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/adkap'
 
-  s.ios.deployment_target = "8.0"
-  s.osx.deployment_target = "10.10"
+  s.ios.deployment_target = '8.0'
+  s.osx.deployment_target = '10.10'
 
   s.requires_arc = true
 
