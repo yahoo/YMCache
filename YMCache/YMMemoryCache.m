@@ -182,24 +182,24 @@ static const CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
     NSParameterAssert(key);
     AssertNotPrivateQueue;
     
+    id item = [self objectForKeyedSubscript:key];
     if (!defaultLoader) {
-        return [self objectForKeyedSubscript:key];
+        return item;
     }
     
-    __block id item;
-    dispatch_sync(self.queue, ^{
-        item = self.items[key];
-    });
-    
+    // If default loader is valid and we don't have this object in cache, we should create and save it.
     if (!item) {
+        __block id newItem;
         dispatch_barrier_sync(self.queue, ^{
-            item = defaultLoader();
-            if (item) {
+            newItem = defaultLoader();
+            if (newItem) {
                 [self.removedPendingNotify removeObject:key];
-                self.items[key] = item;
-                self.updatedPendingNotify[key] = item;
+                self.items[key] = newItem;
+                self.updatedPendingNotify[key] = newItem;
             }
         });
+        
+        item = newItem;
     }
     
     return item;
