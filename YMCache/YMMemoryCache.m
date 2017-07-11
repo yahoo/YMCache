@@ -176,6 +176,35 @@ static const CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
     });
 }
 
+
+- (id)objectForKey:(NSString *)key withDefault:(YMMemoryCacheObjectLoader)defaultLoader
+{
+    NSParameterAssert(key);
+    AssertNotPrivateQueue;
+    
+    if (!defaultLoader) {
+        return [self objectForKeyedSubscript:key];
+    }
+    
+    __block id item;
+    dispatch_sync(self.queue, ^{
+        item = self.items[key];
+    });
+    
+    if (!item) {
+        dispatch_barrier_sync(self.queue, ^{
+            item = defaultLoader();
+            if (item) {
+                [self.removedPendingNotify removeObject:key];
+                self.items[key] = item;
+                self.updatedPendingNotify[key] = item;
+            }
+        });
+    }
+    
+    return item;
+}
+
 #pragma mark - Keyed Subscripting
 
 - (id)objectForKeyedSubscript:(id)key {

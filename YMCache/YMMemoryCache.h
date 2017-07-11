@@ -29,7 +29,9 @@ extern NSString *const kYFCacheRemovedItemsUserInfoKey;
  * @param value The value of the item in the cache.
  * @param context Arbitrary user-provided context.
  */
-typedef BOOL(^YMMemoryCacheEvictionDecider)(id key, id value, void *__nullable context);
+typedef BOOL (^YMMemoryCacheEvictionDecider)(id key, id value, void *__nullable context);
+
+typedef __nullable id (^YMMemoryCacheObjectLoader)();
 
 /** The YMMemoryCache class declares a programatic interface to objects that manage ephemeral
  * associations of keys and values, similar to Foundation's NSMutableDictionary. The primary benefit
@@ -104,6 +106,10 @@ typedef BOOL(^YMMemoryCacheEvictionDecider)(id key, id value, void *__nullable c
  * @return The value associated with `key`, or `nil` if no value is associated with key.
  */
 - (nullable id)objectForKeyedSubscript:(nonnull id)key;
+
+/** Get the value for the key. If no value exists, invokes defaultLoader(), sets the result as the value for key, and returns it.
+ */
+- (nullable id)objectForKey:(NSString *)key withDefault:(YMMemoryCacheObjectLoader)defaultLoader;
 
 /** Sets the value associated with a given key.
  * @param obj The value for `key`
