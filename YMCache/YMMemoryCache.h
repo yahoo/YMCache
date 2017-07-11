@@ -107,7 +107,9 @@ typedef __nullable id (^YMMemoryCacheObjectLoader)();
  */
 - (nullable id)objectForKeyedSubscript:(nonnull id)key;
 
-/** Get the value for the key. If no value exists, invokes defaultLoader(), sets the result as the value for key, and returns it.
+/** Get the value for the key. If value does not exist, invokes defaultLoader(), sets the result as
+ the value for key, and returns it. In order to ensure consistency, the cache is locked when
+ the defaultLoader block needs to be invoked.
  */
 - (nullable id)objectForKey:(NSString *)key withDefault:(YMMemoryCacheObjectLoader)defaultLoader;
 
