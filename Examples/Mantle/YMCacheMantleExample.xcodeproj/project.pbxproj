@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		114B1FBD7B2A435881A2F74A /* Pods_YMCacheMantleExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CEA9DFEE7F3DFA1059E64E3 /* Pods_YMCacheMantleExample.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		1A05FE20A2A725C3775CF3FF /* Pods_YMCacheMantleExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EAAF3A13B6D02E10BC145DD /* Pods_YMCacheMantleExample.framework */; };
 		FCDDABC71B701243006C333F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FCDDABC61B701243006C333F /* main.m */; };
 		FCDDABCA1B701243006C333F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FCDDABC91B701243006C333F /* AppDelegate.m */; };
 		FCDDABCD1B701243006C333F /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCDDABCC1B701243006C333F /* TableViewController.m */; };
@@ -21,9 +21,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1CEA9DFEE7F3DFA1059E64E3 /* Pods_YMCacheMantleExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YMCacheMantleExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8AFC53072F296BFF4126CDA3 /* Pods-YMCacheMantleExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YMCacheMantleExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YMCacheMantleExample/Pods-YMCacheMantleExample.debug.xcconfig"; sourceTree = "<group>"; };
-		DED211485E0E10F477C01AC7 /* Pods-YMCacheMantleExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YMCacheMantleExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-YMCacheMantleExample/Pods-YMCacheMantleExample.release.xcconfig"; sourceTree = "<group>"; };
+		4697FDB2E18840AB71844213 /* Pods-YMCacheMantleExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YMCacheMantleExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-YMCacheMantleExample/Pods-YMCacheMantleExample.release.xcconfig"; sourceTree = "<group>"; };
+		6EAAF3A13B6D02E10BC145DD /* Pods_YMCacheMantleExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YMCacheMantleExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C9405CF2A6A466514E7ED8F /* Pods-YMCacheMantleExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YMCacheMantleExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YMCacheMantleExample/Pods-YMCacheMantleExample.debug.xcconfig"; sourceTree = "<group>"; };
 		FCDDABC11B701243006C333F /* YMCacheMantleExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YMCacheMantleExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCDDABC51B701243006C333F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FCDDABC61B701243006C333F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -48,26 +48,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				114B1FBD7B2A435881A2F74A /* Pods_YMCacheMantleExample.framework in Frameworks */,
+				1A05FE20A2A725C3775CF3FF /* Pods_YMCacheMantleExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		77ACB36F56A296D647164A37 /* Pods */ = {
+		0D99D23B6907BE548A06A73F /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				8AFC53072F296BFF4126CDA3 /* Pods-YMCacheMantleExample.debug.xcconfig */,
-				DED211485E0E10F477C01AC7 /* Pods-YMCacheMantleExample.release.xcconfig */,
+				8C9405CF2A6A466514E7ED8F /* Pods-YMCacheMantleExample.debug.xcconfig */,
+				4697FDB2E18840AB71844213 /* Pods-YMCacheMantleExample.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		DB72E814718CF8D3F8FF5197 /* Frameworks */ = {
+		D245D262AD0DBAF134CE7D7C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1CEA9DFEE7F3DFA1059E64E3 /* Pods_YMCacheMantleExample.framework */,
+				6EAAF3A13B6D02E10BC145DD /* Pods_YMCacheMantleExample.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -77,8 +77,8 @@
 			children = (
 				FCDDABC31B701243006C333F /* YMCacheMantleExample */,
 				FCDDABC21B701243006C333F /* Products */,
-				77ACB36F56A296D647164A37 /* Pods */,
-				DB72E814718CF8D3F8FF5197 /* Frameworks */,
+				0D99D23B6907BE548A06A73F /* Pods */,
+				D245D262AD0DBAF134CE7D7C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -152,12 +152,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FCDDABE41B701243006C333F /* Build configuration list for PBXNativeTarget "YMCacheMantleExample" */;
 			buildPhases = (
-				05285794B68EC9EFD758B1C2 /* Check Pods Manifest.lock */,
+				F3003163E4700F556166CDD0 /* [CP] Check Pods Manifest.lock */,
 				FCDDABBD1B701243006C333F /* Sources */,
 				FCDDABBE1B701243006C333F /* Frameworks */,
 				FCDDABBF1B701243006C333F /* Resources */,
-				D1CBE908B402871986ACCF7A /* Embed Pods Frameworks */,
-				4964FB5811837E052C6EE04C /* Copy Pods Resources */,
+				119EACCBCD59D3B14FE65668 /* [CP] Embed Pods Frameworks */,
+				F435A07B04CB05CBEE059EC2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -215,49 +215,49 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		05285794B68EC9EFD758B1C2 /* Check Pods Manifest.lock */ = {
+		119EACCBCD59D3B14FE65668 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		4964FB5811837E052C6EE04C /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YMCacheMantleExample/Pods-YMCacheMantleExample-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D1CBE908B402871986ACCF7A /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YMCacheMantleExample/Pods-YMCacheMantleExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F3003163E4700F556166CDD0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		F435A07B04CB05CBEE059EC2 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YMCacheMantleExample/Pods-YMCacheMantleExample-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -380,7 +380,7 @@
 		};
 		FCDDABE51B701243006C333F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8AFC53072F296BFF4126CDA3 /* Pods-YMCacheMantleExample.debug.xcconfig */;
+			baseConfigurationReference = 8C9405CF2A6A466514E7ED8F /* Pods-YMCacheMantleExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = YMCacheMantleExample/Info.plist;
@@ -391,7 +391,7 @@
 		};
 		FCDDABE61B701243006C333F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DED211485E0E10F477C01AC7 /* Pods-YMCacheMantleExample.release.xcconfig */;
+			baseConfigurationReference = 4697FDB2E18840AB71844213 /* Pods-YMCacheMantleExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = YMCacheMantleExample/Info.plist;
