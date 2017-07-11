@@ -176,6 +176,35 @@ static const CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
     });
 }
 
+
+- (id)objectForKey:(NSString *)key withDefault:(YMMemoryCacheObjectLoader)defaultLoader
+{
+    NSParameterAssert(key);
+    AssertNotPrivateQueue;
+    
+    id item = [self objectForKeyedSubscript:key];
+    if (!defaultLoader) {
+        return item;
+    }
+    
+    // If default loader is valid and we don't have this object in cache, we should create and save it.
+    if (!item) {
+        __block id newItem;
+        dispatch_barrier_sync(self.queue, ^{
+            newItem = defaultLoader();
+            if (newItem) {
+                [self.removedPendingNotify removeObject:key];
+                self.items[key] = newItem;
+                self.updatedPendingNotify[key] = newItem;
+            }
+        });
+        
+        item = newItem;
+    }
+    
+    return item;
+}
+
 #pragma mark - Keyed Subscripting
 
 - (id)objectForKeyedSubscript:(id)key {

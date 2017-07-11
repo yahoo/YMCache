@@ -69,7 +69,7 @@ static NSString *const kCacheName = @"stock.json";
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(cacheUpdated:)
-                                                 name:kYFCacheItemsChangedNotificationKey
+                                                 name:kYFCacheDidChangeNotification
                                                object:self.cache];
     
     dispatch_resume(self.timer);
