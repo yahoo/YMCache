@@ -62,8 +62,77 @@ describe(@"YMMemoryCache", ^{
     
     // Single Getter
     
-    it(@"Should return nil when a key has no value", ^{
-        expect(emptyCache[@"key"]).to.beNil();
+    context(@"Getter", ^{
+        
+        it(@"Should return value", ^{
+            id key = cacheValues.allKeys.firstObject;
+            expect(populatedCache[key]).to.equal(cacheValues[key]);
+        });
+        
+        it(@"Should return nil when a key has no value", ^{
+            expect(emptyCache[@"key"]).to.beNil();
+        });
+        
+    });
+    
+    // Default-Loading Getter
+    
+    describe(@"Getter with loader block", ^{
+        
+        context(@"Without default block", ^{
+            
+            id(^nullBlock)() = NULL;
+            
+            it(@"returns value", ^{
+                id key = cacheValues.allKeys.firstObject;
+                expect([populatedCache objectForKey:key withDefault:nullBlock]).to.equal(cacheValues[key]);
+            });
+            
+            it(@"returns nil for missing value", ^{
+                expect([emptyCache objectForKey:@"key" withDefault:nullBlock]).to.beNil();
+            });
+            
+        });
+        
+        context(@"With default block", ^{
+            
+            it(@"returns value when present", ^{
+                id key = cacheValues.allKeys.firstObject;
+                
+                __block BOOL invoked = NO;
+                id val = [populatedCache objectForKey:key withDefault:^id _Nullable{
+                    // failure case, the value should not be returned, and the block
+                    // should not be invoked. The later is a performance test.
+                    invoked = YES;
+                    return @"foo";
+                }];
+                
+                expect(val).to.equal(cacheValues[key]);
+                expect(invoked).to.beFalsy();
+            });
+            
+            it(@"loads and returns value when missing", ^{
+                id val = [populatedCache objectForKey:@"MISSING_KEY" withDefault:^id _Nullable{
+                    return @"abcdef";
+                }];
+                
+                expect(val).to.equal(@"abcdef");
+            });
+            
+            it(@"loads and returns nil when missing and loader nil", ^{
+                __block BOOL invoked = NO;
+                id val = [populatedCache objectForKey:@"MISSING_KEY" withDefault:^id _Nullable{
+                    invoked = YES;
+                    return nil;
+                }];
+                
+                expect(val).to.beNil();
+                expect(invoked).to.beTruthy();
+            });
+            
+        });
+        
+        
     });
     
     context(@"Bulk setter", ^{

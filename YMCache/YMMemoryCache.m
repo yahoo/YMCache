@@ -191,6 +191,15 @@ static const CFStringRef kYFPrivateQueueKey = CFSTR("kYFPrivateQueueKey");
     if (!item) {
         __block id newItem;
         dispatch_barrier_sync(self.queue, ^{
+            // In order to ensure that read call are only blocking when they need
+            // to be, this mutating block is executed with it's own barrier. This
+            // means that we have a potential race condition if this method is called
+            // in parallel with the same missing key. Resolve by checking again!
+            newItem = self.items[key];
+            if (newItem) {
+                return; // item was probably added in another loading block that was queued concurrently with this one
+            }
+            
             newItem = defaultLoader();
             if (newItem) {
                 [self.removedPendingNotify removeObject:key];
