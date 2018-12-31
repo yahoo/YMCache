@@ -1,28 +1,32 @@
 language: objective-c
-osx_image: xcode10
+os: osx
+osx_image: xcode10.1
 xcode_project: YMCache.xcodeproj
-xcode_scheme: YMCache-iOS
+
+matrix:
+  include:
+    - xcode_scheme: YMCache-iOS
+      xcode_destination: platform=iOS Simulator,OS=12.1,name=iPhone X
+
+    - xcode_scheme: YMCache-Mac
+      xcode_destination: platform=macOS
+
 before_install:
-- brew update || brew update
-- brew install carthage || brew outdated carthage || brew upgrade carthage
-- gem install xcpretty --no-rdoc --no-ri --no-document --quiet
-- gem install xcpretty-travis-formatter --no-rdoc --no-ri --no-document --quiet
-- gem install slather --no-rdoc --no-ri --no-document --quiet
-- "./script/travis-codesign-setup.sh"
+  - gem install slather --no-rdoc --no-ri --no-document --quiet
+  - brew update || brew update
+  - brew install carthage || brew outdated carthage || brew upgrade carthage
+  - "./script/travis-codesign-setup.sh"
+
 install:
-- carthage bootstrap
+  - carthage bootstrap
+
 after_install:
-- "./script/travis-codesign-teardown.sh"
-script:
-- xcodebuild clean test -project YMCache.xcodeproj -scheme YMCache-iOS -sdk iphonesimulator
-  ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES
-  | xcpretty -c -f `xcpretty-travis-formatter`
-- set -o pipefail && xcodebuild clean test -project YMCache.xcodeproj -scheme YMCache-Mac
-  -sdk macosx ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES
-  | xcpretty -c -f `xcpretty-travis-formatter`
-- pod lib lint --quick
+  - "./script/travis-codesign-teardown.sh"
+
 after_success:
-- slather
+  - slather
+  - pod lib lint --quick
+
 env:
   global:
   # Coveralls API Key
