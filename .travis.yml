@@ -12,9 +12,9 @@ matrix:
       xcode_destination: platform=macOS
 
 before_install:
+  - gem install slather --no-rdoc --no-ri --no-document --quiet
   - brew update || brew update
   - brew install carthage || brew outdated carthage || brew upgrade carthage
-  - gem install slather --no-rdoc --no-ri --no-document --quiet
   - "./script/travis-codesign-setup.sh"
 
 install:
@@ -23,11 +23,9 @@ install:
 after_install:
   - "./script/travis-codesign-teardown.sh"
 
-script:
-  - pod lib lint --quick
-
 after_success:
   - slather
+  - pod lib lint --quick
 
 env:
   global:
