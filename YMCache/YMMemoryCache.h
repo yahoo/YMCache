@@ -31,7 +31,7 @@ extern NSString *const kYFCacheRemovedItemsUserInfoKey;
  */
 typedef BOOL (^YMMemoryCacheEvictionDecider)(id key, id value, void *__nullable context);
 
-typedef __nullable id (^YMMemoryCacheObjectLoader)();
+typedef __nullable id (^YMMemoryCacheObjectLoader)(void);
 
 /** The YMMemoryCache class declares a programatic interface to objects that manage ephemeral
  * associations of keys and values, similar to Foundation's NSMutableDictionary. The primary benefit
