@@ -74,7 +74,7 @@ This cache is essentially a completely thread-safe NSDictionary with read-write 
 #### Eviction
 
 ##### Manual eviction
-```objc`
+```objc
 // Create memory cache with an eviction decider block, which will be triggered for each item in the cache whenever
 // you call `-purgeEvictableItems:`.
 YMMemoryCache *cache = [YMMemoryCache memoryCacheWithName:@"my-object-cache"
@@ -86,10 +86,11 @@ YMMemoryCache *cache = [YMMemoryCache memoryCacheWithName:@"my-object-cache"
         [cache purgeEvictableItems:nil];
     });
 ```
+
 This example cache includes an eviction block which is called once after a 10 second delay. You are responsible for implementing the logic to decide which items are safe to evict. In this case, `NewsStory` models published more than 5 minutes ago will be purged from the cache. In this case, the eviction decider will be invoked on the main queue, because that is where `-purgeEvictableItems:` is called from.
 
 ##### Time-based eviction
-```objc`
+```objc
 YMMemoryCache *cache = [YMMemoryCache memoryCacheWithName:@"my-object-cache"
                                           evictionDecider:^(NSString *key, NewsStory *value, void *context) {
                                               return value.publishDate > [NSDate dateWithTimeIntervalSinceNow:-300];
@@ -97,10 +98,10 @@ YMMemoryCache *cache = [YMMemoryCache memoryCacheWithName:@"my-object-cache"
 
 cache.evictionInterval = 60.0; // trigger eviction every 60 seconds
 ```
-This creates a cache periodic time-based cache evictions every 60 seconds. Note that automatic invocations of the eviction decider execute on an arbitrary background thread. This approach can be combined with other manual eviction calls to provide a situations in which cache eviction is triggered on-demand, but at lease every N minutes.
+This creates a cache with periodic time-based cache evictions every 60 seconds. Note that automatic invocations of the eviction decider execute on an arbitrary background thread. This approach can be combined with other manual eviction calls to provide a situations in which cache eviction is triggered on-demand, but at lease every N minutes.
 
 ##### Automatic eviction on low memory
-```objc`
+```objc
 // Create memory cache with an eviction decider block, which will be triggered for each item in the cache whenever
 // you call `-purgeEvictableItems:`.
 YMMemoryCache *cache = [YMMemoryCache memoryCacheWithName:@"my-object-cache"
@@ -114,11 +115,11 @@ YMMemoryCache *cache = [YMMemoryCache memoryCacheWithName:@"my-object-cache"
                                              name:UIApplicationDidReceiveMemoryWarningNotification
                                            object:nil];
 
-// or, more commonly commonly
+// or, more commonly
 
 - (void)didReceiveMemoryWarning {
 	[super didReceiveMemoryWarning];
-    
+
     // Trigger immediate synchronous cache cleanup
     [self.cache purgeEvictableItems:nil];
 }
@@ -167,8 +168,3 @@ Report any bugs or send feature requests to the GitHub issues. Pull requests are
 ## License
 
 MIT license. See the [LICENSE](https://github.com/yahoo/YMCache/blob/master/LICENSE) file for details.
-
-
-[![Pixel](https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif)](#)
-[![Pixel](https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif)](#)
-[![Pixel](https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif)](#)
