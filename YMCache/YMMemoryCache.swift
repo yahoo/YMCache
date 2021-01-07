@@ -82,7 +82,7 @@ import Foundation
     }
 
     /// Eviction decider block invoked during eviction runs
-    let evictionDecider: EvictionDecider?
+    private let evictionDecider: EvictionDecider?
 
     private let queue: DispatchQueue
 
@@ -152,25 +152,15 @@ import Foundation
         }
     }
 
+    /// Returns the value associated with a given key
     @objc public subscript(key: AnyHashable) -> Any? {
         get { self[key, withDefault: nil] }
         set { self[key, withDefault: nil] = newValue }
     }
 
-    /** Returns the value associated with a given key.
-     * @param key The key for which to return the corresponding value.
-     * @return The value associated with `key`, or `nil` if no value is associated with key.
-     */
-    /** Sets the value associated with a given key.
-     * @param obj The value for `key`
-     * @param key The key for `value`. The key is copied (keys must conform to the NSCopying protocol).
-     *  If `key` already exists in the cache, `object` takes its place. If `object` is `nil`, key is removed
-     *  from the cache.
-     */
-    /** Get the value for the key. If value does not exist, invokes defaultLoader(), sets the result as
-     the value for key, and returns it. In order to ensure consistency, the cache is locked when
-     the defaultLoader block needs to be invoked.
-     */
+    /// Get the value for the key. If value does not exist, invokes defaultLoader(), sets the result as
+    /// the value for key, and returns it. In order to ensure consistency, the cache is locked when
+    /// the defaultLoader block needs to be invoked
     @objc public subscript(key: AnyHashable, withDefault loader: (() -> Any?)? = nil) -> Any? {
         get {
             assertNotPrivateQueue()
@@ -297,28 +287,11 @@ import Foundation
         }.keys
         removeObjects(forKeys: Array(purgableItems))
     }
-
-    private func sendPendingNotifications() {
-        assertPrivateQueue()
-        guard !itemsUpdatedPendingNotify.isEmpty && !itemsRemovedPendingNotify.isEmpty else {
-            return
-        }
-
-        let updated = itemsUpdatedPendingNotify
-        let removed = itemsRemovedPendingNotify
-        itemsUpdatedPendingNotify.removeAll()
-        itemsRemovedPendingNotify.removeAll()
-
-        DispatchQueue.main.async { [weak self] in
-            NotificationCenter.default.post(name: YMMemoryCache.CacheDidChangeNotification, object: self, userInfo: [
-                YMMemoryCache.CacheUpdatedItemsUserInfoKey: updated,
-                YMMemoryCache.CacheRemovedItemsUserInfoKey: removed
-            ])
-        }
-    }
 }
 
 extension YMMemoryCache {
+
+    /// Throws an assertion if the current queue is not the private queue of this instance
     private func assertPrivateQueue() {
         guard let key = DispatchQueue.getSpecific(key: YMMemoryCache.kYFPrivateQueueKey) else {
             return assertionFailure("Incorrect queue")
@@ -326,11 +299,19 @@ extension YMMemoryCache {
         assert(key == privateQueueNonce, "Incorrect queue")
     }
 
+    /// Throws an assertion if the current queue is the private queue of this instance
     private func assertNotPrivateQueue() {
         guard let key = DispatchQueue.getSpecific(key: YMMemoryCache.kYFPrivateQueueKey) else { return }
         assert(key != privateQueueNonce, "Potential deadlock: blocking call issued from current queue to the same queue")
     }
 
+    /// Create a new Dispatch Source Timer instance.
+    /// - Parameters:
+    ///   - oldSource: An existing timer to be canceled
+    ///   - interval: Repeat interval for the timer. If not greater than 0, the new timer is not set, but any old timer would be canceled
+    ///   - queue: Dispatch queue to use for timer source invocations
+    ///   - execute: The block to invoke on `queue` after each `interval`
+    /// - Returns: The new source timer that was created, if any was. Call `resume()` on this timer to start it.
     private func newSourceTimer(replacing oldSource: DispatchSourceTimer?, interval: TimeInterval, queue: DispatchQueue, execute: @escaping () -> Void) -> DispatchSourceTimer? {
         // Cancel any scheduled work
         if let oldSource = oldSource {
@@ -348,6 +329,26 @@ extension YMMemoryCache {
         source.schedule(deadline: .now() + .microseconds(usecInterval), repeating: .microseconds(usecInterval))
 
         return source
+    }
+
+    /// Dispatch any pending change notifications
+    private func sendPendingNotifications() {
+        assertPrivateQueue()
+        guard !itemsUpdatedPendingNotify.isEmpty && !itemsRemovedPendingNotify.isEmpty else {
+            return
+        }
+
+        let updated = itemsUpdatedPendingNotify
+        let removed = itemsRemovedPendingNotify
+        itemsUpdatedPendingNotify.removeAll()
+        itemsRemovedPendingNotify.removeAll()
+
+        DispatchQueue.main.async { [weak self] in
+            NotificationCenter.default.post(name: YMMemoryCache.CacheDidChangeNotification, object: self, userInfo: [
+                YMMemoryCache.CacheUpdatedItemsUserInfoKey: updated,
+                YMMemoryCache.CacheRemovedItemsUserInfoKey: removed
+            ])
+        }
     }
 }
 
