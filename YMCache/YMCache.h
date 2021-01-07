@@ -10,6 +10,5 @@ FOUNDATION_EXPORT double YMCacheVersionNumber;
 FOUNDATION_EXPORT const unsigned char YMCacheVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <YMCache/PublicHeader.h>
-#import <YMCache/YMMemoryCache.h>
 #import <YMCache/YMCachePersistenceController.h>
 

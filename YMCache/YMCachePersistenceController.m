@@ -3,7 +3,6 @@
 //  Licensed under the terms of the MIT License. See LICENSE file in the project root.
 
 #import "YMCachePersistenceController.h"
-#import "YMMemoryCache.h"
 #import "YMLog.h"
 
 #include "TargetConditionals.h"
