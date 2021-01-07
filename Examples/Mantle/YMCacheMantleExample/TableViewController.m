@@ -25,7 +25,7 @@ static NSString *const kCacheName = @"stock.json";
     self.formatter = [NSNumberFormatter new];
     self.formatter.positivePrefix = @"+";
     self.formatter.numberStyle = NSNumberFormatterCurrencyStyle;
-    
+
     self.cache = [YMMemoryCache memoryCacheWithName:@"dog-cache"];
     self.cache.notificationInterval = 0.25;
     

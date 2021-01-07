@@ -1,30 +1,8 @@
-//  Created by Adam Kaplan on 8/1/15.
+//  Created by Adam Kaplan on 1/4/21.
 //  Copyright 2021 Verizon Media.
 //  Licensed under the terms of the MIT License. See LICENSE file in the project root.
 
 import Foundation
-
-/// Cache update notification. The userInfo dictionary in the notification contains two values:
-/// `kYFCacheUpdatedItemsUserInfoKey` containing key-value pairs that have been added/updated and
-/// `kYFCacheRemovedItemsUserInfoKey` containing keys that have been removed.
-/// The notification is essentially a delta between the last notification and the current cache state.
-public let kYFCacheDidChangeNotification = "kYFCacheDidChangeNotification"
-
-/// A key whose value is an NSDictionary of key-value pairs
-/// representing entries that have been added
-/// to or removed from the cache since the last notification.
-public let kYFCacheUpdatedItemsUserInfoKey = "kYFCacheUpdatedItemsUserInfoKey"
-
-/// A key whose value is an NSSet of cache keys representing entries that have been removed from the
-/// cache since the last notification.
-public let kYFCacheRemovedItemsUserInfoKey = "kYFCacheRemovedItemsUserInfoKey"
-
-/// Type of a decider block for determining is an item is evictable.
-/// - Parameters:
-///  - key: The key associated with value in the cache
-///  - value: The value of the item in the cache
-///  - context: Arbitrary user-provided context
-public typealias YMMemoryCacheEvictionDecider = (_ key: Any, _ value: Any, _ context: UnsafeMutableRawPointer?) -> Bool
 
 /// The YMMemoryCache class declares a programatic interface to objects that manage ephemeral
 /// associations of keys and values, similar to Foundation's NSMutableDictionary. The primary benefit
@@ -104,7 +82,7 @@ public typealias YMMemoryCacheEvictionDecider = (_ key: Any, _ value: Any, _ con
     }
 
     /// Eviction decider block invoked during eviction runs
-    let evictionDecider: YMMemoryCacheEvictionDecider?
+    let evictionDecider: EvictionDecider?
 
     private let queue: DispatchQueue
 
@@ -122,9 +100,16 @@ public typealias YMMemoryCacheEvictionDecider = (_ key: Any, _ value: Any, _ con
 
     /// Creates and returns a new memory cache using the specified name, but no eviction delegate.
     /// - Parameter name: Unique name for this cache. Optional, helpful for debugging.
+    /// - Returns: New cache identified by `name`
+    @objc public class func memoryCache(withName name: String?) -> YMMemoryCache {
+        return memoryCache(withName: name, evictionDecider: nil)
+    }
+
+    /// Creates and returns a new memory cache using the specified name, but no eviction delegate.
+    /// - Parameter name: Unique name for this cache. Optional, helpful for debugging.
     /// - Parameter evictionDecider: The eviction decider to use. See `evictionDecider` property.
     /// - Returns: New cache identified by `name`
-    @objc public class func memoryCache(withName name: String?, evictionDecider: YMMemoryCacheEvictionDecider? = nil) -> YMMemoryCache {
+    @objc public class func memoryCache(withName name: String?, evictionDecider: EvictionDecider? = nil) -> YMMemoryCache {
         return YMMemoryCache(withName: name, evictionDecider: evictionDecider)
     }
 
@@ -135,7 +120,7 @@ public typealias YMMemoryCacheEvictionDecider = (_ key: Any, _ value: Any, _ con
     ///   if the item can be evicted, or NO if the item should not be evicted from the cache. A nil evictionDevider is
     ///   equivalent to returning NO for all items. The decider will execute on an arbitrary thread. The `context`
     ///   parameter is NULL if the block is called due to the internal eviction timer expiring.
-    @objc public init(withName name: String? = nil, evictionDecider: YMMemoryCacheEvictionDecider? = nil) {
+    @objc public init(withName name: String? = nil, evictionDecider: EvictionDecider? = nil) {
         self.name = name
         self.evictionDecider = evictionDecider
 
@@ -165,6 +150,11 @@ public typealias YMMemoryCacheEvictionDecider = (_ key: Any, _ value: Any, _ con
         if let source = notificationSourceTimer, !source.isCancelled {
             source.cancel()
         }
+    }
+
+    @objc public subscript(key: AnyHashable) -> Any? {
+        get { self[key, withDefault: nil] }
+        set { self[key, withDefault: nil] = newValue }
     }
 
     /** Returns the value associated with a given key.
@@ -294,7 +284,7 @@ public typealias YMMemoryCacheEvictionDecider = (_ key: Any, _ value: Any, _ con
     /// Triggers an immediate (synchronous) check for exired items, and releases those items that are expired.
     /// This method does nothing if no expirationDecider block was provided during initialization. The
     /// evictionDecider block is run on the queue that this method is called on.
-    @objc private func purgeEvictableItems(context: UnsafeMutableRawPointer? = nil) {
+    @objc(purgeEvictableItems:) public func purgeEvictableItems(context: UnsafeMutableRawPointer? = nil) {
         // All external execution must have been dispatched to another queue so as to not leak the private queue
         // though the user-provided evictionDecider block.
         assertNotPrivateQueue()
@@ -320,9 +310,9 @@ public typealias YMMemoryCacheEvictionDecider = (_ key: Any, _ value: Any, _ con
         itemsRemovedPendingNotify.removeAll()
 
         DispatchQueue.main.async { [weak self] in
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: kYFCacheDidChangeNotification), object: self, userInfo: [
-                kYFCacheUpdatedItemsUserInfoKey: updated,
-                kYFCacheRemovedItemsUserInfoKey: removed
+            NotificationCenter.default.post(name: YMMemoryCache.CacheDidChangeNotification, object: self, userInfo: [
+                YMMemoryCache.CacheUpdatedItemsUserInfoKey: updated,
+                YMMemoryCache.CacheRemovedItemsUserInfoKey: removed
             ])
         }
     }
@@ -359,4 +349,28 @@ extension YMMemoryCache {
 
         return source
     }
+}
+
+@objc public extension YMMemoryCache {
+    /// Cache update notification. The userInfo dictionary in the notification contains two values:
+    /// `kYFCacheUpdatedItemsUserInfoKey` containing key-value pairs that have been added/updated and
+    /// `kYFCacheRemovedItemsUserInfoKey` containing keys that have been removed.
+    /// The notification is essentially a delta between the last notification and the current cache state.
+    @objc static var CacheDidChangeNotification: NSNotification.Name { NSNotification.Name.yfCacheDidChange }
+
+    /// A key whose value is an NSDictionary of key-value pairs
+    /// representing entries that have been added
+    /// to or removed from the cache since the last notification.
+    @objc static var CacheUpdatedItemsUserInfoKey: String { kYFCacheUpdatedItemsUserInfoKey }
+
+    /// A key whose value is an NSSet of cache keys representing entries that have been removed from the
+    /// cache since the last notification.
+    @objc static var CacheRemovedItemsUserInfoKey: String { kYFCacheRemovedItemsUserInfoKey }
+
+    /// Type of a decider block for determining is an item is evictable.
+    /// - Parameters:
+    ///  - key: The key associated with value in the cache
+    ///  - value: The value of the item in the cache
+    ///  - context: Arbitrary user-provided context
+    typealias EvictionDecider = (_ key: Any, _ value: Any, _ context: UnsafeMutableRawPointer?) -> Bool
 }
