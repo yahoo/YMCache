@@ -12,7 +12,7 @@ matrix:
       xcode_destination: platform=macOS
 
 before_install:
-  - gem install slather --no-rdoc --no-ri --no-document --quiet
+  - gem install slather --no-document --quiet
   - brew update || brew update
   - brew install carthage || brew outdated carthage || brew upgrade carthage
   - "./script/travis-codesign-setup.sh"
