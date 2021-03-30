@@ -2,20 +2,24 @@ PODS:
   - Mantle (2.0.3):
     - Mantle/extobjc (= 2.0.3)
   - Mantle/extobjc (2.0.3)
-  - YMCache (2.0.1)
+  - YMCache (2.2.0)
 
 DEPENDENCIES:
   - Mantle (~> 2.0)
   - YMCache (from `../../`)
 
+SPEC REPOS:
+  trunk:
+    - Mantle
+
 EXTERNAL SOURCES:
   YMCache:
-    :path: ../../
+    :path: "../../"
 
 SPEC CHECKSUMS:
   Mantle: 8d6b14979a082a9ed4994463eb7a4ff576c94632
-  YMCache: fbaa0a6b4b894b3c0b6ce30a899f6f413617e91d
+  YMCache: ea1a858871d9dd1cbb2daca41ce87695999e33c8
 
-PODFILE CHECKSUM: b5436bf716c3b9fafcba05b85523d009ff960ff5
+PODFILE CHECKSUM: 0ad642fd9dd67bb09b8987d7229ab527f1dcd7eb
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.10.0
