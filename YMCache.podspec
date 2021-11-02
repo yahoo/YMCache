@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'YMCache'
-  s.version          = '2.1.1'
+  s.version          = '2.2.0'
   s.summary          = 'Fast & simple small object cache. GCD-based and thread-safe.'
   s.homepage         = 'https://github.com/yahoo/YMCache'
   s.license          = 'MIT'
