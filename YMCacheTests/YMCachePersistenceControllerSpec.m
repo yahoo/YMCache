@@ -2,8 +2,7 @@
 //  Copyright 2015 Yahoo.
 //  Licensed under the terms of the MIT License. See LICENSE file in the project root.
 
-#import <YMCache/YMMemoryCache.h>
-#import <YMCache/YMCachePersistenceController.h>
+@import YMCache;
 
 @interface TestDelegate : NSObject <YMSerializationDelegate>
 @end

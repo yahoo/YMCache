@@ -36,5 +36,8 @@ jobs:
         with: 
           xcode-version: latest-stable 
 
-      - name: Build the SwiftPM
-        run: swift build -v
+      - name: Build
+        run: swift build
+
+      - name: Run tests
+        run: swift test

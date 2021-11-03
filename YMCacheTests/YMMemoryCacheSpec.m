@@ -2,7 +2,7 @@
 //  Copyright 2015 Yahoo.
 //  Licensed under the terms of the MIT License. See LICENSE file in the project root.
 
-#import <YMCache/YMCache.h>
+@import YMCache;
 #import "NSRunLoop+AsyncTestAdditions.h"
 
 SpecBegin(YMMemoryCacheSpec)

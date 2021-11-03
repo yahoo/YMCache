@@ -22,5 +22,15 @@ let package = Package(
             path: "YMCache",
             exclude: ["Info.plist"],
             publicHeadersPath: "."),
+        .testTarget(
+            name: "YMCacheTests",
+            dependencies: ["YMCache"],
+            path: "YMCacheTests",
+            exclude: [
+                "Info.plist", 
+                "Tests-Prefix.pch",
+                "YMCachePersistenceControllerSpec.m", // TODO: Un-specta-ify
+                "YMMemoryCacheSpec.m" // TODO: Un-specta-ify
+            ]),
     ]
 )
