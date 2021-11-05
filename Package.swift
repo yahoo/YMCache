@@ -5,10 +5,10 @@ import PackageDescription
 let package = Package(
     name: "YMCache",
     platforms: [
-        .iOS(.v13),
-        .macOS(.v10_13),
-        .tvOS(.v13),
-        .watchOS(.v6)
+        .iOS(.v9),
+        .macOS(.v10_10),
+        .tvOS(.v9),
+        .watchOS(.v3)
     ],
     products: [
         .library(
