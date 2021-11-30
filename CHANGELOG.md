@@ -3,13 +3,13 @@ CHANGELOG
 
 2.2.0 (2021-11-30)
 ==================
-[Feature] Add Swift Package Manager (SPM) support
-[Pod] Bump minimum iOS version to 9.0
+* [Feature] Add Swift Package Manager (SPM) support
+* [Pod] Bump minimum iOS version to 9.0
 
 2.1.1 (2018-12-31)
 ==================
-[Feature] Support for tvOS and watchOS Latest
-[Fix] Eliminate new pod lint warnings
+* [Feature] Support for tvOS and watchOS Latest
+* [Fix] Eliminate new pod lint warnings
 
 2.0.1 (2017-04-20)
 ==================
