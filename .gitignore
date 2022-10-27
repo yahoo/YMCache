@@ -35,3 +35,8 @@ html/
 # `pod install` in .travis.yml
 #
 # Pods/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved

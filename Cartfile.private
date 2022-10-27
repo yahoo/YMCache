@@ -1,4 +1,0 @@
-# Test Dependencies
-github "specta/specta" ~> 1.0
-
-github "specta/expecta" ~> 1.0

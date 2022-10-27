@@ -1,16 +1,15 @@
 # YMCache
 
-[![Build Status](https://travis-ci.org/yahoo/YMCache.svg?branch=master)](https://travis-ci.org/yahoo/YMCache)
-[![Coverage Status](https://coveralls.io/repos/yahoo/YMCache/badge.svg?branch=master&service=github)](https://coveralls.io/github/yahoo/YMCache?branch=master)
+[![build-status](https://github.com/yahoo/YMCache/workflows/YMCache%20CI/badge.svg?branch=master)](https://github.com/yahoo/YMCache/actions)
 
-[![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg)](https://github.com/Carthage/Carthage)
+[![Swift Package Manager compatible](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen.svg)](https://github.com/apple/swift-package-manager)
 [![CocoaPods Compatible](https://img.shields.io/badge/CocoaPods-compatible-brightgreen.svg)](https://github.com/CocoaPods/CocoaPods)
 [![GitHub license](https://img.shields.io/github/license/yahoo/YMCache.svg)](https://raw.githubusercontent.com/yahoo/YMCache/master/LICENSE.md)
 [![Supported Platforms](https://img.shields.io/cocoapods/p/YMCache.svg)]()
 
 ---
 
-YMCache is a lightweight object caching solution for iOS and Mac OS X that is designed for highly parallel access scenarios. YMCache presents a familiar interface emulating `NSMutableDictionary`, while internally leveraging Apple's [Grand Central Dispatch](https://developer.apple.com/library/ios/documentation/Performance/Reference/GCD_libdispatch_Ref/index.html) technology to strike a balance between performance and consistency.
+YMCache is a lightweight object caching solution for iOS and macOS that is designed for highly parallel access scenarios. YMCache presents a familiar interface emulating `NSMutableDictionary`, while internally leveraging Apple's [Grand Central Dispatch](https://developer.apple.com/library/ios/documentation/Performance/Reference/GCD_libdispatch_Ref/index.html) technology to strike a balance between performance and consistency.
 
 The Yahoo Finance iOS team uses YMCache to multiplex access to it's database of thousands of real-time stocks, which change in unpredictable ways, with an unpredictable cadence. YMCache helps relieve the complexity of multi-thread access to a central data store by providing a set of easy to understand [reader-writer](https://en.wikipedia.org/wiki/Readers–writer_lock) access semantics.
 
@@ -31,7 +30,7 @@ The above rules allow for multiple readers, but a single writer. A nice result o
 
 ## SETUP
 
-We support the [CocoaPods](http://github.com/CocoaPods/CocoaPods) and [Carthage](https://github.com/carthage/carthage) distribution systems.
+We support distribution through [CocoaPods](http://github.com/CocoaPods/CocoaPods) and [Swift Package Manager](https://swift.org/package-manager/).
 
 ### CocoaPods
 
@@ -45,17 +44,9 @@ We support the [CocoaPods](http://github.com/CocoaPods/CocoaPods) and [Carthage]
 
 2. Run `pod update` or `pod install` in your project directory.
 
-### Carthage
+### SwiftPM
 
-1. Add YMCache to your project's `Cartfile`
-
-    ```
-    github "yahoo/YMCache"
-    ```
-
-2. Run `carthage update` in your project directory
-3. Drag the appropriate `YMCache.framework` for your platform (located in `$PROJECT/Carthage/Build/`) into your application’s Xcode project, and add it to your target.
-4. If you are building for iOS, a new `Run Script Phase` must be added to copy the framework. The instructions can be found on [Carthage's getting started instructions](https://github.com/carthage/carthage#getting-started)
+Add `.package(url: "https://github.com/yahoo/YMCache.git", from: "2.2.0")` to your `package.swift`
 
 ## Usage
 
