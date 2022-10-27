@@ -215,7 +215,8 @@ import Foundation
     /// All entries in the dictionary will be part of the next change notification event, even if an identical
     /// key-value pair was already present in the cache.
     ///
-    /// - Parameter fromDictionary: The dictionary from which to add entries
+    /// - Parameters:
+    ///   - other: The dictionary from which to add entries
     @objc public func addEntries(fromDictionary other: [AnyHashable: Any]) {
         queue.async(flags: .barrier) {
             self.items.merge(other) { $1 }

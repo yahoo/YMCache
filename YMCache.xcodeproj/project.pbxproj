@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C6F9EE1F290A1691008DEB36 /* YMMemoryCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F9EE1E290A1691008DEB36 /* YMMemoryCache.swift */; };
+		C6F9EE20290A1691008DEB36 /* YMMemoryCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F9EE1E290A1691008DEB36 /* YMMemoryCache.swift */; };
 		FC4B27521BA1320C00F870A1 /* YMCachePersistenceControllerSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = FC4B27511BA1320C00F870A1 /* YMCachePersistenceControllerSpec.m */; };
 		FC4B27531BA1320C00F870A1 /* YMCachePersistenceControllerSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = FC4B27511BA1320C00F870A1 /* YMCachePersistenceControllerSpec.m */; };
 		FC59B36E1B71156B00093177 /* YMCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC59B3631B71156B00093177 /* YMCache.framework */; };
@@ -80,6 +82,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C6F9EE1E290A1691008DEB36 /* YMMemoryCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YMMemoryCache.swift; sourceTree = "<group>"; };
 		FC4B27511BA1320C00F870A1 /* YMCachePersistenceControllerSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YMCachePersistenceControllerSpec.m; path = YMCacheTests/YMCachePersistenceControllerSpec.m; sourceTree = SOURCE_ROOT; };
 		FC59B3631B71156B00093177 /* YMCache.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = YMCache.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC59B36D1B71156B00093177 /* YMCache-MacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "YMCache-MacTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -255,6 +258,7 @@
 				FCB05DDB1B6FDFC300C7302B /* YMCachePersistenceController.m */,
 				FCB05DDD1B6FDFC300C7302B /* YMMemoryCache.h */,
 				FCB05DDE1B6FDFC300C7302B /* YMMemoryCache.m */,
+				C6F9EE1E290A1691008DEB36 /* YMMemoryCache.swift */,
 			);
 			name = Public;
 			sourceTree = "<group>";
@@ -381,12 +385,14 @@
 				TargetAttributes = {
 					FC59B3621B71156B00093177 = {
 						CreatedOnToolsVersion = 6.4;
+						LastSwiftMigration = 1300;
 					};
 					FC59B36C1B71156B00093177 = {
 						CreatedOnToolsVersion = 6.4;
 					};
 					FCDDAB5C1B7008D4006C333F = {
 						CreatedOnToolsVersion = 6.4;
+						LastSwiftMigration = 1300;
 					};
 					FCDDAB661B7008D4006C333F = {
 						CreatedOnToolsVersion = 6.4;
@@ -452,6 +458,7 @@
 			files = (
 				FC59B37C1B7115FC00093177 /* YMCachePersistenceController.m in Sources */,
 				FC59B37D1B7115FD00093177 /* YMMemoryCache.m in Sources */,
+				C6F9EE20290A1691008DEB36 /* YMMemoryCache.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -471,6 +478,7 @@
 			files = (
 				FCD690821B710F520099E854 /* YMCachePersistenceController.m in Sources */,
 				FCD690831B710F540099E854 /* YMMemoryCache.m in Sources */,
+				C6F9EE1F290A1691008DEB36 /* YMMemoryCache.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -574,6 +582,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -594,6 +603,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.yahoo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(PROJECT_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -603,6 +614,7 @@
 		FC4B27561BA13A2000F870A1 /* Test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -628,6 +640,7 @@
 		FC4B27571BA13A2000F870A1 /* Test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -650,6 +663,8 @@
 				PRODUCT_NAME = "$(PROJECT_NAME)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -658,6 +673,7 @@
 		FC4B27581BA13A2000F870A1 /* Test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -686,6 +702,7 @@
 		FC59B3771B71156B00093177 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -708,6 +725,8 @@
 				PRODUCT_NAME = "$(PROJECT_NAME)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -716,6 +735,7 @@
 		FC59B3781B71156B00093177 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -733,6 +753,7 @@
 				PRODUCT_NAME = "$(PROJECT_NAME)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -741,6 +762,7 @@
 		FC59B37A1B71156B00093177 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -769,6 +791,7 @@
 		FC59B37B1B71156B00093177 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -926,6 +949,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -946,6 +970,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.yahoo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(PROJECT_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -956,6 +982,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -972,6 +999,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.yahoo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(PROJECT_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -981,6 +1009,7 @@
 		FCDDAB741B7008D4006C333F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1006,6 +1035,7 @@
 		FCDDAB751B7008D4006C333F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
