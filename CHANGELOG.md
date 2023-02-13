@@ -1,6 +1,10 @@
 CHANGELOG
 ==================
 
+2.2.1 (2023-2-13)
+==================
+* Fix a warning in Swift Package about not including something in the umbrella
+
 2.2.0 (2021-11-30)
 ==================
 * [Feature] Add Swift Package Manager (SPM) support
